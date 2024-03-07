@@ -2,49 +2,48 @@ import { PrismaClient } from "@prisma/client";
 import { HttpStatusCode } from "axios";
 import { ApiError } from "next/dist/server/api-utils";
 import { NextRequest, NextResponse } from "next/server";
-import bcrypt from "bcrypt";
 
 const prisma = new PrismaClient();
 
-export async function POST(request: NextRequest) {
+export async function PATCH(request: NextRequest) {
   try {
-    const { name, email, password, role } = await request.json();
-
+    const { id, name, email, role } = await request.json();
     const existingUser = await prisma.user.findFirst({
-      where: { email: email },
+      where: { id: id },
     });
 
-    if (existingUser?.id) {
+    if (!existingUser?.id) {
+      throw new ApiError(HttpStatusCode.BadRequest, "User not found");
+    }
+
+    const userWithExistingEmail = await prisma.user.findFirst({
+      where: { email: email, id: { not: id } },
+      select: { id: true },
+    });
+
+    if (userWithExistingEmail != null) {
       throw new ApiError(
         HttpStatusCode.BadRequest,
         "User already exists with this email"
       );
     }
 
-    const userRole = await prisma.role.upsert({
-      where: { slug: role.slug },
-      create: {
-        name: role.name,
-        slug: role.slug,
+    await prisma.user.update({
+      where: {
+        id: id,
       },
-      update: {},
-    });
-
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    await prisma.user.create({
       data: {
         name: name,
         email: email,
-        password: hashedPassword,
-        roleId: userRole.id,
+        roleId: role.id,
+        updatedAt: new Date(),
       },
     });
 
     const response = NextResponse.json({
       success: true,
-      message: "User Added Successfully",
-      statusCode: HttpStatusCode.Created,
+      message: "User Updated Successfully",
+      statusCode: HttpStatusCode.Ok,
     });
 
     return response;

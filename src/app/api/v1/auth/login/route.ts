@@ -3,6 +3,7 @@ import bcrypt from "bcrypt";
 import { ApiError } from "next/dist/server/api-utils";
 import { HttpStatusCode } from "axios";
 import { PrismaClient } from "@prisma/client";
+import { generateToken } from "@/services/backend/jwt.service";
 
 const prisma = new PrismaClient();
 
@@ -59,9 +60,19 @@ export async function POST(request: NextRequest) {
       throw new ApiError(HttpStatusCode.Unauthorized, "Wrong Password!");
     }
 
+    const profile = {
+      id: user.id,
+      email: user.email,
+      role: user.role.slug,
+    };
+
+    const token = await generateToken(profile);
+
     const response = NextResponse.json({
       message: "Login successful",
       success: true,
+      profile,
+      token: token,
     });
 
     return response;

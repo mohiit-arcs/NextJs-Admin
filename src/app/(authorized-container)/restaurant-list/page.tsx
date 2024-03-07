@@ -9,19 +9,24 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import _ from "lodash";
 import Pagination from "@/components/pagination/pagination";
+import { getAuthToken } from "@/services/frontend/storage.service";
 
 const entriesPerPageOptions = [5, 10, 15];
+const baseUrl = "http://localhost:3000"
 
 const UserList = () => {
-  const [users, setUsers] = useState<User[]>([]);
+  const [restaurants, setRestaurants] = useState<User[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [usersLimit, setUsersLimit] = useState(5);
-  const [totalUsers, setTotalUsers] = useState<number>();
+  const [restaurantsLimit, setRestaurantsLimit] = useState(5);
+  const [totalRestaurants, setTotalRestaurants] = useState<number>();
   const [totalPages, setTotalPages] = useState<number>();
   const [searchQuery, setSearchQuery] = useState("");
   const [sortBy, setSortBy] = useState("createdAt");
   const [sortOrder, setSortOrder] = useState("desc");
   const router = useRouter();
+  const headers = {
+    Authorization: "Bearer " + getAuthToken(),
+  };
 
   useEffect(() => {
     getUsers();
@@ -29,17 +34,18 @@ const UserList = () => {
     return () => {
       debouncedUserResults.cancel();
     };
-  }, [currentPage, usersLimit, searchQuery, sortBy, sortOrder]);
+  }, [currentPage, restaurantsLimit, searchQuery, sortBy, sortOrder]);
 
   const getUsers = async () => {
     try {
       const response = await axios.get(
-        `api/v1/users?page=${currentPage}&limit=${usersLimit}&search=${searchQuery}&sortBy=${sortBy}&sortOrder=${sortOrder}`
+        `api/v1/restaurants?page=${currentPage}&limit=${restaurantsLimit}&search=${searchQuery}&sortBy=${sortBy}&sortOrder=${sortOrder}`,
+        { headers: headers }
       );
       if (response.data.count != 0) {
-        setUsers(response.data.result);
-        setTotalUsers(response.data.count);
-        const totalPages = Math.ceil(response.data.count / usersLimit);
+        setRestaurants(response.data.result);
+        setTotalRestaurants(response.data.count);
+        const totalPages = Math.ceil(response.data.count / restaurantsLimit);
         setTotalPages(totalPages);
       }
     } catch (error) {
@@ -47,15 +53,22 @@ const UserList = () => {
     }
   };
 
-  const onDelete = async (userId: number) => {
+  const onDelete = async (restaurantId: number) => {
     try {
-      const toDelete = confirm("Are you sure, you want to delete the user?");
+      const toDelete = confirm(
+        "Are you sure, you want to delete this restaurant?"
+      );
       if (toDelete) {
-        const response = await axios.delete(`api/v1/users/${userId}`);
+        const response = await axios.delete(
+          `api/v1/restaurants/${restaurantId}`,
+          { headers: headers }
+        );
         if (response.data.success) {
-          const updatedUsers = users.filter((user) => user.id != userId);
-          setUsers(updatedUsers);
-          setTotalUsers(response.data.count);
+          const updatedUsers = restaurants.filter(
+            (restaurant) => restaurant.id != restaurantId
+          );
+          setRestaurants(updatedUsers);
+          setTotalRestaurants(response.data.count);
           toast.success(response.data.message);
         }
       }
@@ -65,16 +78,16 @@ const UserList = () => {
     }
   };
 
-  const onUpdate = async (userId: number) => {
-    router.push(`/update-user/${userId}`, { scroll: true });
+  const onUpdate = async (restaurantId: number) => {
+    router.push(`/update-restaurant/${restaurantId}`, { scroll: true });
   };
 
   const handleEntriesPerPageChange = (
     event: React.ChangeEvent<HTMLSelectElement>
   ) => {
     const usersLimit = parseInt(event.target.value);
-    setUsersLimit(usersLimit);
-    const totalPages = Math.ceil(totalUsers! / usersLimit);
+    setRestaurantsLimit(usersLimit);
+    const totalPages = Math.ceil(totalRestaurants! / usersLimit);
     setTotalPages(totalPages);
     setCurrentPage(1);
   };
@@ -90,7 +103,7 @@ const UserList = () => {
   };
 
   const goToNextPage = () => {
-    console.log(totalUsers);
+    console.log(totalRestaurants);
     if (currentPage < totalPages!) {
       setCurrentPage(currentPage + 1);
     }
@@ -115,12 +128,12 @@ const UserList = () => {
 
   return (
     <div className="bg-gray-100 min-h-screen">
-      <h1 className="text-4xl text-center text-black">User List</h1>
+      <h1 className="text-4xl text-center text-black">Restaurant List</h1>
       <div className="flex justify-end">
         <button
-          onClick={() => router.push("add-user")}
-          className="bg-blue-500 hover:bg-blue-600 m-2 p-2 text-white rounded-md w-40">
-          Add New User
+          onClick={() => router.push("add-restaurant")}
+          className="bg-blue-500 hover:bg-blue-600 m-2 p-2 text-white rounded-md w-44">
+          Add New Restaurant
         </button>
         <div className="relative mb-2 w-[400px] mr-6">
           <input
@@ -148,32 +161,73 @@ const UserList = () => {
                 Email <span className="cursor-pointer text-lg">↕️</span>
               </th>
               <th
-                onClick={() => handleSortByAndOrder("role")}
+                onClick={() => handleSortByAndOrder("phoneNumber")}
                 className="px-5 py-4 text-sm text-white font-bold">
-                Role <span className="cursor-pointer text-lg">↕️</span>
+                Phone Number <span className="cursor-pointer text-lg">↕️</span>
               </th>
+              <th
+                onClick={() => handleSortByAndOrder("street")}
+                className="px-5 py-4 text-sm text-white font-bold">
+                Street <span className="cursor-pointer text-lg">↕️</span>
+              </th>
+              <th
+                onClick={() => handleSortByAndOrder("city")}
+                className="px-5 py-4 text-sm text-white font-bold">
+                City <span className="cursor-pointer text-lg">↕️</span>
+              </th>
+              <th
+                onClick={() => handleSortByAndOrder("zipcode")}
+                className="px-5 py-4 text-sm text-white font-bold">
+                ZipCode <span className="cursor-pointer text-lg">↕️</span>
+              </th>
+              <th
+                onClick={() => handleSortByAndOrder("state")}
+                className="px-5 py-4 text-sm text-white font-bold">
+                State <span className="cursor-pointer text-lg">↕️</span>
+              </th>
+              <th
+                onClick={() => handleSortByAndOrder("country")}
+                className="px-5 py-4 text-sm text-white font-bold">
+                Country <span className="cursor-pointer text-lg">↕️</span>
+              </th>
+              {/* <th className="px-5 py-4 text-sm text-white font-bold">
+                Image <span className="cursor-pointer text-lg">↕️</span>
+              </th> */}
+              <th className="px-5 py-4 text-sm text-white font-bold">Image</th>
               <th className="px-5 py-4 text-sm text-white font-bold">
                 Actions
               </th>
             </tr>
           </thead>
           <tbody>
-            {users!.map((user: any) => (
-              <tr key={user.id} className="hover:bg-gray-200">
-                <td className="px-4 py-3">{user.name}</td>
-                <td className="px-4 py-3">{user.email}</td>
-                <td className="px-4 py-3">{user.role.name}</td>
+            {restaurants!.map((restaurant: any) => (
+              <tr key={restaurant.id} className="hover:bg-gray-200">
+                <td className="px-4 py-3">{restaurant.name}</td>
+                <td className="px-4 py-3">{restaurant.email}</td>
+                <td className="px-4 py-3">{restaurant.phoneNumber}</td>
+                <td className="px-4 py-3">{restaurant.location.street}</td>
+                <td className="px-4 py-3">{restaurant.location.city}</td>
+                <td className="px-4 py-3">{restaurant.location.zipCode}</td>
+                <td className="px-4 py-3">{restaurant.location.state}</td>
+                <td className="px-4 py-3">{restaurant.location.country}</td>
+                <td className="px-4 py-3">
+                  <img
+                    className="h-16 object-cover"
+                    src={`${baseUrl}/assets/images/restaurants/thumbnail/${restaurant.image}`}
+                    alt=""
+                  />
+                </td>
                 <td className="flex">
                   <span className="px-4 py-3">
                     <Pencil
                       className="cursor-pointer"
-                      onClick={() => onUpdate(user.id)}
+                      onClick={() => onUpdate(restaurant.id)}
                     />
                   </span>
                   <span className="px-4 py-3">
                     <Trash
                       className="cursor-pointer"
-                      onClick={() => onDelete(user.id)}
+                      onClick={() => onDelete(restaurant.id)}
                     />
                   </span>
                 </td>
@@ -184,8 +238,8 @@ const UserList = () => {
       </div>
 
       <Pagination
-        totalUsers={totalUsers}
-        usersLimit={usersLimit}
+        totalUsers={totalRestaurants}
+        usersLimit={restaurantsLimit}
         currentPage={currentPage}
         entriesPerPageOptions={entriesPerPageOptions}
         handleEntriesPerPageChange={handleEntriesPerPageChange}

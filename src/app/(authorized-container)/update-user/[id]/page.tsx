@@ -1,18 +1,17 @@
 "use client";
 
 import axios from "axios";
-import { Eye, EyeOff } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useRouter } from "next/navigation";
 
 type Inputs = {
   name: string;
   email: string;
-  password: string;
-  role: number;
+  role: string;
 };
 
 interface Role {
@@ -21,44 +20,55 @@ interface Role {
   slug: string;
 }
 
-const AddUser = () => {
-  const [showPassword, setShowPassword] = useState(false);
+const baseUrl = "http://localhost:3000/api/v1/users";
+
+const UpdateUser = () => {
+  const { id } = useParams();
   const [roles, setRoles] = useState<Role[]>([]);
+  const router = useRouter();
+
   const {
     register,
     handleSubmit,
     formState: { errors },
+    setValue,
   } = useForm<Inputs>();
-  const router = useRouter();
 
   useEffect(() => {
+    getUserDetails(Number(id));
     getUserRoles();
   }, []);
 
-  const addUser: SubmitHandler<Inputs> = async (addUser) => {
+  const getUserDetails = async (userId: number) => {
     try {
-      const response = await axios.post("api/v1/auth/signup", {
-        ...addUser,
-        role: roles[addUser.role],
-      });
+      const response = await axios.get(`${baseUrl}/${userId}`);
+
       if (response.data.success) {
-        router.push("user-list");
-        toast.success(response.data.message);
-      } else if (!response.data.success) {
-        toast.error(response.data.message);
+        const userData = response.data.data.details;
+        setValue("name", userData.name, {
+          shouldValidate: true,
+          shouldDirty: true,
+          shouldTouch: true,
+        });
+        setValue("email", userData.email, {
+          shouldValidate: true,
+          shouldDirty: true,
+          shouldTouch: true,
+        });
+        setValue("role", userData.role.id, {
+          shouldValidate: true,
+          shouldDirty: true,
+          shouldTouch: true,
+        });
       }
     } catch (error) {
       console.log(error);
     }
   };
 
-  const validateNoWhiteSpace = (value: string) => {
-    return !!value.trim();
-  };
-
   const getUserRoles = async () => {
     try {
-      const response = await axios.get("api/v1/users/roles");
+      const response = await axios.get(`${baseUrl}/roles`);
       if (response.data.success) {
         setRoles(response.data.result);
       }
@@ -67,12 +77,32 @@ const AddUser = () => {
     }
   };
 
+  const updateUser: SubmitHandler<Inputs> = async (updateUser) => {
+    try {
+      const role = roles.find((role) => role.id == Number(updateUser.role));
+      const updatedUserData = {
+        ...updateUser,
+        id: Number(id),
+        role: role,
+      };
+      const response = await axios.patch(`${baseUrl}/update`, updatedUserData);
+      if (response.data.success) {
+        toast.success(response.data.message);
+        router.back();
+      } else if (!response.data.success) {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className="bg-gray-100">
-      <h1 className="text-4xl text-center text-black">Add User</h1>
+      <h1 className="text-4xl text-center text-black">Update User</h1>
       <div className="flex flex-col items-center justify-center min-h-screen py-2">
         <hr />
-        <form onSubmit={handleSubmit(addUser)}>
+        <form onSubmit={handleSubmit(updateUser)}>
           <label className="text-black" htmlFor="name">
             Name*
           </label>
@@ -85,7 +115,6 @@ const AddUser = () => {
               placeholder="Name"
               {...register("name", {
                 required: true,
-                validate: validateNoWhiteSpace,
               })}
             />
           </div>
@@ -121,36 +150,7 @@ const AddUser = () => {
             </div>
           )}
           <hr />
-          <label className="text-black" htmlFor="password">
-            Password*
-          </label>
-          <div className="flex justify-center items-center">
-            <input
-              className="w-72 p-3 text-black"
-              type={showPassword ? "text" : "password"}
-              id="password"
-              autoComplete="off"
-              placeholder="Password"
-              {...register("password", {
-                required: true,
-                minLength: 6,
-                validate: validateNoWhiteSpace,
-              })}
-            />
-            <div
-              className="-ml-9 cursor-pointer"
-              onClick={() => setShowPassword(!showPassword)}>
-              {showPassword ? <Eye color="black" /> : <EyeOff color="black" />}
-            </div>
-          </div>
-          {errors.password && (
-            <div className="error text-red-500">
-              {errors.password.type == "minLength" &&
-                "Password must be of 6 letters"}
-              {errors.password.type == "required" && "Enter your password"}
-            </div>
-          )}
-          <hr />
+
           <label className="text-black" htmlFor="role">
             Role*
           </label>
@@ -160,12 +160,9 @@ const AddUser = () => {
             id="role"
             {...register("role", { required: true })}>
             <option disabled>-- Select User Role --</option>
-            {roles.map((item, index) => {
+            {roles.map((item) => {
               return (
-                <option
-                  key={item.slug}
-                  className="text-gray-900"
-                  value={item.id}>
+                <option key={item.id} className="text-gray-900" value={item.id}>
                   {item.name}
                 </option>
               );
@@ -187,4 +184,4 @@ const AddUser = () => {
   );
 };
 
-export default AddUser;
+export default UpdateUser;

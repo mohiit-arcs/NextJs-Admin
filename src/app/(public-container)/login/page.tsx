@@ -1,4 +1,5 @@
 "use client";
+import { setAuthToken } from "@/services/frontend/storage.service";
 import axios from "axios";
 import { Eye, EyeOff } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -25,8 +26,15 @@ export default function LoginPage() {
     try {
       const response = await axios.post("api/v1/auth/login", login);
       if (response.data.success) {
-        router.push("/dashboard");
-        toast.success(response.data.message);
+        const token = response.data.token;
+        setAuthToken(token);
+        if (response.data.profile.role === "superAdmin") {
+          router.push("/user-list");
+          toast.success(response.data.message);
+        } else {
+          router.push("/restaurant-list");
+          toast.success(response.data.message);
+        }
       } else if (!response.data.success) {
         toast.error(response.data.message);
       }

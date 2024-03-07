@@ -1,3 +1,4 @@
+import { verifyToken } from "@/services/backend/jwt.service";
 import { PrismaClient } from "@prisma/client";
 import { HttpStatusCode } from "axios";
 import { ApiError } from "next/dist/server/api-utils";
@@ -6,6 +7,15 @@ import { NextRequest, NextResponse } from "next/server";
 const prisma = new PrismaClient();
 
 export async function GET(request: NextRequest) {
+  const authHeader = request.headers.get("Authorization");
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    throw new ApiError(
+      HttpStatusCode.Unauthorized,
+      "Authorization token is missing or invalid"
+    );
+  }
+  const token = authHeader.replace("Bearer ", "");
+  const userData = await verifyToken(token);
   const { searchParams } = request.nextUrl;
   const page = searchParams.get("page") || "1";
   const limit = searchParams.get("limit") || "10";
@@ -24,7 +34,7 @@ export async function GET(request: NextRequest) {
 
   try {
     let whereCondition: any = {
-      role: { slug: { not: "superAdmin" } },
+      userId: userData?.id,
       deletedAt: { equals: null },
     };
 
@@ -35,7 +45,12 @@ export async function GET(request: NextRequest) {
     if (search) {
       whereCondition = {
         AND: [
-          whereCondition,
+          {
+            userId: 26,
+            deletedAt: {
+              equals: null,
+            },
+          },
           {
             OR: [
               {
@@ -51,8 +66,46 @@ export async function GET(request: NextRequest) {
                 },
               },
               {
-                role: {
-                  name: {
+                location: {
+                  street: {
+                    contains: search,
+                    mode: "insensitive",
+                  },
+                },
+              },
+              {
+                location: {
+                  city: {
+                    contains: search,
+                    mode: "insensitive",
+                  },
+                },
+              },
+              {
+                phoneNumber: {
+                  contains: search,
+                  mode: "insensitive",
+                },
+              },
+              {
+                location: {
+                  state: {
+                    contains: search,
+                    mode: "insensitive",
+                  },
+                },
+              },
+              {
+                location: {
+                  country: {
+                    contains: search,
+                    mode: "insensitive",
+                  },
+                },
+              },
+              {
+                location: {
+                  zipCode: {
                     contains: search,
                     mode: "insensitive",
                   },
@@ -64,7 +117,7 @@ export async function GET(request: NextRequest) {
       };
     }
 
-    const users = await prisma.user.findMany({
+    const users = await prisma.restaurant.findMany({
       where: whereCondition,
       skip: skip,
       take: take,
@@ -73,18 +126,18 @@ export async function GET(request: NextRequest) {
         id: true,
         name: true,
         email: true,
-        role: true,
-        roleId: true,
+        phoneNumber: true,
+        location: true,
+        image: true,
         createdAt: true,
         updatedAt: true,
         deletedAt: true,
-        password: false,
       },
     });
 
-    const totalUsers = await prisma.user.count({
+    const totalRestaurants = await prisma.restaurant.count({
       where: {
-        role: { slug: { not: "superAdmin" } },
+        userId: userData?.id,
         deletedAt: { equals: null },
       },
     });
@@ -93,7 +146,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({
         success: true,
         result: users,
-        count: totalUsers,
+        count: totalRestaurants,
         statusCode: HttpStatusCode.Ok,
       });
     }
@@ -101,10 +154,11 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({
       success: true,
       result: [],
-      count: totalUsers,
+      count: totalRestaurants,
       statusCode: HttpStatusCode.Ok,
     });
   } catch (error: any) {
+    console.log(error);
     return NextResponse.json({
       success: false,
       message: error.message,
