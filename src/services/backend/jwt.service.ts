@@ -1,15 +1,14 @@
 import { TokenData } from "@/interfaces/backend/token.interface";
-import { HttpStatusCode } from "axios";
-import { ApiError } from "next/dist/server/api-utils";
 import { promisify } from "util";
 import { config } from "@/config/index.config";
+import { unauthorized } from "@/core/errors/http.error";
 const jwt = require("jsonwebtoken");
 const signAsync = promisify(jwt.sign);
 const verifyAsync = promisify(jwt.verify);
 
 export const verifyToken = async (token: string): Promise<TokenData | null> => {
   if (!token) {
-    throw new ApiError(HttpStatusCode.Unauthorized, "Invalid User");
+    throw unauthorized("Invalid Token. Please log in again");
   }
 
   let tokenData: TokenData | null = null;
@@ -18,7 +17,7 @@ export const verifyToken = async (token: string): Promise<TokenData | null> => {
     try {
       decodedToken = await verifyAsync(token, config.jwt.secret);
     } catch (e: any) {
-      throw new ApiError(HttpStatusCode.Unauthorized, "Invalid Token");
+      throw unauthorized("Invalid Token. Please log in again");
     }
     if (decodedToken?.id) {
       tokenData = Object.assign({
@@ -35,7 +34,7 @@ export const verifyToken = async (token: string): Promise<TokenData | null> => {
 
 export const generateToken = async (tokenData: TokenData): Promise<string> => {
   if (!tokenData) {
-    throw new ApiError(HttpStatusCode.Unauthorized, "Invalid User Profile");
+    throw unauthorized("Invalid Token. Please log in again");
   }
 
   let userInfoForToken = {};

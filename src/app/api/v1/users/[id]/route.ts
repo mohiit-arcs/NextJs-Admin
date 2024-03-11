@@ -1,6 +1,8 @@
+import { badRequest, notFound } from "@/core/errors/http.error";
+import { errorResponse } from "@/core/http-responses/error.http-response";
+import { messages } from "@/messages/backend/index.message";
 import { PrismaClient } from "@prisma/client";
 import { HttpStatusCode } from "axios";
-import { ApiError } from "next/dist/server/api-utils";
 import { NextRequest, NextResponse } from "next/server";
 
 const prisma = new PrismaClient();
@@ -18,7 +20,7 @@ export async function DELETE(req: NextRequest, { params }: any) {
     });
     if (user?.id) {
       if (user.role.slug == "superAdmin") {
-        throw new ApiError(HttpStatusCode.NotFound, "Cannot Delete SuperAdmin");
+        throw badRequest(messages.error.notAllowed);
       }
       await prisma.user.update({
         where: { id: id },
@@ -43,13 +45,9 @@ export async function DELETE(req: NextRequest, { params }: any) {
 
       return response;
     }
-    throw new ApiError(HttpStatusCode.NotFound, "User not found");
+    throw notFound(messages.error.userNotFound);
   } catch (error: any) {
-    return NextResponse.json({
-      success: false,
-      message: error.message,
-      statusCode: error.statusCode,
-    });
+    return errorResponse(error);
   }
 }
 
@@ -75,12 +73,8 @@ export async function GET(req: NextRequest, { params }: any) {
       });
     }
 
-    throw new ApiError(HttpStatusCode.NotFound, "User Not Found.");
+    throw notFound(messages.error.userNotFound);
   } catch (error: any) {
-    return NextResponse.json({
-      success: false,
-      message: error.message,
-      statusCode: error.statusCode,
-    });
+    return errorResponse(error);
   }
 }

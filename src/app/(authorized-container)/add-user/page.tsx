@@ -39,7 +39,7 @@ const AddUser = () => {
     try {
       const response = await axios.post("api/v1/auth/signup", {
         ...addUser,
-        role: roles[addUser.role],
+        role: roles.find((role) => role.id == addUser.role),
       });
       if (response.data.success) {
         router.push("user-list");

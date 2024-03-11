@@ -1,6 +1,5 @@
 "use client";
 
-import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -8,6 +7,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import imageCompression from "browser-image-compression";
 import { getAuthToken } from "@/services/frontend/storage.service";
+import axiosFetch from "@/app/axios.interceptor";
 
 type Inputs = {
   name: string;
@@ -19,10 +19,6 @@ type Inputs = {
   state: string;
   country: string;
   image: string;
-};
-
-const headers = {
-  Authorization: "Bearer " + getAuthToken(),
 };
 
 const AddRestaurant = () => {
@@ -66,10 +62,9 @@ const AddRestaurant = () => {
         country: addRestaurant.country,
       };
 
-      const response = await axios.post(
-        "api/v1/restaurants/create",
-        addRestaurantPayload,
-        { headers: headers }
+      const response = await axiosFetch.post(
+        "api/v1/restaurants",
+        addRestaurantPayload
       );
 
       if (response.data.success) {

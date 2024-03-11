@@ -85,7 +85,7 @@ const UpdateUser = () => {
         id: Number(id),
         role: role,
       };
-      const response = await axios.patch(`${baseUrl}/update`, updatedUserData);
+      const response = await axios.patch(`${baseUrl}`, updatedUserData);
       if (response.data.success) {
         toast.success(response.data.message);
         router.back();

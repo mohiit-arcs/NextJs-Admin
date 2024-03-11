@@ -1,6 +1,4 @@
 import { notFound } from "@/core/errors/http.error";
-import { errorResponse } from "@/core/http-responses/error.http-response";
-import { messages } from "@/messages/backend/index.message";
 import { verifyToken } from "@/services/backend/jwt.service";
 import { PrismaClient } from "@prisma/client";
 import { HttpStatusCode } from "axios";
@@ -22,21 +20,21 @@ export async function DELETE(request: NextRequest, { params }: any) {
     const userData = await verifyToken(token);
     const id = Number(params.id);
     console.log(id);
-    const restaurant = await prisma.restaurant.findFirst({
+    const foodItem = await prisma.foodItem.findFirst({
       where: { id: id, userId: userData?.id },
       select: {
         id: true,
       },
     });
-    if (restaurant?.id) {
-      await prisma.restaurant.update({
+    if (foodItem?.id) {
+      await prisma.foodItem.update({
         where: { id: id },
         data: {
           deletedAt: new Date(),
         },
       });
 
-      const totalRestaurants = await prisma.restaurant.count({
+      const totalFoodItems = await prisma.foodItem.count({
         where: {
           deletedAt: { equals: null },
         },
@@ -44,16 +42,20 @@ export async function DELETE(request: NextRequest, { params }: any) {
 
       const response = NextResponse.json({
         success: true,
-        message: "Restaurant Deleted Successfully",
+        message: "Food Item Deleted Successfully",
         statusCode: HttpStatusCode.Created,
-        count: totalRestaurants,
+        count: totalFoodItems,
       });
 
       return response;
     }
-    throw notFound("Restaurant not found");
+    throw notFound("Food Item not found");
   } catch (error: any) {
-    return errorResponse(error);
+    return NextResponse.json({
+      success: false,
+      message: error.message,
+      statusCode: error.statusCode,
+    });
   }
 }
 
@@ -69,29 +71,35 @@ export async function GET(request: NextRequest, { params }: any) {
     const token = authHeader.replace("Bearer ", "");
     const userData = await verifyToken(token);
     const id = Number(params.id);
-    const user = await prisma.restaurant.findFirst({
+    const foodItem = await prisma.foodItem.findFirst({
       where: { id: id, userId: userData?.id },
       select: {
         id: true,
         name: true,
-        email: true,
-        phoneNumber: true,
-        image: true,
-        location: true,
+        menu: {
+          select: {
+            restaurant: true,
+            menuCategory: true,
+          },
+        },
       },
     });
 
-    if (user?.id) {
+    if (foodItem?.id) {
       return NextResponse.json({
         success: true,
         data: {
-          details: user,
+          details: foodItem,
         },
       });
     }
 
-    throw notFound(messages.error.userNotFound);
+    throw notFound("Food Item Not Found.");
   } catch (error: any) {
-    return errorResponse(error);
+    return NextResponse.json({
+      success: false,
+      message: error.message,
+      statusCode: error.statusCode,
+    });
   }
 }

@@ -1,6 +1,8 @@
+import { badRequest, notFound } from "@/core/errors/http.error";
+import { errorResponse } from "@/core/http-responses/error.http-response";
+import { messages } from "@/messages/backend/index.message";
 import { PrismaClient } from "@prisma/client";
 import { HttpStatusCode } from "axios";
-import { ApiError } from "next/dist/server/api-utils";
 import { NextRequest, NextResponse } from "next/server";
 
 const prisma = new PrismaClient();
@@ -13,10 +15,7 @@ export async function GET(request: NextRequest) {
   const sortBy = searchParams.get("sortBy") || "createdAt";
   const sortOrder = searchParams.get("sortOrder") || "desc";
   if (isNaN(parseInt(page)) || isNaN(parseInt(limit))) {
-    throw new ApiError(
-      HttpStatusCode.BadRequest,
-      "Invalid page or limit parameters"
-    );
+    throw badRequest("You entered something wrong. Please try again");
   }
 
   const skip = (parseInt(page) - 1) * parseInt(limit);
@@ -105,10 +104,50 @@ export async function GET(request: NextRequest) {
       statusCode: HttpStatusCode.Ok,
     });
   } catch (error: any) {
-    return NextResponse.json({
-      success: false,
-      message: error.message,
-      statusCode: error.statusCode,
+    return errorResponse(error);
+  }
+}
+
+export async function PATCH(request: NextRequest) {
+  try {
+    const { id, name, email, role } = await request.json();
+    const existingUser = await prisma.user.findFirst({
+      where: { id: id },
     });
+
+    if (!existingUser?.id) {
+      throw notFound(messages.error.userNotFound);
+    }
+
+    const userWithExistingEmail = await prisma.user.findFirst({
+      where: { email: email, id: { not: id } },
+      select: { id: true },
+    });
+
+    if (userWithExistingEmail != null) {
+      throw badRequest(messages.error.emailAlreadyExists);
+    }
+
+    await prisma.user.update({
+      where: {
+        id: id,
+      },
+      data: {
+        name: name,
+        email: email,
+        roleId: role.id,
+        updatedAt: new Date(),
+      },
+    });
+
+    const response = NextResponse.json({
+      success: true,
+      message: "User Updated Successfully",
+      statusCode: HttpStatusCode.Ok,
+    });
+
+    return response;
+  } catch (error: any) {
+    return errorResponse(error);
   }
 }

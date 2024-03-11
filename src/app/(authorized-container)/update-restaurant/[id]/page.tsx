@@ -1,13 +1,12 @@
 "use client";
 
-import axios from "axios";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import imageCompression from "browser-image-compression";
-import { getAuthToken } from "@/services/frontend/storage.service";
+import axiosFetch from "@/app/axios.interceptor";
 
 type Inputs = {
   name: string;
@@ -22,10 +21,6 @@ type Inputs = {
 };
 const apiUrl = "http://localhost:3000/api/v1/restaurants";
 const baseUrl = "http://localhost:3000";
-
-const headers = {
-  Authorization: "Bearer " + getAuthToken(),
-};
 
 const UpdateRestaurant = () => {
   const { id } = useParams();
@@ -46,9 +41,7 @@ const UpdateRestaurant = () => {
 
   const getRestaurantDetails = async (restaurantId: number) => {
     try {
-      const response = await axios.get(`${apiUrl}/${restaurantId}`, {
-        headers: headers,
-      });
+      const response = await axiosFetch.get(`${apiUrl}/${restaurantId}`);
 
       if (response.data.success) {
         const restaurantData = response.data.data.details;
@@ -133,10 +126,9 @@ const UpdateRestaurant = () => {
         country: updateRestaurant.country,
       };
 
-      const response = await axios.patch(
-        `${apiUrl}/update`,
-        updateRestaurantPayload,
-        { headers: headers }
+      const response = await axiosFetch.patch(
+        `${apiUrl}`,
+        updateRestaurantPayload
       );
 
       if (response.data.success) {

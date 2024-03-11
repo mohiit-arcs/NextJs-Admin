@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import _ from "lodash";
 import Pagination from "@/components/pagination/pagination";
+import useDebounce from "@/hooks/useDebounce";
 
 const entriesPerPageOptions = [5, 10, 15];
 
@@ -23,18 +24,20 @@ const UserList = () => {
   const [sortOrder, setSortOrder] = useState("desc");
   const router = useRouter();
 
+  const debouncedSearchQuery = useDebounce(searchQuery, 500);
+
   useEffect(() => {
     getUsers();
 
     return () => {
-      debouncedUserResults.cancel();
+      // debouncedUserResults.cancel();
     };
-  }, [currentPage, usersLimit, searchQuery, sortBy, sortOrder]);
+  }, [currentPage, usersLimit, debouncedSearchQuery, sortBy, sortOrder]);
 
   const getUsers = async () => {
     try {
       const response = await axios.get(
-        `api/v1/users?page=${currentPage}&limit=${usersLimit}&search=${searchQuery}&sortBy=${sortBy}&sortOrder=${sortOrder}`
+        `api/v1/users?page=${currentPage}&limit=${usersLimit}&search=${debouncedSearchQuery}&sortBy=${sortBy}&sortOrder=${sortOrder}`
       );
       if (response.data.count != 0) {
         setUsers(response.data.result);

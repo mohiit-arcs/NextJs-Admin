@@ -1,6 +1,7 @@
+import { notFound } from "@/core/errors/http.error";
+import { errorResponse } from "@/core/http-responses/error.http-response";
 import { PrismaClient } from "@prisma/client";
 import { HttpStatusCode } from "axios";
-import { ApiError } from "next/dist/server/api-utils";
 import { NextRequest, NextResponse } from "next/server";
 
 const prisma = new PrismaClient();
@@ -19,7 +20,7 @@ export async function GET(request: NextRequest) {
     });
 
     if (roles.length == 0) {
-      throw new ApiError(HttpStatusCode.NotFound, "No Roles Found");
+      throw notFound("No Roles Found");
     }
 
     return NextResponse.json({
@@ -29,10 +30,6 @@ export async function GET(request: NextRequest) {
       statusCode: HttpStatusCode.Ok,
     });
   } catch (error: any) {
-    return NextResponse.json({
-      success: false,
-      message: error.message,
-      statusCode: error.statusCode,
-    });
+    return errorResponse(error);
   }
 }
