@@ -55,11 +55,11 @@ const UserList = () => {
       const toDelete = confirm("Are you sure, you want to delete the user?");
       if (toDelete) {
         const response = await axios.delete(`api/v1/users/${userId}`);
-        if (response.data.success) {
+        if (response.data.data?.success) {
           const updatedUsers = users.filter((user) => user.id != userId);
           setUsers(updatedUsers);
-          setTotalUsers(response.data.count);
-          toast.success(response.data.message);
+          setTotalUsers(response.data.data.count);
+          toast.success(response.data.data.message);
         }
       }
       return;

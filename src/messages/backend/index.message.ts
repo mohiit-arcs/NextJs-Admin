@@ -10,7 +10,11 @@ export const messages = {
     internalServerError: "Internal Server Error",
     information: "Information",
   },
-  response: {},
+  response: {
+    requestUpdated: "Request updated successfully",
+    signupUser: "User Registered Successfully",
+    deleteUser: "User deleted successfully",
+  },
   error: {
     invalidPassword: "Invalid password. Please try again",
     invalidEmail: "Invalid email address. Please try again",

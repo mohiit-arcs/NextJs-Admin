@@ -42,8 +42,7 @@ const UpdateUser = () => {
   const getUserDetails = async (userId: number) => {
     try {
       const response = await axios.get(`${baseUrl}/${userId}`);
-
-      if (response.data.success) {
+      if (response.data.data.success) {
         const userData = response.data.data.details;
         setValue("name", userData.name, {
           shouldValidate: true,
@@ -86,10 +85,10 @@ const UpdateUser = () => {
         role: role,
       };
       const response = await axios.patch(`${baseUrl}`, updatedUserData);
-      if (response.data.success) {
-        toast.success(response.data.message);
+      if (response.data.data?.success) {
+        toast.success(response.data.data.message);
         router.back();
-      } else if (!response.data.success) {
+      } else {
         toast.error(response.data.message);
       }
     } catch (error) {

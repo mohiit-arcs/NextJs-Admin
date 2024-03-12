@@ -1,11 +1,10 @@
-import { badRequest, notFound } from "@/core/errors/http.error";
+import { badRequest } from "@/core/errors/http.error";
 import { errorResponse } from "@/core/http-responses/error.http-response";
+import { successResponse } from "@/core/http-responses/success.http-response";
 import { messages } from "@/messages/backend/index.message";
-import { PrismaClient } from "@prisma/client";
+import { updateUser, userList } from "@/services/backend/user.service";
 import { HttpStatusCode } from "axios";
 import { NextRequest, NextResponse } from "next/server";
-
-const prisma = new PrismaClient();
 
 export async function GET(request: NextRequest) {
   const { searchParams } = request.nextUrl;
@@ -22,85 +21,12 @@ export async function GET(request: NextRequest) {
   const take = parseInt(limit);
 
   try {
-    let whereCondition: any = {
-      role: { slug: { not: "superAdmin" } },
-      deletedAt: { equals: null },
-    };
-
-    const orderBy = {
-      [sortBy]: sortOrder,
-    };
-
-    if (search) {
-      whereCondition = {
-        AND: [
-          whereCondition,
-          {
-            OR: [
-              {
-                name: {
-                  contains: search,
-                  mode: "insensitive",
-                },
-              },
-              {
-                email: {
-                  contains: search,
-                  mode: "insensitive",
-                },
-              },
-              {
-                role: {
-                  name: {
-                    contains: search,
-                    mode: "insensitive",
-                  },
-                },
-              },
-            ],
-          },
-        ],
-      };
-    }
-
-    const users = await prisma.user.findMany({
-      where: whereCondition,
-      skip: skip,
-      take: take,
-      orderBy,
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        role: true,
-        roleId: true,
-        createdAt: true,
-        updatedAt: true,
-        deletedAt: true,
-        password: false,
-      },
-    });
-
-    const totalUsers = await prisma.user.count({
-      where: {
-        role: { slug: { not: "superAdmin" } },
-        deletedAt: { equals: null },
-      },
-    });
-
-    if (users.length != 0) {
-      return NextResponse.json({
-        success: true,
-        result: users,
-        count: totalUsers,
-        statusCode: HttpStatusCode.Ok,
-      });
-    }
+    const response = await userList(search, sortBy, sortOrder, skip, take);
 
     return NextResponse.json({
       success: true,
-      result: [],
-      count: totalUsers,
+      result: response.users,
+      count: response.count,
       statusCode: HttpStatusCode.Ok,
     });
   } catch (error: any) {
@@ -111,42 +37,19 @@ export async function GET(request: NextRequest) {
 export async function PATCH(request: NextRequest) {
   try {
     const { id, name, email, role } = await request.json();
-    const existingUser = await prisma.user.findFirst({
-      where: { id: id },
-    });
 
-    if (!existingUser?.id) {
-      throw notFound(messages.error.userNotFound);
-    }
+    const updatedUser = {
+      name,
+      email,
+      roleSlug: role.slug,
+    };
 
-    const userWithExistingEmail = await prisma.user.findFirst({
-      where: { email: email, id: { not: id } },
-      select: { id: true },
-    });
-
-    if (userWithExistingEmail != null) {
-      throw badRequest(messages.error.emailAlreadyExists);
-    }
-
-    await prisma.user.update({
-      where: {
-        id: id,
-      },
+    return successResponse({
       data: {
-        name: name,
-        email: email,
-        roleId: role.id,
-        updatedAt: new Date(),
+        success: await updateUser(Number(id), updatedUser),
+        message: messages.response.requestUpdated,
       },
     });
-
-    const response = NextResponse.json({
-      success: true,
-      message: "User Updated Successfully",
-      statusCode: HttpStatusCode.Ok,
-    });
-
-    return response;
   } catch (error: any) {
     return errorResponse(error);
   }

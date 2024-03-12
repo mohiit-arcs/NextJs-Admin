@@ -41,10 +41,10 @@ const AddUser = () => {
         ...addUser,
         role: roles.find((role) => role.id == addUser.role),
       });
-      if (response.data.success) {
+      if (response.data.data?.success) {
         router.push("user-list");
         toast.success(response.data.message);
-      } else if (!response.data.success) {
+      } else if (!response.data.data?.success) {
         toast.error(response.data.message);
       }
     } catch (error) {
