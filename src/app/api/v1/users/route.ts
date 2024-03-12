@@ -7,20 +7,19 @@ import { HttpStatusCode } from "axios";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
-  const { searchParams } = request.nextUrl;
-  const page = searchParams.get("page") || "1";
-  const limit = searchParams.get("limit") || "10";
-  const search = searchParams.get("search")?.trim() || "";
-  const sortBy = searchParams.get("sortBy") || "createdAt";
-  const sortOrder = searchParams.get("sortOrder") || "desc";
-  if (isNaN(parseInt(page)) || isNaN(parseInt(limit))) {
-    throw badRequest("You entered something wrong. Please try again");
-  }
-
-  const skip = (parseInt(page) - 1) * parseInt(limit);
-  const take = parseInt(limit);
-
   try {
+    const { searchParams } = request.nextUrl;
+    const page = searchParams.get("page") || "1";
+    const limit = searchParams.get("limit") || "10";
+    const search = searchParams.get("search")?.trim() || "";
+    const sortBy = searchParams.get("sortBy") || "createdAt";
+    const sortOrder = searchParams.get("sortOrder") || "desc";
+    if (isNaN(parseInt(page)) || isNaN(parseInt(limit))) {
+      throw badRequest("You entered something wrong. Please try again");
+    }
+
+    const skip = (parseInt(page) - 1) * parseInt(limit);
+    const take = parseInt(limit);
     const response = await userList(search, sortBy, sortOrder, skip, take);
 
     return NextResponse.json({
@@ -47,8 +46,8 @@ export async function PATCH(request: NextRequest) {
     return successResponse({
       data: {
         success: await updateUser(Number(id), updatedUser),
-        message: messages.response.requestUpdated,
       },
+      message: messages.response.requestUpdated,
     });
   } catch (error: any) {
     return errorResponse(error);

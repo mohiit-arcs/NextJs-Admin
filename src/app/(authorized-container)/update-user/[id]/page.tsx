@@ -86,7 +86,7 @@ const UpdateUser = () => {
       };
       const response = await axios.patch(`${baseUrl}`, updatedUserData);
       if (response.data.data?.success) {
-        toast.success(response.data.data.message);
+        toast.success(response.data.message);
         router.back();
       } else {
         toast.error(response.data.message);

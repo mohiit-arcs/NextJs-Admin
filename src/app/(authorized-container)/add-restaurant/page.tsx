@@ -67,7 +67,7 @@ const AddRestaurant = () => {
         addRestaurantPayload
       );
 
-      if (response.data.success) {
+      if (response.data.data.success) {
         router.push("restaurant-list");
         toast.success(response.data.message);
       } else {

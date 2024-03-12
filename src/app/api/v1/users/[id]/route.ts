@@ -17,7 +17,6 @@ export async function DELETE(req: NextRequest, { params }: any) {
 export async function GET(req: NextRequest, { params }: any) {
   try {
     const id = Number(params.id);
-    console.log(await getUserById(id));
     return successResponse({
       data: await getUserById(id),
     });

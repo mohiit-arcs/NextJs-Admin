@@ -60,13 +60,13 @@ const UserList = () => {
         const response = await axiosFetch.delete(
           `api/v1/restaurants/${restaurantId}`
         );
-        if (response.data.success) {
+        if (response.data.data.success) {
           const updatedUsers = restaurants.filter(
             (restaurant) => restaurant.id != restaurantId
           );
           setRestaurants(updatedUsers);
-          setTotalRestaurants(response.data.count);
-          toast.success(response.data.message);
+          setTotalRestaurants(response.data.data.count);
+          toast.success(response.data.data.message);
         }
       }
       return;
