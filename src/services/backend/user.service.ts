@@ -3,7 +3,6 @@ import { CreateUser } from "@/interfaces/backend/user.interface";
 import { messages } from "@/messages/backend/index.message";
 import { PrismaClient, RoleSlug } from "@prisma/client";
 import bcrypt from "bcrypt";
-import { NextResponse } from "next/server";
 
 const prisma = new PrismaClient();
 
