@@ -83,7 +83,7 @@ export async function GET(request: NextRequest) {
     const sortBy = searchParams.get("sortBy") || "createdAt";
     const sortOrder = searchParams.get("sortOrder") || "desc";
     if (isNaN(parseInt(page)) || isNaN(parseInt(limit))) {
-      throw badRequest("You entered something wrong. Please try again");
+      throw badRequest(messages.error.badRequest);
     }
 
     const skip = (parseInt(page) - 1) * parseInt(limit);

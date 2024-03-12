@@ -43,7 +43,11 @@ const AddFoodItem = () => {
         router.push("food-item-list");
         toast.success(response.data.message);
       } else if (!response.data.data.success) {
-        toast.error(response.data.message);
+        if (response.data.statusCode == 500) {
+          toast.error("There is some internal problem will be resolved soon!");
+        } else {
+          toast.error(response.data.message);
+        }
       }
     } catch (error) {
       console.log(error);

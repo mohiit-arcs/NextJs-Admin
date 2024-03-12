@@ -1,4 +1,6 @@
 import { notFound } from "@/core/errors/http.error";
+import { successResponse } from "@/core/http-responses/success.http-response";
+import { getFoodItemById } from "@/services/backend/foodItem.service";
 import { verifyToken } from "@/services/backend/jwt.service";
 import { PrismaClient } from "@prisma/client";
 import { HttpStatusCode } from "axios";
@@ -71,30 +73,9 @@ export async function GET(request: NextRequest, { params }: any) {
     const token = authHeader.replace("Bearer ", "");
     const userData = await verifyToken(token);
     const id = Number(params.id);
-    const foodItem = await prisma.foodItem.findFirst({
-      where: { id: id, userId: userData?.id },
-      select: {
-        id: true,
-        name: true,
-        menu: {
-          select: {
-            restaurant: true,
-            menuCategory: true,
-          },
-        },
-      },
+    return successResponse({
+      data: await getFoodItemById(id, userData?.id!),
     });
-
-    if (foodItem?.id) {
-      return NextResponse.json({
-        success: true,
-        data: {
-          details: foodItem,
-        },
-      });
-    }
-
-    throw notFound("Food Item Not Found.");
   } catch (error: any) {
     return NextResponse.json({
       success: false,

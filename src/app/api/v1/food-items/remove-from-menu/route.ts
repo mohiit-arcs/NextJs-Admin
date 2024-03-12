@@ -1,12 +1,12 @@
 import { badRequest } from "@/core/errors/http.error";
 import { errorResponse } from "@/core/http-responses/error.http-response";
+import { successResponse } from "@/core/http-responses/success.http-response";
+import { messages } from "@/messages/backend/index.message";
+import { removeFromMenu } from "@/services/backend/foodItem.service";
 import { verifyToken } from "@/services/backend/jwt.service";
-import { PrismaClient } from "@prisma/client";
 import { HttpStatusCode } from "axios";
 import { ApiError } from "next/dist/server/api-utils";
-import { NextRequest, NextResponse } from "next/server";
-
-const prisma = new PrismaClient();
+import { NextRequest } from "next/server";
 
 export async function PATCH(request: NextRequest) {
   try {
@@ -21,25 +21,16 @@ export async function PATCH(request: NextRequest) {
     const userData = await verifyToken(token);
     const { id, restaurantId, categoryId } = await request.json();
     if (isNaN(restaurantId) || isNaN(categoryId)) {
-      throw badRequest("You entered something wrong. Please try again");
+      throw badRequest(messages.error.badRequest);
     }
 
-    await prisma.foodItem.update({
-      where: { id: id, userId: userData?.id },
-      data: {
-        menu: {
-          deleteMany: {
-            restaurantId: parseInt(restaurantId),
-            menuCategoryId: parseInt(categoryId),
-          },
-        },
-      },
-    });
-
-    return NextResponse.json({
-      success: true,
-      message: "Food Item Removed from menu",
-      statusCode: HttpStatusCode.Ok,
+    return successResponse({
+      data: await removeFromMenu(
+        id,
+        parseInt(restaurantId),
+        parseInt(categoryId),
+        userData?.id!
+      ),
     });
   } catch (error: any) {
     console.log(error);

@@ -47,12 +47,15 @@ const AddToMenu = () => {
         `${apiUrl}/food-items/add-to-menu`,
         { id, ...addFoodToMenu }
       );
-      if (response.data.success) {
-        toast.success(response.data.message);
+      if (response.data.data?.success) {
+        toast.success(response.data.data?.message);
         router.back();
       } else if (!response.data.success) {
-        toast.error(response.data.message);
-        // console.log("first");
+        if (response.data.statusCode == 500) {
+          toast.error("There is some internal problem will be resolved soon!");
+        } else {
+          toast.error(response.data.message);
+        }
       }
     } catch (error) {
       console.log(error);
@@ -65,7 +68,7 @@ const AddToMenu = () => {
         `${apiUrl}/food-items/${foodItemId}`
       );
       console.log(response);
-      if (response.data.success) {
+      if (response.data.data?.success) {
         setFoodItemData(response.data.data.details);
       }
     } catch (error) {
@@ -117,9 +120,7 @@ const AddToMenu = () => {
             categoryId,
           }
         );
-        console.log(restaurantId);
-        console.log(categoryId);
-        if (response.data.success) {
+        if (response.data.data?.success) {
           const updatedMenu = foodItemData?.menu
             .map((item: any) => {
               console.log(item);
@@ -138,9 +139,15 @@ const AddToMenu = () => {
             ...foodItemData,
             menu: updatedMenu,
           });
-          toast.success(response.data.message);
+          toast.success(response.data.data?.message);
         } else {
-          toast.error(response.data.message);
+          if (response.data.statusCode == 500) {
+            toast.error(
+              "There is some internal problem will be resolved soon!"
+            );
+          } else {
+            toast.error(response.data.message);
+          }
         }
       }
     } catch (error) {

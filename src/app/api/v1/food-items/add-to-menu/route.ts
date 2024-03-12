@@ -1,12 +1,12 @@
 import { badRequest } from "@/core/errors/http.error";
 import { errorResponse } from "@/core/http-responses/error.http-response";
+import { successResponse } from "@/core/http-responses/success.http-response";
+import { messages } from "@/messages/backend/index.message";
+import { addToMenu } from "@/services/backend/foodItem.service";
 import { verifyToken } from "@/services/backend/jwt.service";
-import { PrismaClient } from "@prisma/client";
 import { HttpStatusCode } from "axios";
 import { ApiError } from "next/dist/server/api-utils";
-import { NextRequest, NextResponse } from "next/server";
-
-const prisma = new PrismaClient();
+import { NextRequest } from "next/server";
 
 export async function PATCH(request: NextRequest) {
   try {
@@ -22,42 +22,16 @@ export async function PATCH(request: NextRequest) {
     const { id, restaurantId, categoryId } = await request.json();
 
     if (isNaN(parseInt(restaurantId)) || isNaN(parseInt(categoryId))) {
-      throw badRequest("You entered something wrong. Please try again");
+      throw badRequest(messages.error.badRequest);
     }
 
-    const existingFoodItem = await prisma.foodItem.findFirst({
-      where: { id: parseInt(id), userId: userData?.id },
-      select: {
-        id: true,
-        menu: {
-          where: {
-            restaurantId: parseInt(restaurantId),
-            menuCategoryId: parseInt(categoryId),
-          },
-        },
-      },
-    });
-
-    if (existingFoodItem?.menu.length != 0) {
-      throw badRequest("Food Item Already Added");
-    }
-
-    await prisma.foodItem.update({
-      where: { id: parseInt(id), userId: userData?.id },
-      data: {
-        menu: {
-          create: {
-            restaurantId: parseInt(restaurantId),
-            menuCategoryId: parseInt(categoryId),
-          },
-        },
-      },
-    });
-
-    return NextResponse.json({
-      success: true,
-      message: "Food Item Added",
-      statusCode: HttpStatusCode.Ok,
+    return successResponse({
+      data: await addToMenu(
+        parseInt(id),
+        parseInt(restaurantId),
+        parseInt(categoryId),
+        userData?.id!
+      ),
     });
   } catch (error: any) {
     console.log(error);

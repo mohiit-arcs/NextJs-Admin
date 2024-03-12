@@ -31,7 +31,7 @@ const UpdateFoodItem = () => {
     try {
       const response = await axiosFetch.get(`${apiUrl}/${foodItemId}`);
 
-      if (response.data.success) {
+      if (response.data.data?.success) {
         const restaurantData = response.data.data.details;
         setValue("name", restaurantData.name, {
           shouldValidate: true,
@@ -50,7 +50,7 @@ const UpdateFoodItem = () => {
         id: Number(id),
         name: updateFoodItem.name,
       });
-      if (response.data.success) {
+      if (response.data.data?.success) {
         router.push("food-item-list");
         toast.success(response.data.message);
         router.back();
