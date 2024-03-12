@@ -1,12 +1,13 @@
 import { notFound } from "@/core/errors/http.error";
 import { errorResponse } from "@/core/http-responses/error.http-response";
+import { acl } from "@/services/backend/acl.service";
 import { PrismaClient } from "@prisma/client";
 import { HttpStatusCode } from "axios";
 import { NextRequest, NextResponse } from "next/server";
 
 const prisma = new PrismaClient();
 
-export async function GET(request: NextRequest) {
+export const GET = acl("users", "full", async (request: NextRequest) => {
   try {
     const roles = await prisma.role.findMany({
       where: {
@@ -32,4 +33,4 @@ export async function GET(request: NextRequest) {
   } catch (error: any) {
     return errorResponse(error);
   }
-}
+});

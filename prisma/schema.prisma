@@ -1,0 +1,191 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Role {
+  id              Int              @id @default(autoincrement())
+  name            String           @db.VarChar(255)
+  slug            RoleSlug         @unique
+  users           User[]
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  deletedAt       DateTime?
+  rolePermissions RolePermission[]
+
+  @@index([slug])
+  @@map("roles")
+}
+
+model User {
+  id          Int          @id @default(autoincrement())
+  name        String       @db.VarChar(255)
+  email       String       @unique @db.VarChar(100)
+  password    String       @db.VarChar(60)
+  role        Role         @relation(fields: [roleId], references: [id])
+  roleId      Int
+  restaurants Restaurant[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  deletedAt   DateTime?
+  foodItems   FoodItem[]
+
+  @@index([email])
+  @@index([roleId])
+  @@map("users")
+}
+
+model Module {
+  id          Int          @id @default(autoincrement())
+  slug        String       @unique @db.VarChar(30)
+  name        String       @db.VarChar(100)
+  description String?
+  sortOrder   Int?         @map("sort_order")
+  parent      Module?      @relation("ParentRelation", fields: [parentId], references: [id])
+  parentId    Int?         @map("parent_id")
+  createdAt   DateTime     @default(now()) @map("created_at")
+  updatedAt   DateTime     @default(now()) @map("updated_at")
+  deletedAt   DateTime?    @map("deleted_at")
+  permission  Permission[]
+  children    Module[]     @relation("ParentRelation")
+
+  @@index([slug])
+  @@map("modules")
+}
+
+model Permission {
+  id              Int              @id @default(autoincrement())
+  module          Module           @relation(fields: [moduleId], references: [id])
+  moduleId        Int              @map("module_id")
+  slug            String           @db.VarChar(30)
+  name            String           @db.VarChar(100)
+  description     String?
+  sortOrder       Int?             @map("sort_order")
+  createdAt       DateTime         @default(now()) @map("created_at")
+  updatedAt       DateTime         @default(now()) @map("updated_at")
+  deletedAt       DateTime?        @map("deleted_at")
+  rolePermissions RolePermission[]
+
+  @@index([moduleId])
+  @@index([slug])
+  @@map("permissions")
+}
+
+model RolePermission {
+  id           Int        @id @default(autoincrement())
+  role         Role       @relation(fields: [roleId], references: [id])
+  roleId       Int        @map("role_id")
+  permission   Permission @relation(fields: [permissionId], references: [id])
+  permissionId Int        @map("permission_id")
+  createdAt    DateTime   @default(now()) @map("created_at")
+  updatedAt    DateTime   @default(now()) @map("updated_at")
+  deletedAt    DateTime?  @map("deleted_at")
+
+  @@index([roleId])
+  @@index([permissionId])
+  @@map("role_permissions")
+}
+
+model Restaurant {
+  id          Int       @id @default(autoincrement())
+  name        String    @db.VarChar(255)
+  email       String    @unique @db.VarChar(150)
+  phoneNumber String    @db.VarChar(50)
+  image       String
+  location    Location  @relation(fields: [locationId], references: [id])
+  locationId  Int
+  admin       User?     @relation(fields: [userId], references: [id])
+  userId      Int?      @map("adminId")
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime?
+  menu        Menu[]
+
+  @@index([email])
+  @@index([userId])
+  @@map("restaurants")
+}
+
+model Location {
+  id         Int          @id @default(autoincrement())
+  street     String
+  city       String       @db.VarChar(100)
+  state      String       @db.VarChar(150)
+  zipCode    String       @db.VarChar(10)
+  country    String       @db.VarChar(100)
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+  deletedAt  DateTime?
+  restaurant Restaurant[]
+
+  @@map("location")
+}
+
+model MenuCategory {
+  id        Int              @id @default(autoincrement())
+  name      String           @db.VarChar(255)
+  slug      MenuCategorySlug @unique
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+  deletedAt DateTime?
+  menus     Menu[]
+
+  @@index([slug])
+  @@map("menu_categories")
+}
+
+model FoodItem {
+  id        Int       @id @default(autoincrement())
+  name      String    @db.VarChar(255)
+  admin     User?     @relation(fields: [userId], references: [id])
+  userId    Int?      @map("adminId")
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+  menu      Menu[]
+
+  @@index([userId])
+  @@map("food_items")
+}
+
+model Menu {
+  id             Int          @id @default(autoincrement())
+  restaurant     Restaurant   @relation(fields: [restaurantId], references: [id])
+  restaurantId   Int
+  menuCategory   MenuCategory @relation(fields: [menuCategoryId], references: [id])
+  menuCategoryId Int
+  foodItem       FoodItem     @relation(fields: [foodItemId], references: [id])
+  foodItemId     Int
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  deletedAt      DateTime?
+
+  @@index([restaurantId])
+  @@index([menuCategoryId])
+  @@index([foodItemId])
+  @@map("menus")
+}
+
+enum RoleSlug {
+  superAdmin
+  restaurantAdmin
+  deliveryPartner
+  customer
+}
+
+enum MenuCategorySlug {
+  breakfast
+  lunch
+  dinner
+  snacks
+}

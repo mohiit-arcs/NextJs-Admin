@@ -1,29 +1,19 @@
 import { badRequest } from "@/core/errors/http.error";
 import { errorResponse } from "@/core/http-responses/error.http-response";
 import { successResponse } from "@/core/http-responses/success.http-response";
+import { ApiRequest } from "@/interfaces/backend/request.interface";
 import { messages } from "@/messages/backend/index.message";
+import { acl } from "@/services/backend/acl.service";
 import {
   createFoodItem,
   foodItemList,
   updateFoodItem,
 } from "@/services/backend/foodItem.service";
-import { verifyToken } from "@/services/backend/jwt.service";
 import { HttpStatusCode } from "axios";
-import { ApiError } from "next/dist/server/api-utils";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 
-export async function POST(request: NextRequest) {
+export const POST = acl("restaurants", "full", async (request: ApiRequest) => {
   try {
-    const authHeader = request.headers.get("Authorization");
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
-      throw new ApiError(
-        HttpStatusCode.Unauthorized,
-        "Authorization token is missing or invalid"
-      );
-    }
-    const token = authHeader.replace("Bearer ", "");
-    const userData = await verifyToken(token);
-
     const { name, restaurantId, categoryId } = await request.json();
 
     if (name.trim() === "") {
@@ -44,7 +34,7 @@ export async function POST(request: NextRequest) {
           foodItem,
           parseInt(restaurantId),
           parseInt(categoryId),
-          userData?.id!
+          request.user?.id!
         ),
       },
       message: messages.response.createFoodItem,
@@ -53,19 +43,10 @@ export async function POST(request: NextRequest) {
     console.log(error);
     return errorResponse(error);
   }
-}
+});
 
-export async function GET(request: NextRequest) {
+export const GET = acl("restaurants", "full", async (request: ApiRequest) => {
   try {
-    const authHeader = request.headers.get("Authorization");
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
-      throw new ApiError(
-        HttpStatusCode.Unauthorized,
-        "Authorization token is missing or invalid"
-      );
-    }
-    const token = authHeader.replace("Bearer ", "");
-    const userData = await verifyToken(token);
     const { searchParams } = request.nextUrl;
     const page = searchParams.get("page") || "1";
     const limit = searchParams.get("limit") || "10";
@@ -85,7 +66,7 @@ export async function GET(request: NextRequest) {
       sortOrder,
       skip,
       take,
-      userData?.id!
+      request.user?.id!
     );
 
     return NextResponse.json({
@@ -98,19 +79,10 @@ export async function GET(request: NextRequest) {
     console.log(error);
     return errorResponse(error);
   }
-}
+});
 
-export async function PATCH(request: NextRequest) {
+export const PATCH = acl("restaurants", "full", async (request: ApiRequest) => {
   try {
-    const authHeader = request.headers.get("Authorization");
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
-      throw new ApiError(
-        HttpStatusCode.Unauthorized,
-        "Authorization token is missing or invalid"
-      );
-    }
-    const token = authHeader.replace("Bearer ", "");
-    const userData = await verifyToken(token);
     const { id, name } = await request.json();
 
     if (name.trim() === "") {
@@ -126,7 +98,7 @@ export async function PATCH(request: NextRequest) {
         success: await updateFoodItem(
           Number(id),
           updatedFoodItem,
-          userData?.id!
+          request.user?.id!
         ),
       },
       message: messages.response.requestUpdated,
@@ -134,4 +106,4 @@ export async function PATCH(request: NextRequest) {
   } catch (error: any) {
     return errorResponse(error);
   }
-}
+});

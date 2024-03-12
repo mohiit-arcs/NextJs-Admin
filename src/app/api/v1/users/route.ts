@@ -2,11 +2,12 @@ import { badRequest } from "@/core/errors/http.error";
 import { errorResponse } from "@/core/http-responses/error.http-response";
 import { successResponse } from "@/core/http-responses/success.http-response";
 import { messages } from "@/messages/backend/index.message";
+import { acl } from "@/services/backend/acl.service";
 import { updateUser, userList } from "@/services/backend/user.service";
 import { HttpStatusCode } from "axios";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(request: NextRequest) {
+export const GET = acl("users", "full", async (request: NextRequest) => {
   try {
     const { searchParams } = request.nextUrl;
     const page = searchParams.get("page") || "1";
@@ -31,9 +32,9 @@ export async function GET(request: NextRequest) {
   } catch (error: any) {
     return errorResponse(error);
   }
-}
+});
 
-export async function PATCH(request: NextRequest) {
+export const PATCH = acl("users", "full", async (request: NextRequest) => {
   try {
     const { id, name, email, role } = await request.json();
 
@@ -52,4 +53,4 @@ export async function PATCH(request: NextRequest) {
   } catch (error: any) {
     return errorResponse(error);
   }
-}
+});

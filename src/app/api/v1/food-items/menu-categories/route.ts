@@ -1,24 +1,14 @@
 import { notFound } from "@/core/errors/http.error";
 import { errorResponse } from "@/core/http-responses/error.http-response";
-import { verifyToken } from "@/services/backend/jwt.service";
+import { acl } from "@/services/backend/acl.service";
 import { PrismaClient } from "@prisma/client";
 import { HttpStatusCode } from "axios";
-import { ApiError } from "next/dist/server/api-utils";
 import { NextRequest, NextResponse } from "next/server";
 
 const prisma = new PrismaClient();
 
-export async function GET(request: NextRequest) {
+export const GET = acl("restaurants", "full", async (request: NextRequest) => {
   try {
-    const authHeader = request.headers.get("Authorization");
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
-      throw new ApiError(
-        HttpStatusCode.Unauthorized,
-        "Authorization token is missing or invalid"
-      );
-    }
-    const token = authHeader.replace("Bearer ", "");
-    await verifyToken(token);
     const menuCategories = await prisma.menuCategory.findMany({
       select: {
         id: true,
@@ -41,4 +31,4 @@ export async function GET(request: NextRequest) {
     console.log(error);
     return errorResponse(error);
   }
-}
+});
