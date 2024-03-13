@@ -6,8 +6,8 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import imageCompression from "browser-image-compression";
-import { getAuthToken } from "@/services/frontend/storage.service";
 import axiosFetch from "@/app/axios.interceptor";
+import { messages } from "@/messages/frontend/index.message";
 
 type Inputs = {
   name: string;
@@ -72,7 +72,7 @@ const AddRestaurant = () => {
         toast.success(response.data.message);
       } else {
         if (response.data.statusCode == 500) {
-          toast.error("There is some internal problem will be resolved soon!");
+          toast.error(messages.error.badResponse);
         } else {
           toast.error(response.data.message);
         }
@@ -117,7 +117,7 @@ const AddRestaurant = () => {
       console.log(imageFile);
       const fileExtension = imageFile.name.split(".").pop();
       if (fileExtension !== "jpg" && fileExtension !== "png") {
-        toast.error("Please upload image file of type .jpg or .png");
+        toast.error(messages.error.wrongFileType);
         return;
       }
       setImage(imageFile);
@@ -161,7 +161,9 @@ const AddRestaurant = () => {
             />
           </div>
           {errors.name && (
-            <div className="error text-red-500">Please enter name</div>
+            <div className="error text-red-500">
+              {messages.form.validation.name.required}
+            </div>
           )}
           <hr />
           <label className="text-black" htmlFor="email">
@@ -179,16 +181,17 @@ const AddRestaurant = () => {
                 pattern: {
                   value:
                     /^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+/,
-                  message: "Please enter correct email",
+                  message: messages.form.validation.email.invalid,
                 },
               })}
             />
           </div>
           {errors.email && (
             <div className="error text-red-500">
-              {errors.email.type === "required" && "Please enter email"}
+              {errors.email.type === "required" &&
+                messages.form.validation.email.required}
               {errors.email.type === "pattern" &&
-                "Please enter a valid email address"}
+                messages.form.validation.email.invalid}
             </div>
           )}
           <label className="text-black" htmlFor="image">
@@ -213,7 +216,9 @@ const AddRestaurant = () => {
             ) : null}
           </div>
           {imageError && (
-            <div className="error text-red-500">Please select image</div>
+            <div className="error text-red-500">
+              {messages.form.validation.image.required}
+            </div>
           )}
           <hr />
           <label className="text-black" htmlFor="phoneNumber">
@@ -230,7 +235,7 @@ const AddRestaurant = () => {
                 required: true,
                 pattern: {
                   value: /^[0-9]{10}$/,
-                  message: "Please enter correct phone number",
+                  message: messages.form.validation.phoneNumber.invalid,
                 },
                 validate: validateNoWhiteSpace,
               })}
@@ -239,9 +244,9 @@ const AddRestaurant = () => {
           {errors.phoneNumber && (
             <div className="error text-red-500">
               {errors.phoneNumber.type === "required" &&
-                "Please enter phone number"}
+                messages.form.validation.phoneNumber.required}
               {errors.phoneNumber.type === "pattern" &&
-                "Please enter a valid phone number"}
+                messages.form.validation.phoneNumber.invalid}
             </div>
           )}
           <hr />
@@ -262,7 +267,9 @@ const AddRestaurant = () => {
             />
           </div>
           {errors.street && (
-            <div className="error text-red-500">Please enter street</div>
+            <div className="error text-red-500">
+              {messages.form.validation.street.required}
+            </div>
           )}
           <hr />
           <label className="text-black" htmlFor="city">
@@ -282,7 +289,9 @@ const AddRestaurant = () => {
             />
           </div>
           {errors.city && (
-            <div className="error text-red-500">Please enter city</div>
+            <div className="error text-red-500">
+              {messages.form.validation.city.required}
+            </div>
           )}
           <hr />
           <label className="text-black" htmlFor="zipcode">
@@ -299,7 +308,7 @@ const AddRestaurant = () => {
                 required: true,
                 pattern: {
                   value: /^[0-9]{6}$/,
-                  message: "Please enter correct zipcode",
+                  message: messages.form.validation.zipCode.invalid,
                 },
                 validate: validateNoWhiteSpace,
               })}
@@ -307,9 +316,10 @@ const AddRestaurant = () => {
           </div>
           {errors.zipCode && (
             <div className="error text-red-500">
-              {errors.zipCode.type === "required" && "Please enter zipcode"}
+              {errors.zipCode.type === "required" &&
+                messages.form.validation.zipCode.required}
               {errors.zipCode.type === "pattern" &&
-                "Please enter a valid zipcode"}
+                messages.form.validation.zipCode.invalid}
             </div>
           )}
           <hr />
@@ -330,7 +340,9 @@ const AddRestaurant = () => {
             />
           </div>
           {errors.state && (
-            <div className="error text-red-500">Please enter state</div>
+            <div className="error text-red-500">
+              {messages.form.validation.state.required}
+            </div>
           )}
           <hr />
           <label className="text-black" htmlFor="country">
@@ -350,7 +362,9 @@ const AddRestaurant = () => {
             />
           </div>
           {errors.country && (
-            <div className="error text-red-500">Please enter country</div>
+            <div className="error text-red-500">
+              {messages.form.validation.country.required}
+            </div>
           )}
           <hr />
           <hr />

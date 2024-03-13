@@ -1,6 +1,7 @@
 "use client";
 
 import axiosFetch from "@/app/axios.interceptor";
+import { messages } from "@/messages/frontend/index.message";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { useEffect, useState } from "react";
@@ -44,7 +45,7 @@ const AddFoodItem = () => {
         toast.success(response.data.message);
       } else if (!response.data.data.success) {
         if (response.data.statusCode == 500) {
-          toast.error("There is some internal problem will be resolved soon!");
+          toast.error(messages.error.badResponse);
         } else {
           toast.error(response.data.message);
         }
@@ -107,7 +108,9 @@ const AddFoodItem = () => {
             />
           </div>
           {errors.name && (
-            <div className="error text-red-500">Please enter name</div>
+            <div className="error text-red-500">
+              {messages.form.validation.name.required}
+            </div>
           )}
           <hr />
           <label className="text-black" htmlFor="restaurant">
@@ -132,7 +135,9 @@ const AddFoodItem = () => {
             })}
           </select>
           {errors.categoryId && (
-            <div className="error text-red-500">Please select restaurant</div>
+            <div className="error text-red-500">
+              {messages.form.validation.restaurant.required}
+            </div>
           )}
           <hr />
           <label className="text-black" htmlFor="menu-category">
@@ -157,7 +162,9 @@ const AddFoodItem = () => {
             })}
           </select>
           {errors.categoryId && (
-            <div className="error text-red-500">Please select category</div>
+            <div className="error text-red-500">
+              {messages.form.validation.menuCategory.required}
+            </div>
           )}
           <hr />
           <hr />

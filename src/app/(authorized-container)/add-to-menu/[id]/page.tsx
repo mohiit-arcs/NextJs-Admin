@@ -1,5 +1,6 @@
 "use client";
 import axiosFetch from "@/app/axios.interceptor";
+import { messages } from "@/messages/frontend/index.message";
 import { X } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -52,7 +53,7 @@ const AddToMenu = () => {
         router.back();
       } else if (!response.data.success) {
         if (response.data.statusCode == 500) {
-          toast.error("There is some internal problem will be resolved soon!");
+          toast.error(messages.error.badResponse);
         } else {
           toast.error(response.data.message);
         }
@@ -142,9 +143,7 @@ const AddToMenu = () => {
           toast.success(response.data.data?.message);
         } else {
           if (response.data.statusCode == 500) {
-            toast.error(
-              "There is some internal problem will be resolved soon!"
-            );
+            toast.error(messages.error.badResponse);
           } else {
             toast.error(response.data.message);
           }

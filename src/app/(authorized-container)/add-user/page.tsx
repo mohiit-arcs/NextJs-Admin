@@ -1,6 +1,7 @@
 "use client";
 
-import axios from "axios";
+import axiosFetch from "@/app/axios.interceptor";
+import { messages } from "@/messages/frontend/index.message";
 import { Eye, EyeOff } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -37,7 +38,7 @@ const AddUser = () => {
 
   const addUser: SubmitHandler<Inputs> = async (addUser) => {
     try {
-      const response = await axios.post("api/v1/auth/signup", {
+      const response = await axiosFetch.post("api/v1/auth/signup", {
         ...addUser,
         role: roles.find((role) => role.id == addUser.role),
       });
@@ -46,7 +47,7 @@ const AddUser = () => {
         toast.success(response.data.message);
       } else if (!response.data.data?.success) {
         if (response.data.statusCode == 500) {
-          toast.error("There is some internal problem will be resolved soon!");
+          toast.error(messages.error.badResponse);
         } else {
           toast.error(response.data.message);
         }
@@ -62,7 +63,7 @@ const AddUser = () => {
 
   const getUserRoles = async () => {
     try {
-      const response = await axios.get("api/v1/users/roles");
+      const response = await axiosFetch.get("api/v1/users/roles");
       if (response.data.success) {
         setRoles(response.data.result);
       }
@@ -94,7 +95,9 @@ const AddUser = () => {
             />
           </div>
           {errors.name && (
-            <div className="error text-red-500">Please enter name</div>
+            <div className="error text-red-500">
+              {messages.form.validation.name.required}
+            </div>
           )}
           <hr />
           <label className="text-black" htmlFor="email">
@@ -112,16 +115,17 @@ const AddUser = () => {
                 pattern: {
                   value:
                     /^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+/,
-                  message: "Please enter correct email",
+                  message: messages.form.validation.email.invalid,
                 },
               })}
             />
           </div>
           {errors.email && (
             <div className="error text-red-500">
-              {errors.email.type === "required" && "Please enter email"}
+              {errors.email.type === "required" &&
+                messages.form.validation.email.required}
               {errors.email.type === "pattern" &&
-                "Please enter a valid email address"}
+                messages.form.validation.email.invalid}
             </div>
           )}
           <hr />
@@ -150,8 +154,9 @@ const AddUser = () => {
           {errors.password && (
             <div className="error text-red-500">
               {errors.password.type == "minLength" &&
-                "Password must be of 6 letters"}
-              {errors.password.type == "required" && "Enter your password"}
+                messages.form.validation.password.minChar}
+              {errors.password.type == "required" &&
+                messages.form.validation.password.required}
             </div>
           )}
           <hr />
@@ -176,7 +181,9 @@ const AddUser = () => {
             })}
           </select>
           {errors.role && (
-            <div className="error text-red-500">Please select role</div>
+            <div className="error text-red-500">
+              {messages.form.validation.role.required}
+            </div>
           )}
           <hr />
           <hr />

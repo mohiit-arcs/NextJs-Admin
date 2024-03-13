@@ -1,12 +1,13 @@
 "use client";
 
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/navigation";
+import axiosFetch from "@/app/axios.interceptor";
+import { messages } from "@/messages/frontend/index.message";
 
 type Inputs = {
   name: string;
@@ -41,7 +42,7 @@ const UpdateUser = () => {
 
   const getUserDetails = async (userId: number) => {
     try {
-      const response = await axios.get(`${baseUrl}/${userId}`);
+      const response = await axiosFetch.get(`${baseUrl}/${userId}`);
       if (response.data.data.success) {
         const userData = response.data.data.details;
         setValue("name", userData.name, {
@@ -67,7 +68,7 @@ const UpdateUser = () => {
 
   const getUserRoles = async () => {
     try {
-      const response = await axios.get(`${baseUrl}/roles`);
+      const response = await axiosFetch.get(`${baseUrl}/roles`);
       if (response.data.success) {
         setRoles(response.data.result);
       }
@@ -84,13 +85,13 @@ const UpdateUser = () => {
         id: Number(id),
         role: role,
       };
-      const response = await axios.patch(`${baseUrl}`, updatedUserData);
+      const response = await axiosFetch.patch(`${baseUrl}`, updatedUserData);
       if (response.data.data?.success) {
         toast.success(response.data.message);
         router.back();
       } else {
         if (response.data.statusCode == 500) {
-          toast.error("There is some internal problem will be resolved soon!");
+          toast.error(messages.error.badResponse);
         } else {
           toast.error(response.data.message);
         }
@@ -122,7 +123,9 @@ const UpdateUser = () => {
             />
           </div>
           {errors.name && (
-            <div className="error text-red-500">Please enter name</div>
+            <div className="error text-red-500">
+              {messages.form.validation.name.required}
+            </div>
           )}
           <hr />
           <label className="text-black" htmlFor="email">
@@ -140,16 +143,17 @@ const UpdateUser = () => {
                 pattern: {
                   value:
                     /^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+/,
-                  message: "Please enter correct email",
+                  message: messages.form.validation.email.invalid,
                 },
               })}
             />
           </div>
           {errors.email && (
             <div className="error text-red-500">
-              {errors.email.type === "required" && "Please enter email"}
+              {errors.email.type === "required" &&
+                messages.form.validation.email.required}
               {errors.email.type === "pattern" &&
-                "Please enter a valid email address"}
+                messages.form.validation.email.invalid}
             </div>
           )}
           <hr />
@@ -172,7 +176,9 @@ const UpdateUser = () => {
             })}
           </select>
           {errors.role && (
-            <div className="error text-red-500">Please select role</div>
+            <div className="error text-red-500">
+              {messages.form.validation.role.required}
+            </div>
           )}
           <hr />
           <hr />

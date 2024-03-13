@@ -1,6 +1,7 @@
 "use client";
 
 import axiosFetch from "@/app/axios.interceptor";
+import { messages } from "@/messages/frontend/index.message";
 import { useParams, useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -89,7 +90,9 @@ const UpdateFoodItem = () => {
             />
           </div>
           {errors.name && (
-            <div className="error text-red-500">Please enter name</div>
+            <div className="error text-red-500">
+              {messages.form.validation.name.required}
+            </div>
           )}
           <hr />
           <hr />

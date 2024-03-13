@@ -1,4 +1,5 @@
 "use client";
+import { messages } from "@/messages/frontend/index.message";
 import { setAuthToken } from "@/services/frontend/storage.service";
 import axios from "axios";
 import { Eye, EyeOff } from "lucide-react";
@@ -37,7 +38,7 @@ export default function LoginPage() {
         }
       } else if (!response.data.success) {
         if (response.data.statusCode == 500) {
-          toast.error("There is some internal problem will be resolved soon!");
+          toast.error(messages.error.badResponse);
         } else {
           toast.error(response.data.message);
         }

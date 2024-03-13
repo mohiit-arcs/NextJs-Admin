@@ -1,7 +1,6 @@
 "use client";
 
 import { User } from "@prisma/client";
-import axios from "axios";
 import { Pencil, Trash } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -10,6 +9,7 @@ import "react-toastify/dist/ReactToastify.css";
 import _ from "lodash";
 import Pagination from "@/components/pagination/pagination";
 import useDebounce from "@/hooks/useDebounce";
+import axiosFetch from "@/app/axios.interceptor";
 
 const entriesPerPageOptions = [5, 10, 15];
 
@@ -36,7 +36,7 @@ const UserList = () => {
 
   const getUsers = async () => {
     try {
-      const response = await axios.get(
+      const response = await axiosFetch.get(
         `api/v1/users?page=${currentPage}&limit=${usersLimit}&search=${debouncedSearchQuery}&sortBy=${sortBy}&sortOrder=${sortOrder}`
       );
       if (response.data.count != 0) {
@@ -54,7 +54,7 @@ const UserList = () => {
     try {
       const toDelete = confirm("Are you sure, you want to delete the user?");
       if (toDelete) {
-        const response = await axios.delete(`api/v1/users/${userId}`);
+        const response = await axiosFetch.delete(`api/v1/users/${userId}`);
         if (response.data.data?.success) {
           const updatedUsers = users.filter((user) => user.id != userId);
           setUsers(updatedUsers);
@@ -161,27 +161,28 @@ const UserList = () => {
             </tr>
           </thead>
           <tbody>
-            {users!.map((user: any) => (
-              <tr key={user.id} className="hover:bg-gray-200">
-                <td className="px-4 py-3">{user.name}</td>
-                <td className="px-4 py-3">{user.email}</td>
-                <td className="px-4 py-3">{user.role.name}</td>
-                <td className="flex">
-                  <span className="px-4 py-3">
-                    <Pencil
-                      className="cursor-pointer"
-                      onClick={() => onUpdate(user.id)}
-                    />
-                  </span>
-                  <span className="px-4 py-3">
-                    <Trash
-                      className="cursor-pointer"
-                      onClick={() => onDelete(user.id)}
-                    />
-                  </span>
-                </td>
-              </tr>
-            ))}
+            {users &&
+              users!.map((user: any) => (
+                <tr key={user.id} className="hover:bg-gray-200">
+                  <td className="px-4 py-3">{user.name}</td>
+                  <td className="px-4 py-3">{user.email}</td>
+                  <td className="px-4 py-3">{user.role.name}</td>
+                  <td className="flex">
+                    <span className="px-4 py-3">
+                      <Pencil
+                        className="cursor-pointer"
+                        onClick={() => onUpdate(user.id)}
+                      />
+                    </span>
+                    <span className="px-4 py-3">
+                      <Trash
+                        className="cursor-pointer"
+                        onClick={() => onDelete(user.id)}
+                      />
+                    </span>
+                  </td>
+                </tr>
+              ))}
           </tbody>
         </table>
       </div>

@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import imageCompression from "browser-image-compression";
 import axiosFetch from "@/app/axios.interceptor";
+import { messages } from "@/messages/frontend/index.message";
 
 type Inputs = {
   name: string;
@@ -136,7 +137,7 @@ const UpdateRestaurant = () => {
         toast.success(response.data.message);
       } else {
         if (response.data.statusCode == 500) {
-          toast.error("There is some internal problem will be resolved soon!");
+          toast.error(messages.error.badResponse);
         } else {
           toast.error(response.data.message);
         }
@@ -186,6 +187,11 @@ const UpdateRestaurant = () => {
     if (e.target.files && e.target.files.length > 0) {
       const imageFile = e.target.files[0];
       console.log(imageFile);
+      const fileExtension = imageFile.name.split(".").pop();
+      if (fileExtension !== "jpg" && fileExtension !== "png") {
+        toast.error(messages.error.wrongFileType);
+        return;
+      }
       setImage(imageFile);
       setImageError(() => false);
       const base64 = await fileToBase64(imageFile);
@@ -220,7 +226,9 @@ const UpdateRestaurant = () => {
             />
           </div>
           {errors.name && (
-            <div className="error text-red-500">Please enter name</div>
+            <div className="error text-red-500">
+              {messages.form.validation.name.required}
+            </div>
           )}
           <hr />
           <label className="text-black" htmlFor="email">
@@ -238,16 +246,17 @@ const UpdateRestaurant = () => {
                 pattern: {
                   value:
                     /^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+/,
-                  message: "Please enter correct email",
+                  message: messages.form.validation.email.invalid,
                 },
               })}
             />
           </div>
           {errors.email && (
             <div className="error text-red-500">
-              {errors.email.type === "required" && "Please enter email"}
+              {errors.email.type === "required" &&
+                messages.form.validation.email.required}
               {errors.email.type === "pattern" &&
-                "Please enter a valid email address"}
+                messages.form.validation.email.invalid}
             </div>
           )}
           <label className="text-black" htmlFor="image">
@@ -272,7 +281,9 @@ const UpdateRestaurant = () => {
             ) : null}
           </div>
           {imageError && (
-            <div className="error text-red-500">Please select image</div>
+            <div className="error text-red-500">
+              {messages.form.validation.image.required}
+            </div>
           )}
           <hr />
           <label className="text-black" htmlFor="phoneNumber">
@@ -289,7 +300,7 @@ const UpdateRestaurant = () => {
                 required: true,
                 pattern: {
                   value: /^[0-9]{10}$/,
-                  message: "Please enter correct phone number",
+                  message: messages.form.validation.phoneNumber.invalid,
                 },
                 validate: validateNoWhiteSpace,
               })}
@@ -298,9 +309,9 @@ const UpdateRestaurant = () => {
           {errors.phoneNumber && (
             <div className="error text-red-500">
               {errors.phoneNumber.type === "required" &&
-                "Please enter phone number"}
+                messages.form.validation.phoneNumber.required}
               {errors.phoneNumber.type === "pattern" &&
-                "Please enter a valid phone number"}
+                messages.form.validation.phoneNumber.invalid}
             </div>
           )}
           <hr />
@@ -321,7 +332,9 @@ const UpdateRestaurant = () => {
             />
           </div>
           {errors.street && (
-            <div className="error text-red-500">Please enter street</div>
+            <div className="error text-red-500">
+              {messages.form.validation.street.required}
+            </div>
           )}
           <hr />
           <label className="text-black" htmlFor="city">
@@ -341,7 +354,9 @@ const UpdateRestaurant = () => {
             />
           </div>
           {errors.city && (
-            <div className="error text-red-500">Please enter city</div>
+            <div className="error text-red-500">
+              {messages.form.validation.city.required}
+            </div>
           )}
           <hr />
           <label className="text-black" htmlFor="zipcode">
@@ -350,7 +365,6 @@ const UpdateRestaurant = () => {
           <div className="flex justify-center items-center">
             <input
               className="w-72 p-3 text-black"
-              type="number"
               id="zipcode"
               autoComplete="off"
               placeholder="ZipCode"
@@ -358,12 +372,20 @@ const UpdateRestaurant = () => {
                 required: true,
                 pattern: {
                   value: /^[0-9]{6}$/,
-                  message: "Please enter correct zipcode",
+                  message: messages.form.validation.zipCode.invalid,
                 },
                 validate: validateNoWhiteSpace,
               })}
             />
           </div>
+          {errors.zipCode && (
+            <div className="error text-red-500">
+              {errors.zipCode.type === "required" &&
+                messages.form.validation.zipCode.required}
+              {errors.zipCode.type === "pattern" &&
+                messages.form.validation.zipCode.invalid}
+            </div>
+          )}
           <hr />
           <label className="text-black" htmlFor="state">
             State*
@@ -382,7 +404,9 @@ const UpdateRestaurant = () => {
             />
           </div>
           {errors.state && (
-            <div className="error text-red-500">Please enter state</div>
+            <div className="error text-red-500">
+              {messages.form.validation.state.required}
+            </div>
           )}
           <hr />
           <label className="text-black" htmlFor="country">
@@ -402,7 +426,9 @@ const UpdateRestaurant = () => {
             />
           </div>
           {errors.country && (
-            <div className="error text-red-500">Please enter country</div>
+            <div className="error text-red-500">
+              {messages.form.validation.country.required}
+            </div>
           )}
           <hr />
           <hr />
