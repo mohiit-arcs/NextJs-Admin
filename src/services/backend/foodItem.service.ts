@@ -171,7 +171,7 @@ export const foodItemList = async (
     },
   });
 
-  return { foodItems: processedData, count: foodItemsCount };
+  return { rows: processedData, count: foodItemsCount };
 };
 
 export const getFoodItemById = async (id: number, userId: number) => {

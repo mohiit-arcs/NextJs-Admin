@@ -82,8 +82,8 @@ const AddToMenu = () => {
       const response = await axiosFetch.get(
         `${apiUrl}/food-items/menu-categories`
       );
-      if (response.data.success) {
-        setMenuCategories(response.data.result);
+      if (response.data.data) {
+        setMenuCategories(response.data.data.result);
       }
     } catch (error) {
       console.log(error);
@@ -95,8 +95,8 @@ const AddToMenu = () => {
       const response = await axiosFetch.get(
         `${apiUrl}/restaurants?page=&limit=&search=&sortBy=&sortOrder=`
       );
-      if (response.data.success) {
-        setRestaurants(response.data.result);
+      if (response.data.data) {
+        setRestaurants(response.data.data.rows);
       }
     } catch (error) {
       console.log(error);

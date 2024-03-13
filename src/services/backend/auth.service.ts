@@ -63,18 +63,18 @@ export const login = async (email: string, password: string) => {
 
   const profile = {
     id: user.id,
+    name: user.name,
     email: user.email,
     role: user.role.slug,
   };
 
   const token = await generateToken(profile);
 
-  const response = NextResponse.json({
-    message: "Login successfull",
+  const response = {
     success: true,
     profile,
     token: token,
-  });
+  };
 
   return response;
 };

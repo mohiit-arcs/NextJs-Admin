@@ -11,6 +11,7 @@ export const messages = {
     information: "Information",
   },
   response: {
+    login: "User logged in successfully",
     requestUpdated: "Request updated successfully",
     signupUser: "User Registered Successfully",
     deleteUser: "User deleted successfully",

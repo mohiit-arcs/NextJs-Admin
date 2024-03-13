@@ -1,34 +1,13 @@
-import { notFound } from "@/core/errors/http.error";
 import { errorResponse } from "@/core/http-responses/error.http-response";
+import { successResponse } from "@/core/http-responses/success.http-response";
 import { acl } from "@/services/backend/acl.service";
-import { PrismaClient } from "@prisma/client";
-import { HttpStatusCode } from "axios";
-import { NextRequest, NextResponse } from "next/server";
-
-const prisma = new PrismaClient();
+import { getUserRoles } from "@/services/backend/user.service";
+import { NextRequest } from "next/server";
 
 export const GET = acl("users", "full", async (request: NextRequest) => {
   try {
-    const roles = await prisma.role.findMany({
-      where: {
-        slug: { not: "superAdmin" },
-      },
-      select: {
-        id: true,
-        name: true,
-        slug: true,
-      },
-    });
-
-    if (roles.length == 0) {
-      throw notFound("No Roles Found");
-    }
-
-    return NextResponse.json({
-      success: true,
-      result: roles,
-      count: roles.length,
-      statusCode: HttpStatusCode.Ok,
+    return successResponse({
+      data: await getUserRoles(),
     });
   } catch (error: any) {
     return errorResponse(error);

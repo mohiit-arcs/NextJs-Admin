@@ -41,9 +41,11 @@ const UserList = () => {
         `api/v1/restaurants?page=${currentPage}&limit=${restaurantsLimit}&search=${debouncedSearchQuery}&sortBy=${sortBy}&sortOrder=${sortOrder}`
       );
       if (response.data.count != 0) {
-        setRestaurants(response.data.result);
-        setTotalRestaurants(response.data.count);
-        const totalPages = Math.ceil(response.data.count / restaurantsLimit);
+        setRestaurants(response.data.data.rows);
+        setTotalRestaurants(response.data.data.count);
+        const totalPages = Math.ceil(
+          response.data.data.count / restaurantsLimit
+        );
         setTotalPages(totalPages);
       }
     } catch (error) {

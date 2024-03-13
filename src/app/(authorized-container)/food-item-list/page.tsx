@@ -40,9 +40,9 @@ const FoodItemList = () => {
         `api/v1/food-items?page=${currentPage}&limit=${itemsLimit}&search=${debouncedSearchQuery}&sortBy=${sortBy}&sortOrder=${sortOrder}`
       );
       if (response.data.count != 0) {
-        setFoodItems(response.data.result);
-        setTotalFoodItems(response.data.count);
-        const totalPages = Math.ceil(response.data.count / itemsLimit);
+        setFoodItems(response.data.data.rows);
+        setTotalFoodItems(response.data.data.count);
+        const totalPages = Math.ceil(response.data.data.count / itemsLimit);
         setTotalPages(totalPages);
       }
     } catch (error) {

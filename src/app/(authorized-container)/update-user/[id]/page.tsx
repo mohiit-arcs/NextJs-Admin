@@ -43,7 +43,7 @@ const UpdateUser = () => {
   const getUserDetails = async (userId: number) => {
     try {
       const response = await axiosFetch.get(`${baseUrl}/${userId}`);
-      if (response.data.data.success) {
+      if (response.data.data) {
         const userData = response.data.data.details;
         setValue("name", userData.name, {
           shouldValidate: true,
@@ -69,8 +69,8 @@ const UpdateUser = () => {
   const getUserRoles = async () => {
     try {
       const response = await axiosFetch.get(`${baseUrl}/roles`);
-      if (response.data.success) {
-        setRoles(response.data.result);
+      if (response.data.data) {
+        setRoles(response.data.data.result);
       }
     } catch (error) {
       console.log(error);

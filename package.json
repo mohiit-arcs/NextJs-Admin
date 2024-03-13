@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "preswagger": "ts-node --project ./src/console/tsconfig.json ./src/console/openapi-script.ts",
+    "swagger": "npx openapi-generator-cli generate -i ./src/console/swagger.json -g typescript-fetch -o ./src/swagger"
   },
   "prisma": {
     "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
@@ -16,23 +18,30 @@
     "axios": "^1.6.7",
     "bcrypt": "^5.1.1",
     "browser-image-compression": "^2.0.2",
+    "dotenv": "^16.4.5",
+    "fs-extra": "^11.2.0",
     "jsonwebtoken": "^9.0.2",
     "lodash": "^4.17.21",
     "lodash.debounce": "^4.0.8",
     "lucide-react": "^0.343.0",
     "next": "14.1.0",
+    "next-swagger-doc": "^0.4.0",
     "react": "^18",
     "react-dom": "^18",
     "react-hook-form": "^7.50.1",
-    "react-toastify": "^10.0.4"
+    "react-toastify": "^10.0.4",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-react": "^5.11.10"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
+    "@types/fs-extra": "^11.0.4",
     "@types/jsonwebtoken": "^9.0.6",
     "@types/lodash.debounce": "^4.0.9",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "@types/swagger-ui-react": "^4.18.3",
     "autoprefixer": "^10.0.1",
     "eslint": "^8",
     "eslint-config-next": "14.1.0",

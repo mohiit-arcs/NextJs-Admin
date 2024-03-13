@@ -39,10 +39,10 @@ const UserList = () => {
       const response = await axiosFetch.get(
         `api/v1/users?page=${currentPage}&limit=${usersLimit}&search=${debouncedSearchQuery}&sortBy=${sortBy}&sortOrder=${sortOrder}`
       );
-      if (response.data.count != 0) {
-        setUsers(response.data.result);
-        setTotalUsers(response.data.count);
-        const totalPages = Math.ceil(response.data.count / usersLimit);
+      if (response.data.data) {
+        setUsers(response.data.data.rows);
+        setTotalUsers(response.data.data.count);
+        const totalPages = Math.ceil(response.data.data.count / usersLimit);
         setTotalPages(totalPages);
       }
     } catch (error) {

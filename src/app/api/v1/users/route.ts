@@ -4,8 +4,7 @@ import { successResponse } from "@/core/http-responses/success.http-response";
 import { messages } from "@/messages/backend/index.message";
 import { acl } from "@/services/backend/acl.service";
 import { updateUser, userList } from "@/services/backend/user.service";
-import { HttpStatusCode } from "axios";
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 
 export const GET = acl("users", "full", async (request: NextRequest) => {
   try {
@@ -21,13 +20,8 @@ export const GET = acl("users", "full", async (request: NextRequest) => {
 
     const skip = (parseInt(page) - 1) * parseInt(limit);
     const take = parseInt(limit);
-    const response = await userList(search, sortBy, sortOrder, skip, take);
-
-    return NextResponse.json({
-      success: true,
-      result: response.users,
-      count: response.count,
-      statusCode: HttpStatusCode.Ok,
+    return successResponse({
+      data: await userList(search, sortBy, sortOrder, skip, take),
     });
   } catch (error: any) {
     return errorResponse(error);

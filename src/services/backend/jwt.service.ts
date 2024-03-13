@@ -47,7 +47,9 @@ export const generateToken = async (tokenData: TokenData): Promise<string> => {
   }
   let token: string;
   try {
-    token = await signAsync(userInfoForToken, config.jwt.secret);
+    token = await signAsync(userInfoForToken, config.jwt.secret, {
+      expiresIn: Number(config.jwt.expiry),
+    });
   } catch (e: any) {
     throw e;
   }

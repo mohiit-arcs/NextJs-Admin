@@ -346,7 +346,7 @@ export const restaurantList = async (
     },
   });
 
-  return { restaurants, count: totalRestaurants };
+  return { rows: restaurants, count: totalRestaurants };
 };
 
 export const getRestaurantById = async (id: number, userId: number) => {

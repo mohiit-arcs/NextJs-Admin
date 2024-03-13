@@ -26,10 +26,10 @@ export default function LoginPage() {
   const onLogin: SubmitHandler<Inputs> = async (login) => {
     try {
       const response = await axios.post("api/v1/auth/login", login);
-      if (response.data.success) {
-        const token = response.data.token;
+      if (response.data.data?.success) {
+        const token = response.data.data.token;
         setAuthToken(token);
-        if (response.data.profile.role === "superAdmin") {
+        if (response.data.data.profile.role === "superAdmin") {
           router.push("/user-list");
           toast.success(response.data.message);
         } else {

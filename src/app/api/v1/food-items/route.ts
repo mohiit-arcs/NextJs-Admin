@@ -60,20 +60,15 @@ export const GET = acl("restaurants", "full", async (request: ApiRequest) => {
     const skip = (parseInt(page) - 1) * parseInt(limit);
     const take = parseInt(limit);
 
-    const response = await foodItemList(
-      search,
-      sortBy,
-      sortOrder,
-      skip,
-      take,
-      request.user?.id!
-    );
-
-    return NextResponse.json({
-      success: true,
-      result: response.foodItems,
-      count: response.count,
-      statusCode: HttpStatusCode.Ok,
+    return successResponse({
+      data: await foodItemList(
+        search,
+        sortBy,
+        sortOrder,
+        skip,
+        take,
+        request.user?.id!
+      ),
     });
   } catch (error: any) {
     console.log(error);

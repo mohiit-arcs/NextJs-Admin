@@ -64,8 +64,8 @@ const AddUser = () => {
   const getUserRoles = async () => {
     try {
       const response = await axiosFetch.get("api/v1/users/roles");
-      if (response.data.success) {
-        setRoles(response.data.result);
+      if (response.data.data) {
+        setRoles(response.data.data.result);
       }
     } catch (error) {
       console.log(error);

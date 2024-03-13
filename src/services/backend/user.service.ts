@@ -176,7 +176,7 @@ export const userList = async (
     },
   });
 
-  return { users, count: totalUsers };
+  return { rows: users, count: totalUsers };
 };
 
 export const deleteUserById = async (id: number) => {
@@ -229,12 +229,36 @@ export const getUserById = async (id: number) => {
 
   if (user?.id) {
     return {
-      data: {
-        success: true,
-        details: user,
-      },
+      details: user,
     };
   }
 
   throw notFound(messages.error.userNotFound);
+};
+
+export const getUserRoles = async () => {
+  const roles = await prisma.role.findMany({
+    where: {
+      slug: { not: "superAdmin" },
+    },
+    select: {
+      id: true,
+      name: true,
+      slug: true,
+    },
+  });
+
+  return { result: roles, count: roles.length };
+};
+
+export const getMenuCategories = async () => {
+  const menuCategories = await prisma.menuCategory.findMany({
+    select: {
+      id: true,
+      name: true,
+      slug: true,
+    },
+  });
+
+  return { result: menuCategories, count: menuCategories.length };
 };

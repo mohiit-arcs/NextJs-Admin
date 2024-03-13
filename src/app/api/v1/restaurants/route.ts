@@ -1,5 +1,3 @@
-import { HttpStatusCode } from "axios";
-import { NextResponse } from "next/server";
 import { badRequest } from "@/core/errors/http.error";
 import { messages } from "@/messages/backend/index.message";
 import { errorResponse } from "@/core/http-responses/error.http-response";
@@ -70,20 +68,16 @@ export const GET = acl("restaurants", "full", async (request: ApiRequest) => {
 
     const skip = (parseInt(page) - 1) * parseInt(limit);
     const take = parseInt(limit);
-    const response = await restaurantList(
-      search,
-      sortBy,
-      sortOrder,
-      skip,
-      take,
-      request.user?.id!
-    );
 
-    return NextResponse.json({
-      success: true,
-      result: response.restaurants,
-      count: response.count,
-      statusCode: HttpStatusCode.Ok,
+    return successResponse({
+      data: await restaurantList(
+        search,
+        sortBy,
+        sortOrder,
+        skip,
+        take,
+        request.user?.id!
+      ),
     });
   } catch (error: any) {
     console.log(error);
