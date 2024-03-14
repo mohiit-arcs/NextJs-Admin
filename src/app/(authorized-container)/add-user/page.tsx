@@ -2,6 +2,7 @@
 
 import axiosFetch from "@/app/axios.interceptor";
 import { messages } from "@/messages/frontend/index.message";
+import { AuthenticationApi, SignupResponse } from "@/swagger";
 import { Eye, EyeOff } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -38,20 +39,24 @@ const AddUser = () => {
 
   const addUser: SubmitHandler<Inputs> = async (addUser) => {
     try {
-      const response = await axiosFetch.post("api/v1/auth/signup", {
-        ...addUser,
-        role: roles.find((role) => role.id == addUser.role),
-      });
-      if (response.data.data?.success) {
-        router.push("user-list");
-        toast.success(response.data.message);
-      } else if (!response.data.data?.success) {
-        if (response.data.statusCode == 500) {
-          toast.error(messages.error.badResponse);
-        } else {
-          toast.error(response.data.message);
-        }
-      }
+      const authApi = new AuthenticationApi();
+      authApi
+        .signup({
+          signupRequest: {
+            name: addUser.name,
+            email: addUser.email,
+            password: addUser.password,
+            role: roles.find((role) => role.id == addUser.role),
+          },
+        })
+        .then((response: SignupResponse) => {
+          if (response.data?.success) {
+            router.push("user-list");
+            toast.success(response.message);
+          } else {
+            toast.error(response.message);
+          }
+        });
     } catch (error) {
       console.log(error);
     }

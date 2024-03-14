@@ -26,7 +26,7 @@ export const checkEmailExists = async (email: string) => {
   });
 
   if (existingUser?.id) {
-    throw true;
+    return true;
   }
 
   return false;

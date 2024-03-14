@@ -1,7 +1,7 @@
 "use client";
 
-export const setAuthToken = (token: string) => {
-  if (token.trim()) {
+export const setAuthToken = (token: string | undefined) => {
+  if (token?.trim()) {
     localStorage.setItem("authToken", token);
   } else {
     localStorage.removeItem("authToken");

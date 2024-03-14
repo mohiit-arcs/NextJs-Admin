@@ -23,5 +23,8 @@ LoginResponse.properties.data = {
         },
       },
     },
+    token: {
+      type: "string",
+    },
   },
 };

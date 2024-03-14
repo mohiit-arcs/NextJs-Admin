@@ -1,7 +1,6 @@
 "use client";
-import { messages } from "@/messages/frontend/index.message";
 import { setAuthToken } from "@/services/frontend/storage.service";
-import axios from "axios";
+import { AuthenticationApi, LoginResponse } from "@/swagger";
 import { Eye, EyeOff } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -25,24 +24,30 @@ export default function LoginPage() {
 
   const onLogin: SubmitHandler<Inputs> = async (login) => {
     try {
-      const response = await axios.post("api/v1/auth/login", login);
-      if (response.data.data?.success) {
-        const token = response.data.data.token;
-        setAuthToken(token);
-        if (response.data.data.profile.role === "superAdmin") {
-          router.push("/user-list");
-          toast.success(response.data.message);
-        } else {
-          router.push("/restaurant-list");
-          toast.success(response.data.message);
-        }
-      } else if (!response.data.success) {
-        if (response.data.statusCode == 500) {
-          toast.error(messages.error.badResponse);
-        } else {
-          toast.error(response.data.message);
-        }
-      }
+      const authApi = new AuthenticationApi();
+      authApi
+        .login({
+          loginRequest: {
+            email: login.email,
+            password: login.password,
+          },
+        })
+        .then((response: LoginResponse) => {
+          console.log(response);
+          if (response.data?.profile) {
+            const token = response.data.token;
+            setAuthToken(token);
+            if (response.data.profile.role === "superAdmin") {
+              router.push("/user-list");
+              toast.success(response.message);
+            } else {
+              router.push("/restaurant-list");
+              toast.success(response.message);
+            }
+          } else {
+            toast.error(response.message);
+          }
+        });
     } catch (error) {
       console.log(error);
     }
