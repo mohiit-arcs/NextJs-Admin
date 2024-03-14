@@ -115,9 +115,16 @@ export const userList = async (
     deletedAt: { equals: null },
   };
 
-  const orderBy = {
-    [sortBy]: sortOrder,
-  };
+  const orderBy: any =
+    sortBy === "role"
+      ? {
+          role: {
+            slug: sortOrder,
+          },
+        }
+      : {
+          [sortBy]: sortOrder,
+        };
 
   if (search) {
     whereCondition = {

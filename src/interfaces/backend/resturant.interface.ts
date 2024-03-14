@@ -5,7 +5,7 @@ export interface CreateRestaurant {
   phoneNumber: string;
   street: string;
   city: string;
-  zipCode: string;
+  zipcode: string;
   state: string;
   country: string;
 }

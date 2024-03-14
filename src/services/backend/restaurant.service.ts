@@ -42,16 +42,6 @@ export const createRestaurant = async (
     throw badRequest(messages.error.emailAlreadyExists);
   }
 
-  const location = await prisma.location.create({
-    data: {
-      street: restaurant.street,
-      city: restaurant.city,
-      zipCode: restaurant.zipCode,
-      state: restaurant.state,
-      country: restaurant.country,
-    },
-  });
-
   if (
     restaurant.imageData.imageMimetype !== "image/jpeg" &&
     restaurant.imageData.imageMimetype !== "image/png"
@@ -99,8 +89,12 @@ export const createRestaurant = async (
       email: restaurant.email,
       phoneNumber: restaurant.phoneNumber,
       userId: userId,
-      locationId: location.id,
       image: `${restaurant.imageData.imageName}.${fileExtension}`,
+      street: restaurant.street,
+      city: restaurant.city,
+      zipcode: restaurant.zipcode,
+      state: restaurant.state,
+      country: restaurant.country,
     },
   });
 
@@ -196,20 +190,6 @@ export const updateRestaurant = async (
     await fs.writeFile(thumbnailImagePath, thumbnailImageBuffer);
   }
 
-  await prisma.location.update({
-    where: {
-      id: existingRestaurant.locationId,
-    },
-    data: {
-      city: updateRestaurant.city,
-      street: updateRestaurant.street,
-      state: updateRestaurant.state,
-      zipCode: updateRestaurant.zipCode,
-      country: updateRestaurant.country,
-      updatedAt: new Date(),
-    },
-  });
-
   await prisma.restaurant.update({
     where: {
       id: id,
@@ -222,6 +202,11 @@ export const updateRestaurant = async (
         updateRestaurant.imageData.imageName !== undefined
           ? `${updateRestaurant.imageData.imageName}.${fileExtension}`
           : existingRestaurant.image,
+      city: updateRestaurant.city,
+      street: updateRestaurant.street,
+      state: updateRestaurant.state,
+      zipcode: updateRestaurant.zipcode,
+      country: updateRestaurant.country,
       updatedAt: new Date(),
     },
   });
@@ -270,19 +255,15 @@ export const restaurantList = async (
               },
             },
             {
-              location: {
-                street: {
-                  contains: search,
-                  mode: "insensitive",
-                },
+              street: {
+                contains: search,
+                mode: "insensitive",
               },
             },
             {
-              location: {
-                city: {
-                  contains: search,
-                  mode: "insensitive",
-                },
+              city: {
+                contains: search,
+                mode: "insensitive",
               },
             },
             {
@@ -292,27 +273,21 @@ export const restaurantList = async (
               },
             },
             {
-              location: {
-                state: {
-                  contains: search,
-                  mode: "insensitive",
-                },
+              state: {
+                contains: search,
+                mode: "insensitive",
               },
             },
             {
-              location: {
-                country: {
-                  contains: search,
-                  mode: "insensitive",
-                },
+              country: {
+                contains: search,
+                mode: "insensitive",
               },
             },
             {
-              location: {
-                zipCode: {
-                  contains: search,
-                  mode: "insensitive",
-                },
+              zipcode: {
+                contains: search,
+                mode: "insensitive",
               },
             },
           ],
@@ -326,17 +301,6 @@ export const restaurantList = async (
     skip: skip,
     take: take,
     orderBy,
-    select: {
-      id: true,
-      name: true,
-      email: true,
-      phoneNumber: true,
-      location: true,
-      image: true,
-      createdAt: true,
-      updatedAt: true,
-      deletedAt: true,
-    },
   });
 
   const totalRestaurants = await prisma.restaurant.count({
@@ -352,14 +316,6 @@ export const restaurantList = async (
 export const getRestaurantById = async (id: number, userId: number) => {
   const restaurant = await prisma.restaurant.findFirst({
     where: { id: id, userId: userId },
-    select: {
-      id: true,
-      name: true,
-      email: true,
-      phoneNumber: true,
-      image: true,
-      location: true,
-    },
   });
 
   if (restaurant?.id) {

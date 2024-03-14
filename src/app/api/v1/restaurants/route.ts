@@ -23,7 +23,7 @@ export const POST = acl("restaurants", "full", async (request: ApiRequest) => {
       phoneNumber,
       street,
       city,
-      zipCode,
+      zipcode,
       state,
       country,
     } = await request.json();
@@ -37,7 +37,7 @@ export const POST = acl("restaurants", "full", async (request: ApiRequest) => {
       phoneNumber,
       street,
       city,
-      zipCode,
+      zipcode,
       state,
       country,
     };
@@ -95,7 +95,7 @@ export const PATCH = acl("restaurants", "full", async (request: ApiRequest) => {
       phoneNumber,
       street,
       city,
-      zipCode,
+      zipcode,
       state,
       country,
     } = await request.json();
@@ -107,7 +107,7 @@ export const PATCH = acl("restaurants", "full", async (request: ApiRequest) => {
       phoneNumber,
       street,
       city,
-      zipCode,
+      zipcode,
       state,
       country,
     };

@@ -15,7 +15,7 @@ type Inputs = {
   phoneNumber: string;
   street: string;
   city: string;
-  zipCode: string;
+  zipcode: string;
   state: string;
   country: string;
   image: string;
@@ -57,7 +57,7 @@ const AddRestaurant = () => {
         phoneNumber: addRestaurant.phoneNumber,
         street: addRestaurant.street,
         city: addRestaurant.city,
-        zipCode: addRestaurant.zipCode,
+        zipcode: addRestaurant.zipcode,
         state: addRestaurant.state,
         country: addRestaurant.country,
       };
@@ -304,7 +304,7 @@ const AddRestaurant = () => {
               id="zipcode"
               autoComplete="off"
               placeholder="ZipCode"
-              {...register("zipCode", {
+              {...register("zipcode", {
                 required: true,
                 pattern: {
                   value: /^[0-9]{6}$/,
@@ -314,11 +314,11 @@ const AddRestaurant = () => {
               })}
             />
           </div>
-          {errors.zipCode && (
+          {errors.zipcode && (
             <div className="error text-red-500">
-              {errors.zipCode.type === "required" &&
+              {errors.zipcode.type === "required" &&
                 messages.form.validation.zipCode.required}
-              {errors.zipCode.type === "pattern" &&
+              {errors.zipcode.type === "pattern" &&
                 messages.form.validation.zipCode.invalid}
             </div>
           )}

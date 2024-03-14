@@ -15,7 +15,7 @@ type Inputs = {
   phoneNumber: string;
   street: string;
   city: string;
-  zipCode: string;
+  zipcode: string;
   state: string;
   country: string;
   image: FileList;
@@ -61,27 +61,27 @@ const UpdateRestaurant = () => {
           shouldDirty: true,
           shouldTouch: true,
         });
-        setValue("street", restaurantData.location.street, {
+        setValue("street", restaurantData.street, {
           shouldValidate: true,
           shouldDirty: true,
           shouldTouch: true,
         });
-        setValue("city", restaurantData.location.city, {
+        setValue("city", restaurantData.city, {
           shouldValidate: true,
           shouldDirty: true,
           shouldTouch: true,
         });
-        setValue("zipCode", restaurantData.location.zipCode, {
+        setValue("zipcode", restaurantData.zipcode, {
           shouldValidate: true,
           shouldDirty: true,
           shouldTouch: true,
         });
-        setValue("state", restaurantData.location.state, {
+        setValue("state", restaurantData.state, {
           shouldValidate: true,
           shouldDirty: true,
           shouldTouch: true,
         });
-        setValue("country", restaurantData.location.country, {
+        setValue("country", restaurantData.country, {
           shouldValidate: true,
           shouldDirty: true,
           shouldTouch: true,
@@ -122,7 +122,7 @@ const UpdateRestaurant = () => {
         phoneNumber: updateRestaurant.phoneNumber,
         street: updateRestaurant.street,
         city: updateRestaurant.city,
-        zipCode: updateRestaurant.zipCode,
+        zipcode: updateRestaurant.zipcode,
         state: updateRestaurant.state,
         country: updateRestaurant.country,
       };
@@ -368,7 +368,7 @@ const UpdateRestaurant = () => {
               id="zipcode"
               autoComplete="off"
               placeholder="ZipCode"
-              {...register("zipCode", {
+              {...register("zipcode", {
                 required: true,
                 pattern: {
                   value: /^[0-9]{6}$/,
@@ -378,11 +378,11 @@ const UpdateRestaurant = () => {
               })}
             />
           </div>
-          {errors.zipCode && (
+          {errors.zipcode && (
             <div className="error text-red-500">
-              {errors.zipCode.type === "required" &&
+              {errors.zipcode.type === "required" &&
                 messages.form.validation.zipCode.required}
-              {errors.zipCode.type === "pattern" &&
+              {errors.zipcode.type === "pattern" &&
                 messages.form.validation.zipCode.invalid}
             </div>
           )}

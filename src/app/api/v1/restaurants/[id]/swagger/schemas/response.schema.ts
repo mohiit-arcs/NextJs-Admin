@@ -24,28 +24,20 @@ RestaurantDetailsResponse.properties.data = {
         image: {
           type: "string",
         },
-        location: {
-          type: "object",
-          properties: {
-            street: {
-              type: "string",
-            },
-            city: {
-              type: "string",
-            },
-            zipCode: {
-              type: "string",
-            },
-            state: {
-              type: "string",
-            },
-            country: {
-              type: "string",
-            },
-            id: {
-              type: "number",
-            },
-          },
+        street: {
+          type: "string",
+        },
+        city: {
+          type: "string",
+        },
+        zipcode: {
+          type: "string",
+        },
+        state: {
+          type: "string",
+        },
+        country: {
+          type: "string",
         },
       },
     },

@@ -71,7 +71,7 @@ export const CreateRestaurantRequest = {
     city: {
       type: "string",
     },
-    zipCode: {
+    zipcode: {
       type: "string",
     },
     state: {
@@ -121,7 +121,7 @@ export const UpdateRestaurantRequest = {
     city: {
       type: "string",
     },
-    zipCode: {
+    zipcode: {
       type: "string",
     },
     state: {

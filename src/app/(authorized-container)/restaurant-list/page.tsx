@@ -7,9 +7,10 @@ import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import _ from "lodash";
-import Pagination from "@/components/pagination/pagination";
+import Pagination from "@/components/ui/table/pagination/pagination";
 import useDebounce from "@/hooks/useDebounce";
 import axiosFetch from "@/app/axios.interceptor";
+import RestaurantColumns from "./columns";
 
 const entriesPerPageOptions = [5, 10, 15];
 const baseUrl = "http://localhost:3000";
@@ -114,9 +115,9 @@ const UserList = () => {
     }, 500);
   }, []);
 
-  const handleSortByAndOrder = (sortBy: string) => {
-    if (sortBy != sortBy) {
-      setSortBy(sortBy);
+  const handleSortByAndOrder = (newSortBy: string) => {
+    if (sortBy != newSortBy) {
+      setSortBy(newSortBy);
     }
     if (sortOrder == "asc") {
       setSortOrder("desc");
@@ -148,55 +149,7 @@ const UserList = () => {
       <div className="rounded-lg border border-gray-200 drop-shadow-xl m-5">
         <table className="w-full rounded-md border-collapse bg-white text-left text-sm text-gray-500">
           <thead className="bg-gray-500">
-            <tr>
-              <th
-                onClick={() => handleSortByAndOrder("name")}
-                className="px-5 py-4 text-sm text-white font-bold">
-                Name <span className="cursor-pointer text-lg">↕️</span>
-              </th>
-              <th
-                onClick={() => handleSortByAndOrder("email")}
-                className="px-5 py-4 text-sm text-white font-bold">
-                Email <span className="cursor-pointer text-lg">↕️</span>
-              </th>
-              <th
-                onClick={() => handleSortByAndOrder("phoneNumber")}
-                className="px-5 py-4 text-sm text-white font-bold">
-                Phone Number <span className="cursor-pointer text-lg">↕️</span>
-              </th>
-              <th
-                onClick={() => handleSortByAndOrder("street")}
-                className="px-5 py-4 text-sm text-white font-bold">
-                Street <span className="cursor-pointer text-lg">↕️</span>
-              </th>
-              <th
-                onClick={() => handleSortByAndOrder("city")}
-                className="px-5 py-4 text-sm text-white font-bold">
-                City <span className="cursor-pointer text-lg">↕️</span>
-              </th>
-              <th
-                onClick={() => handleSortByAndOrder("zipcode")}
-                className="px-5 py-4 text-sm text-white font-bold">
-                ZipCode <span className="cursor-pointer text-lg">↕️</span>
-              </th>
-              <th
-                onClick={() => handleSortByAndOrder("state")}
-                className="px-5 py-4 text-sm text-white font-bold">
-                State <span className="cursor-pointer text-lg">↕️</span>
-              </th>
-              <th
-                onClick={() => handleSortByAndOrder("country")}
-                className="px-5 py-4 text-sm text-white font-bold">
-                Country <span className="cursor-pointer text-lg">↕️</span>
-              </th>
-              {/* <th className="px-5 py-4 text-sm text-white font-bold">
-                Image <span className="cursor-pointer text-lg">↕️</span>
-              </th> */}
-              <th className="px-5 py-4 text-sm text-white font-bold">Image</th>
-              <th className="px-5 py-4 text-sm text-white font-bold">
-                Actions
-              </th>
-            </tr>
+            <RestaurantColumns handleSortByAndOrder={handleSortByAndOrder} />
           </thead>
           <tbody>
             {restaurants!.map((restaurant: any) => (
@@ -204,11 +157,11 @@ const UserList = () => {
                 <td className="px-4 py-3">{restaurant.name}</td>
                 <td className="px-4 py-3">{restaurant.email}</td>
                 <td className="px-4 py-3">{restaurant.phoneNumber}</td>
-                <td className="px-4 py-3">{restaurant.location.street}</td>
-                <td className="px-4 py-3">{restaurant.location.city}</td>
-                <td className="px-4 py-3">{restaurant.location.zipCode}</td>
-                <td className="px-4 py-3">{restaurant.location.state}</td>
-                <td className="px-4 py-3">{restaurant.location.country}</td>
+                <td className="px-4 py-3">{restaurant.street}</td>
+                <td className="px-4 py-3">{restaurant.city}</td>
+                <td className="px-4 py-3">{restaurant.zipcode}</td>
+                <td className="px-4 py-3">{restaurant.state}</td>
+                <td className="px-4 py-3">{restaurant.country}</td>
                 <td className="px-4 py-3">
                   <img
                     className="h-16 object-cover"

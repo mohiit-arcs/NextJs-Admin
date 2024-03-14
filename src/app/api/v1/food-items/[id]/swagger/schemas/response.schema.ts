@@ -38,9 +38,6 @@ FoodItemDetailsResponse.properties.data = {
                   image: {
                     type: "string",
                   },
-                  locationId: {
-                    type: "number",
-                  },
                   userId: {
                     type: "number",
                   },

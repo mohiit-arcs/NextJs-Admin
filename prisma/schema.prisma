@@ -102,8 +102,11 @@ model Restaurant {
   email       String    @unique @db.VarChar(150)
   phoneNumber String    @db.VarChar(50)
   image       String
-  location    Location  @relation(fields: [locationId], references: [id])
-  locationId  Int
+  street      String
+  city        String    @db.VarChar(100)
+  state       String    @db.VarChar(150)
+  zipcode     String    @db.VarChar(10)
+  country     String    @db.VarChar(100)
   admin       User?     @relation(fields: [userId], references: [id])
   userId      Int?      @map("adminId")
   createdAt   DateTime  @default(now())
@@ -114,21 +117,6 @@ model Restaurant {
   @@index([email])
   @@index([userId])
   @@map("restaurants")
-}
-
-model Location {
-  id         Int          @id @default(autoincrement())
-  street     String
-  city       String       @db.VarChar(100)
-  state      String       @db.VarChar(150)
-  zipCode    String       @db.VarChar(10)
-  country    String       @db.VarChar(100)
-  createdAt  DateTime     @default(now())
-  updatedAt  DateTime     @updatedAt
-  deletedAt  DateTime?
-  restaurant Restaurant[]
-
-  @@map("location")
 }
 
 model MenuCategory {
