@@ -1,8 +1,12 @@
 "use client";
 
-import axiosFetch from "@/app/axios.interceptor";
 import { messages } from "@/messages/frontend/index.message";
-import { AuthenticationApi, SignupResponse } from "@/swagger";
+import {
+  AuthenticationApi,
+  SignupResponse,
+  UserRolesApi,
+  UserRolesResponse,
+} from "@/swagger";
 import { Eye, EyeOff } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -68,10 +72,11 @@ const AddUser = () => {
 
   const getUserRoles = async () => {
     try {
-      const response = await axiosFetch.get("api/v1/users/roles");
-      if (response.data.data) {
-        setRoles(response.data.data.result);
-      }
+      const userRolesApi = new UserRolesApi();
+      userRolesApi.findUserRoles().then((response: UserRolesResponse) => {
+        const roles = response.data?.result as Role[];
+        setRoles(roles);
+      });
     } catch (error) {
       console.log(error);
     }

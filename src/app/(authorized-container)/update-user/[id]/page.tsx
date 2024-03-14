@@ -8,6 +8,12 @@ import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/navigation";
 import axiosFetch from "@/app/axios.interceptor";
 import { messages } from "@/messages/frontend/index.message";
+import {
+  UpdateUserResponse,
+  UserRolesApi,
+  UserRolesResponse,
+  UsersApi,
+} from "@/swagger";
 
 type Inputs = {
   name: string;
@@ -68,10 +74,11 @@ const UpdateUser = () => {
 
   const getUserRoles = async () => {
     try {
-      const response = await axiosFetch.get(`${baseUrl}/roles`);
-      if (response.data.data) {
-        setRoles(response.data.data.result);
-      }
+      const userRolesApi = new UserRolesApi();
+      userRolesApi.findUserRoles().then((response: UserRolesResponse) => {
+        const roles = response.data?.result as Role[];
+        setRoles(roles);
+      });
     } catch (error) {
       console.log(error);
     }
@@ -85,17 +92,20 @@ const UpdateUser = () => {
         id: Number(id),
         role: role,
       };
-      const response = await axiosFetch.patch(`${baseUrl}`, updatedUserData);
-      if (response.data.data?.success) {
-        toast.success(response.data.message);
-        router.back();
-      } else {
-        if (response.data.statusCode == 500) {
-          toast.error(messages.error.badResponse);
-        } else {
-          toast.error(response.data.message);
-        }
-      }
+
+      const usersApi = new UsersApi();
+      usersApi
+        .updateUser({
+          updateUserRequest: updatedUserData,
+        })
+        .then((response: UpdateUserResponse) => {
+          if (response.data?.success) {
+            toast.success(response.message);
+            router.back();
+          } else {
+            toast.error(response.message);
+          }
+        });
     } catch (error) {
       console.log(error);
     }

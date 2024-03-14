@@ -9,8 +9,13 @@ import "react-toastify/dist/ReactToastify.css";
 import _ from "lodash";
 import Pagination from "@/components/ui/table/pagination/pagination";
 import useDebounce from "@/hooks/useDebounce";
-import axiosFetch from "@/app/axios.interceptor";
 import UserColumns from "./columns";
+import {
+  UserDeleteResponse,
+  UserListResponse,
+  UserRequestApi,
+  UsersApi,
+} from "@/swagger";
 
 const entriesPerPageOptions = [5, 10, 15];
 
@@ -37,15 +42,22 @@ const UserList = () => {
 
   const getUsers = async () => {
     try {
-      const response = await axiosFetch.get(
-        `api/v1/users?page=${currentPage}&limit=${usersLimit}&search=${debouncedSearchQuery}&sortBy=${sortBy}&sortOrder=${sortOrder}`
-      );
-      if (response.data.data) {
-        setUsers(response.data.data.rows);
-        setTotalUsers(response.data.data.count);
-        const totalPages = Math.ceil(response.data.data.count / usersLimit);
-        setTotalPages(totalPages);
-      }
+      const usersAPi = new UsersApi();
+      usersAPi
+        .findUsers({
+          limit: usersLimit,
+          page: currentPage,
+          search: debouncedSearchQuery,
+          sortBy: sortBy,
+          sortOrder: sortOrder,
+        })
+        .then((response: UserListResponse) => {
+          const users = response.data?.rows as User[];
+          setUsers(users);
+          setTotalUsers(response.data?.count);
+          const totalPages = Math.ceil(response.data?.count! / usersLimit);
+          setTotalPages(totalPages);
+        });
     } catch (error) {
       console.log(error);
     }
@@ -55,13 +67,19 @@ const UserList = () => {
     try {
       const toDelete = confirm("Are you sure, you want to delete the user?");
       if (toDelete) {
-        const response = await axiosFetch.delete(`api/v1/users/${userId}`);
-        if (response.data.data?.success) {
-          const updatedUsers = users.filter((user) => user.id != userId);
-          setUsers(updatedUsers);
-          setTotalUsers(response.data.data.count);
-          toast.success(response.data.data.message);
-        }
+        const userRequestApi = new UserRequestApi();
+        userRequestApi
+          .deleteUserById({
+            id: userId,
+          })
+          .then((response: UserDeleteResponse) => {
+            if (response.data?.success) {
+              const updatedUsers = users.filter((user) => user.id != userId);
+              setUsers(updatedUsers);
+              setTotalUsers(response.data.count);
+              toast.success(response.data.message);
+            }
+          });
       }
       return;
     } catch (error) {

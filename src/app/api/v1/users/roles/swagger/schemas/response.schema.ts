@@ -9,19 +9,14 @@ export const UserRolesResponse = {
           items: {
             type: "object",
             properties: {
-              role: {
-                type: "object",
-                properties: {
-                  name: {
-                    type: "string",
-                  },
-                  slug: {
-                    type: "string",
-                  },
-                  id: {
-                    type: "number",
-                  },
-                },
+              name: {
+                type: "string",
+              },
+              slug: {
+                type: "string",
+              },
+              id: {
+                type: "number",
               },
             },
           },
