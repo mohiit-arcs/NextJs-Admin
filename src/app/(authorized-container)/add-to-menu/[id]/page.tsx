@@ -1,6 +1,13 @@
 "use client";
-import axiosFetch from "@/app/axios.interceptor";
-import { messages } from "@/messages/frontend/index.message";
+
+import {
+  AddToMenuResponse,
+  FoodItemRequestApi,
+  MenuCategoriesApi,
+  MenuCategoriesResponse,
+  RestaurantListResponse,
+  RestaurantsApi,
+} from "@/swagger";
 import { X } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -44,20 +51,24 @@ const AddToMenu = () => {
 
   const addFoodToMenu: SubmitHandler<Inputs> = async (addFoodToMenu) => {
     try {
-      const response = await axiosFetch.patch(
-        `${apiUrl}/food-items/add-to-menu`,
-        { id, ...addFoodToMenu }
-      );
-      if (response.data.data?.success) {
-        toast.success(response.data.data?.message);
-        router.back();
-      } else if (!response.data.success) {
-        if (response.data.statusCode == 500) {
-          toast.error(messages.error.badResponse);
-        } else {
-          toast.error(response.data.message);
-        }
-      }
+      const foodItemsRequestApi = new FoodItemRequestApi();
+      foodItemsRequestApi
+        .addToMenu({
+          addToMenuRequest: {
+            id: Number(id),
+            categoryId: addFoodToMenu.categoryId,
+            restaurantId: addFoodToMenu.restaurantId,
+          },
+        })
+        .then((response: AddToMenuResponse) => {
+          console.log(response);
+          if (response?.data?.success) {
+            toast.success(response?.data.message);
+            router.back();
+          } else {
+            toast.error(response?.message);
+          }
+        });
     } catch (error) {
       console.log(error);
     }
@@ -65,12 +76,12 @@ const AddToMenu = () => {
 
   const getFoodItemDetails = async (foodItemId: number) => {
     try {
-      const response = await axiosFetch.get(
-        `${apiUrl}/food-items/${foodItemId}`
-      );
-      console.log(response);
-      if (response.data.data?.success) {
-        setFoodItemData(response.data.data.details);
+      const foodItemRequestApi = new FoodItemRequestApi();
+      const response = await foodItemRequestApi.findFoodItemById({
+        id: foodItemId,
+      });
+      if (response.data?.details) {
+        setFoodItemData(response.data.details);
       }
     } catch (error) {
       console.log(error);
@@ -79,12 +90,13 @@ const AddToMenu = () => {
 
   const getMenuCategories = async () => {
     try {
-      const response = await axiosFetch.get(
-        `${apiUrl}/food-items/menu-categories`
-      );
-      if (response.data.data) {
-        setMenuCategories(response.data.data.result);
-      }
+      const menuCategoriesApi = new MenuCategoriesApi();
+      menuCategoriesApi
+        .findMenuCategories()
+        .then((response: MenuCategoriesResponse) => {
+          const menuCategories = response.data?.result as [];
+          setMenuCategories(menuCategories);
+        });
     } catch (error) {
       console.log(error);
     }
@@ -92,12 +104,19 @@ const AddToMenu = () => {
 
   const getRestaurants = async () => {
     try {
-      const response = await axiosFetch.get(
-        `${apiUrl}/restaurants?page=&limit=&search=&sortBy=&sortOrder=`
-      );
-      if (response.data.data) {
-        setRestaurants(response.data.data.rows);
-      }
+      const restaurantsApi = new RestaurantsApi();
+      restaurantsApi
+        .findRestaurants({
+          limit: 10,
+          page: 1,
+          search: "",
+          sortBy: "createdAt",
+          sortOrder: "desc",
+        })
+        .then((response: RestaurantListResponse) => {
+          const restaurants = response.data?.rows as [];
+          setRestaurants(restaurants);
+        });
     } catch (error) {
       console.log(error);
     }
@@ -113,18 +132,17 @@ const AddToMenu = () => {
         "Are you sure, you want to delete this food item from menu?"
       );
       if (toDelete) {
-        const response = await axiosFetch.patch(
-          `${apiUrl}/food-items/remove-from-menu`,
-          {
+        const foodItemRequestApi = new FoodItemRequestApi();
+        const response = await foodItemRequestApi.removeFromMenu({
+          removeFromMenuRequest: {
+            categoryId: categoryId,
+            restaurantId: restaurantId,
             id: foodItemId,
-            restaurantId,
-            categoryId,
-          }
-        );
-        if (response.data.data?.success) {
+          },
+        });
+        if (response.data?.success) {
           const updatedMenu = foodItemData?.menu
             .map((item: any) => {
-              console.log(item);
               if (
                 item.restaurant.id == restaurantId &&
                 item.menuCategory.id == categoryId
@@ -135,18 +153,13 @@ const AddToMenu = () => {
               }
             })
             .filter((item: any) => item != undefined);
-          console.log(updatedMenu);
           setFoodItemData({
             ...foodItemData,
             menu: updatedMenu,
           });
-          toast.success(response.data.data?.message);
+          toast.success(response.data?.message);
         } else {
-          if (response.data.statusCode == 500) {
-            toast.error(messages.error.badResponse);
-          } else {
-            toast.error(response.data.message);
-          }
+          toast.error(response.data?.message);
         }
       }
     } catch (error) {

@@ -73,5 +73,11 @@ FoodItemDeleteResponse.properties.data = {
     success: {
       type: "boolean",
     },
+    count: {
+      type: "number",
+    },
+    message: {
+      type: "string",
+    },
   },
 };

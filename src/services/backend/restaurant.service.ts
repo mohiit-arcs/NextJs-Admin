@@ -27,7 +27,7 @@ const checkEmailExists = async (email: string, userId: number) => {
   });
 
   if (existingRestaurant?.id) {
-    throw true;
+    return true;
   }
 
   return false;

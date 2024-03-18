@@ -1,7 +1,14 @@
 "use client";
 
-import axiosFetch from "@/app/axios.interceptor";
 import { messages } from "@/messages/frontend/index.message";
+import {
+  CreateFoodItemResponse,
+  FoodItemsApi,
+  MenuCategoriesApi,
+  MenuCategoriesResponse,
+  RestaurantListResponse,
+  RestaurantsApi,
+} from "@/swagger";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { useEffect, useState } from "react";
@@ -38,18 +45,17 @@ const AddFoodItem = () => {
 
   const addFoodItem: SubmitHandler<Inputs> = async (addFoodItem) => {
     try {
-      console.log(addFoodItem);
-      const response = await axiosFetch.post("api/v1/food-items", addFoodItem);
-      if (response.data.data.success) {
-        router.push("food-item-list");
-        toast.success(response.data.message);
-      } else if (!response.data.data.success) {
-        if (response.data.statusCode == 500) {
-          toast.error(messages.error.badResponse);
-        } else {
-          toast.error(response.data.message);
-        }
-      }
+      const foodItemApi = new FoodItemsApi();
+      foodItemApi
+        .createFoodItem({ createFoodItemRequest: addFoodItem })
+        .then((response: CreateFoodItemResponse) => {
+          if (response.data?.success) {
+            router.push("food-item-list");
+            toast.success(response.message);
+          } else {
+            toast.error(response.message);
+          }
+        });
     } catch (error) {
       console.log(error);
     }
@@ -61,10 +67,13 @@ const AddFoodItem = () => {
 
   const getMenuCategories = async () => {
     try {
-      const response = await axiosFetch.get(
-        "api/v1/food-items/menu-categories"
-      );
-      setMenuCategories(response.data.data.result);
+      const menuCategoriesApi = new MenuCategoriesApi();
+      menuCategoriesApi
+        .findMenuCategories()
+        .then((response: MenuCategoriesResponse) => {
+          const menuCategories = response.data?.result as [];
+          setMenuCategories(menuCategories);
+        });
     } catch (error) {
       console.log(error);
     }
@@ -72,10 +81,19 @@ const AddFoodItem = () => {
 
   const getRestaurants = async () => {
     try {
-      const response = await axiosFetch.get(
-        "api/v1/restaurants?page=&limit=&search=&sortBy=&sortOrder="
-      );
-      setRestaurants(response.data.data.rows);
+      const restaurantsApi = new RestaurantsApi();
+      restaurantsApi
+        .findRestaurants({
+          limit: 10,
+          page: 1,
+          search: "",
+          sortBy: "createdAt",
+          sortOrder: "desc",
+        })
+        .then((response: RestaurantListResponse) => {
+          const restaurants = response.data?.rows as [];
+          setRestaurants(restaurants);
+        });
     } catch (error) {
       console.log(error);
     }

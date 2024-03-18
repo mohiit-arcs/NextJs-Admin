@@ -9,8 +9,6 @@ import {
   foodItemList,
   updateFoodItem,
 } from "@/services/backend/foodItem.service";
-import { HttpStatusCode } from "axios";
-import { NextResponse } from "next/server";
 
 export const POST = acl("restaurants", "full", async (request: ApiRequest) => {
   try {
@@ -99,6 +97,7 @@ export const PATCH = acl("restaurants", "full", async (request: ApiRequest) => {
       message: messages.response.requestUpdated,
     });
   } catch (error: any) {
+    console.log(error);
     return errorResponse(error);
   }
 });

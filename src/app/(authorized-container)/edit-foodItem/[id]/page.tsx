@@ -2,6 +2,11 @@
 
 import axiosFetch from "@/app/axios.interceptor";
 import { messages } from "@/messages/frontend/index.message";
+import {
+  FoodItemRequestApi,
+  FoodItemsApi,
+  UpdateFoodItemResponse,
+} from "@/swagger";
 import { useParams, useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -30,11 +35,14 @@ const UpdateFoodItem = () => {
 
   const getFoodItemDetail = async (foodItemId: number) => {
     try {
-      const response = await axiosFetch.get(`${apiUrl}/${foodItemId}`);
+      const foodItemsRequestApi = new FoodItemRequestApi();
+      const response = await foodItemsRequestApi.findFoodItemById({
+        id: foodItemId,
+      });
 
-      if (response.data.data?.success) {
-        const restaurantData = response.data.data.details;
-        setValue("name", restaurantData.name, {
+      if (response.data) {
+        const restaurantData = response.data.details;
+        setValue("name", restaurantData?.name!, {
           shouldValidate: true,
           shouldDirty: true,
           shouldTouch: true,
@@ -47,17 +55,20 @@ const UpdateFoodItem = () => {
 
   const updateFoodItem: SubmitHandler<Inputs> = async (updateFoodItem) => {
     try {
-      const response = await axiosFetch.patch(apiUrl, {
-        id: Number(id),
-        name: updateFoodItem.name,
-      });
-      if (response.data.data?.success) {
-        router.push("food-item-list");
-        toast.success(response.data.message);
-        router.back();
-      } else if (!response.data.success) {
-        toast.error(response.data.message);
-      }
+      const foodItemsApi = new FoodItemsApi();
+      foodItemsApi
+        .updateFoodItem({
+          updateFoodItemRequest: { id: Number(id), name: updateFoodItem.name },
+        })
+        .then((response: UpdateFoodItemResponse) => {
+          if (response.data?.success) {
+            router.push("food-item-list");
+            toast.success(response.message);
+            router.back();
+          } else {
+            toast.error(response.message);
+          }
+        });
     } catch (error) {
       console.log(error);
     }

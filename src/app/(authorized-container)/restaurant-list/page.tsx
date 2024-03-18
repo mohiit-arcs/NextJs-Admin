@@ -1,6 +1,5 @@
 "use client";
 
-import { User } from "@prisma/client";
 import { Pencil, Trash } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -9,14 +8,20 @@ import "react-toastify/dist/ReactToastify.css";
 import _ from "lodash";
 import Pagination from "@/components/ui/table/pagination/pagination";
 import useDebounce from "@/hooks/useDebounce";
-import axiosFetch from "@/app/axios.interceptor";
 import RestaurantColumns from "./columns";
+import {
+  RestaurantDeleteResponse,
+  RestaurantListResponse,
+  RestaurantRequestApi,
+  RestaurantsApi,
+} from "@/swagger";
+import { Restaurant } from "@prisma/client";
 
 const entriesPerPageOptions = [5, 10, 15];
 const baseUrl = "http://localhost:3000";
 
-const UserList = () => {
-  const [restaurants, setRestaurants] = useState<User[]>([]);
+const RestaurantList = () => {
+  const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [restaurantsLimit, setRestaurantsLimit] = useState(5);
   const [totalRestaurants, setTotalRestaurants] = useState<number>();
@@ -29,26 +34,33 @@ const UserList = () => {
   const debouncedSearchQuery = useDebounce(searchQuery, 500);
 
   useEffect(() => {
-    getUsers();
+    getRestaurants();
 
     return () => {
       // debouncedUserResults.cancel();
     };
   }, [currentPage, restaurantsLimit, debouncedSearchQuery, sortBy, sortOrder]);
 
-  const getUsers = async () => {
+  const getRestaurants = async () => {
     try {
-      const response = await axiosFetch.get(
-        `api/v1/restaurants?page=${currentPage}&limit=${restaurantsLimit}&search=${debouncedSearchQuery}&sortBy=${sortBy}&sortOrder=${sortOrder}`
-      );
-      if (response.data.count != 0) {
-        setRestaurants(response.data.data.rows);
-        setTotalRestaurants(response.data.data.count);
-        const totalPages = Math.ceil(
-          response.data.data.count / restaurantsLimit
-        );
-        setTotalPages(totalPages);
-      }
+      const restaurantListApi = new RestaurantsApi();
+      restaurantListApi
+        .findRestaurants({
+          limit: restaurantsLimit,
+          page: currentPage,
+          search: debouncedSearchQuery,
+          sortBy: sortBy,
+          sortOrder: sortOrder,
+        })
+        .then((response: RestaurantListResponse) => {
+          const restaurants = response.data?.rows as Restaurant[];
+          setRestaurants(restaurants);
+          setTotalRestaurants(response.data?.count);
+          const totalPages = Math.ceil(
+            response.data?.count! / restaurantsLimit
+          );
+          setTotalPages(totalPages);
+        });
     } catch (error) {
       console.log(error);
     }
@@ -60,17 +72,19 @@ const UserList = () => {
         "Are you sure, you want to delete this restaurant?"
       );
       if (toDelete) {
-        const response = await axiosFetch.delete(
-          `api/v1/restaurants/${restaurantId}`
-        );
-        if (response.data.data.success) {
-          const updatedUsers = restaurants.filter(
-            (restaurant) => restaurant.id != restaurantId
-          );
-          setRestaurants(updatedUsers);
-          setTotalRestaurants(response.data.data.count);
-          toast.success(response.data.data.message);
-        }
+        const resturantRequestApi = new RestaurantRequestApi();
+        resturantRequestApi
+          .deleteRestaurantById({ id: restaurantId })
+          .then((response: RestaurantDeleteResponse) => {
+            if (response.data?.success) {
+              const updatedRestaurants = restaurants.filter(
+                (restaurant) => restaurant.id != restaurantId
+              );
+              setRestaurants(updatedRestaurants);
+              setTotalRestaurants(response.data?.count);
+              toast.success(response.data?.message);
+            }
+          });
       }
       return;
     } catch (error) {
@@ -202,4 +216,4 @@ const UserList = () => {
   );
 };
 
-export default UserList;
+export default RestaurantList;

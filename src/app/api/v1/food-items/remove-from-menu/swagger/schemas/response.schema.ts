@@ -6,16 +6,11 @@ export const RemoveFromMenuResponse = _.cloneDeep(successResponse);
 RemoveFromMenuResponse.properties.data = {
   type: "object",
   properties: {
-    data: {
-      type: "object",
-      properties: {
-        success: {
-          type: "boolean",
-        },
-        message: {
-          type: "string",
-        },
-      },
+    success: {
+      type: "boolean",
+    },
+    message: {
+      type: "string",
     },
   },
 };

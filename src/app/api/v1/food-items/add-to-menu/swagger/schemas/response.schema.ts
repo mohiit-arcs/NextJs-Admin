@@ -6,16 +6,11 @@ export const AddToMenuResponse = _.cloneDeep(successResponse);
 AddToMenuResponse.properties.data = {
   type: "object",
   properties: {
-    data: {
-      type: "object",
-      properties: {
-        success: {
-          type: "boolean",
-        },
-        message: {
-          type: "string",
-        },
-      },
+    success: {
+      type: "boolean",
+    },
+    message: {
+      type: "string",
     },
   },
 };

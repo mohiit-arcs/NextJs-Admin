@@ -6,8 +6,12 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import imageCompression from "browser-image-compression";
-import axiosFetch from "@/app/axios.interceptor";
 import { messages } from "@/messages/frontend/index.message";
+import {
+  RestaurantRequestApi,
+  RestaurantsApi,
+  UpdateRestaurantResponse,
+} from "@/swagger";
 
 type Inputs = {
   name: string;
@@ -42,46 +46,48 @@ const UpdateRestaurant = () => {
 
   const getRestaurantDetails = async (restaurantId: number) => {
     try {
-      const response = await axiosFetch.get(`${apiUrl}/${restaurantId}`);
-
-      if (response.data.data?.success) {
-        const restaurantData = response.data.data.details;
-        setValue("name", restaurantData.name, {
+      const restaurantRequestApi = new RestaurantRequestApi();
+      const response = await restaurantRequestApi.findRestaurantById({
+        id: restaurantId,
+      });
+      if (response.data?.details) {
+        const restaurantData = response.data.details;
+        setValue("name", restaurantData.name!, {
           shouldValidate: true,
           shouldDirty: true,
           shouldTouch: true,
         });
-        setValue("email", restaurantData.email, {
+        setValue("email", restaurantData.email!, {
           shouldValidate: true,
           shouldDirty: true,
           shouldTouch: true,
         });
-        setValue("phoneNumber", restaurantData.phoneNumber, {
+        setValue("phoneNumber", restaurantData.phoneNumber!, {
           shouldValidate: true,
           shouldDirty: true,
           shouldTouch: true,
         });
-        setValue("street", restaurantData.street, {
+        setValue("street", restaurantData.street!, {
           shouldValidate: true,
           shouldDirty: true,
           shouldTouch: true,
         });
-        setValue("city", restaurantData.city, {
+        setValue("city", restaurantData.city!, {
           shouldValidate: true,
           shouldDirty: true,
           shouldTouch: true,
         });
-        setValue("zipcode", restaurantData.zipcode, {
+        setValue("zipcode", restaurantData.zipcode!, {
           shouldValidate: true,
           shouldDirty: true,
           shouldTouch: true,
         });
-        setValue("state", restaurantData.state, {
+        setValue("state", restaurantData.state!, {
           shouldValidate: true,
           shouldDirty: true,
           shouldTouch: true,
         });
-        setValue("country", restaurantData.country, {
+        setValue("country", restaurantData.country!, {
           shouldValidate: true,
           shouldDirty: true,
           shouldTouch: true,
@@ -127,21 +133,19 @@ const UpdateRestaurant = () => {
         country: updateRestaurant.country,
       };
 
-      const response = await axiosFetch.patch(
-        `${apiUrl}`,
-        updateRestaurantPayload
-      );
-
-      if (response.data.data.success) {
-        router.back();
-        toast.success(response.data.message);
-      } else {
-        if (response.data.statusCode == 500) {
-          toast.error(messages.error.badResponse);
-        } else {
-          toast.error(response.data.message);
-        }
-      }
+      const restaurantsApi = new RestaurantsApi();
+      restaurantsApi
+        .updateRestaurant({
+          updateRestaurantRequest: updateRestaurantPayload,
+        })
+        .then((response: UpdateRestaurantResponse) => {
+          if (response.data?.success) {
+            router.back();
+            toast.success(response.message);
+          } else {
+            toast.error(response.message);
+          }
+        });
     } catch (error) {
       console.log(error);
     }

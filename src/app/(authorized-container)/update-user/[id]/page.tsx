@@ -6,10 +6,10 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/navigation";
-import axiosFetch from "@/app/axios.interceptor";
 import { messages } from "@/messages/frontend/index.message";
 import {
   UpdateUserResponse,
+  UserRequestApi,
   UserRolesApi,
   UserRolesResponse,
   UsersApi,
@@ -18,7 +18,7 @@ import {
 type Inputs = {
   name: string;
   email: string;
-  role: string;
+  role: number;
 };
 
 interface Role {
@@ -48,20 +48,21 @@ const UpdateUser = () => {
 
   const getUserDetails = async (userId: number) => {
     try {
-      const response = await axiosFetch.get(`${baseUrl}/${userId}`);
-      if (response.data.data) {
-        const userData = response.data.data.details;
-        setValue("name", userData.name, {
+      const userRequestApi = new UserRequestApi();
+      const response = await userRequestApi.findUserById({ id: userId });
+      if (response.data?.details) {
+        const userData = response.data.details;
+        setValue("name", userData.name!, {
           shouldValidate: true,
           shouldDirty: true,
           shouldTouch: true,
         });
-        setValue("email", userData.email, {
+        setValue("email", userData.email!, {
           shouldValidate: true,
           shouldDirty: true,
           shouldTouch: true,
         });
-        setValue("role", userData.role.id, {
+        setValue("role", userData.role?.id!, {
           shouldValidate: true,
           shouldDirty: true,
           shouldTouch: true,

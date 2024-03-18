@@ -6,8 +6,8 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import imageCompression from "browser-image-compression";
-import axiosFetch from "@/app/axios.interceptor";
 import { messages } from "@/messages/frontend/index.message";
+import { CreateRestaurantResponse, RestaurantsApi } from "@/swagger";
 
 type Inputs = {
   name: string;
@@ -62,21 +62,19 @@ const AddRestaurant = () => {
         country: addRestaurant.country,
       };
 
-      const response = await axiosFetch.post(
-        "api/v1/restaurants",
-        addRestaurantPayload
-      );
-
-      if (response.data.data.success) {
-        router.push("restaurant-list");
-        toast.success(response.data.message);
-      } else {
-        if (response.data.statusCode == 500) {
-          toast.error(messages.error.badResponse);
-        } else {
-          toast.error(response.data.message);
-        }
-      }
+      const restaurantsApi = new RestaurantsApi();
+      restaurantsApi
+        .createRestaurant({
+          createRestaurantRequest: addRestaurantPayload,
+        })
+        .then((response: CreateRestaurantResponse) => {
+          if (response.data?.success) {
+            router.push("restaurant-list");
+            toast.success(response.message);
+          } else {
+            toast.error(response.message);
+          }
+        });
     } catch (error) {
       console.log(error);
     }

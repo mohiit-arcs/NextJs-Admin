@@ -51,6 +51,7 @@ export const updateFoodItem = async (
   updateFoodItem: CreateFoodItem,
   userId: number
 ) => {
+  console.log("fdafdfadfa", id);
   const existingFoodItem = await prisma.foodItem.findFirst({
     where: { id: id, userId: userId },
   });

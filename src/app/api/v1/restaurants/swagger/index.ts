@@ -54,7 +54,7 @@ export const RestaurantsAPI = {
   get: {
     "x-controller-name": "Restaurants",
     "x-operation-name": "find",
-    tags: ["Users"],
+    tags: ["Restaurants"],
     description: "This api is for restaurants.",
     summary: "Endpoint for restaurants",
     responses: publicListResponses,

@@ -2,8 +2,8 @@ import React from "react";
 
 const foodItemsColumns = [
   { field: "name", label: "Name", sortable: true },
-  { field: "restaurants", label: "Restaurants", sortable: true },
-  { field: "categories", label: "Categories", sortable: true },
+  { field: "restaurants", label: "Restaurants", sortable: false },
+  { field: "categories", label: "Categories", sortable: false },
   { field: "actions", label: "Actions", sortable: false },
 ];
 

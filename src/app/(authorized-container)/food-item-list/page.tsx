@@ -1,6 +1,5 @@
 "use client";
 
-import axiosFetch from "@/app/axios.interceptor";
 import Pagination from "@/components/ui/table/pagination/pagination";
 import useDebounce from "@/hooks/useDebounce";
 import _ from "lodash";
@@ -10,6 +9,12 @@ import { useEffect, useMemo, useState } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import FoodItemListColumns from "./columns";
+import {
+  FoodItemDeleteResponse,
+  FoodItemRequestApi,
+  FoodItemsApi,
+  FoodItemsListResponse,
+} from "@/swagger";
 
 const entriesPerPageOptions = [5, 10, 15];
 const baseUrl = "http://localhost:3000";
@@ -37,15 +42,22 @@ const FoodItemList = () => {
 
   const getFoodItems = async () => {
     try {
-      const response = await axiosFetch.get(
-        `api/v1/food-items?page=${currentPage}&limit=${itemsLimit}&search=${debouncedSearchQuery}&sortBy=${sortBy}&sortOrder=${sortOrder}`
-      );
-      if (response.data.count != 0) {
-        setFoodItems(response.data.data.rows);
-        setTotalFoodItems(response.data.data.count);
-        const totalPages = Math.ceil(response.data.data.count / itemsLimit);
-        setTotalPages(totalPages);
-      }
+      const foodItemsApi = new FoodItemsApi();
+      foodItemsApi
+        .findFoodItems({
+          limit: itemsLimit,
+          page: currentPage,
+          search: debouncedSearchQuery,
+          sortBy: sortBy,
+          sortOrder: sortOrder,
+        })
+        .then((response: FoodItemsListResponse) => {
+          const foodItems: [] = response.data?.rows as [];
+          setFoodItems(foodItems);
+          setTotalFoodItems(response.data?.count);
+          const totalPages = Math.ceil(response.data?.count! / itemsLimit);
+          setTotalPages(totalPages);
+        });
     } catch (error) {
       console.log(error);
     }
@@ -57,17 +69,19 @@ const FoodItemList = () => {
         "Are you sure, you want to delete this food item?"
       );
       if (toDelete) {
-        const response = await axiosFetch.delete(
-          `api/v1/food-items/${foodItemId}`
-        );
-        if (response.data.success) {
-          const updatedFoodItems = foodItems.filter(
-            (foodItem: any) => foodItem.id != foodItemId
-          );
-          setFoodItems(updatedFoodItems);
-          setTotalFoodItems(response.data.count);
-          toast.success(response.data.message);
-        }
+        const foodItemsRequestApi = new FoodItemRequestApi();
+        foodItemsRequestApi
+          .deleteFoodItemById({ id: foodItemId })
+          .then((response: FoodItemDeleteResponse) => {
+            if (response.data?.success) {
+              const updatedFoodItems = foodItems.filter(
+                (foodItem: any) => foodItem.id != foodItemId
+              );
+              setFoodItems(updatedFoodItems);
+              setTotalFoodItems(response.data.count);
+              toast.success(response.data.message);
+            }
+          });
       }
       return;
     } catch (error) {
