@@ -32,5 +32,6 @@ export const messages = {
     emailAlreadyExists: "Email address is already taken",
     notAllowed: "You are not allowed to perform this action",
     foodItemAlreadyExists: "Food Item already present with this name",
+    notAdmin: "Only admin can login",
   },
 };

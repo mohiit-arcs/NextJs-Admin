@@ -68,6 +68,10 @@ export const login = async (email: string, password: string) => {
     role: user.role.slug,
   };
 
+  if (profile.role == "customer") {
+    throw unauthorized(messages.error.notAdmin);
+  }
+
   const token = await generateToken(profile);
 
   const response = {
