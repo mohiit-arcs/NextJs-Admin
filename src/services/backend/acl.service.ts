@@ -68,6 +68,19 @@ export const acl = (
   };
 };
 
+export const auth = (
+  handler: (req: ApiRequest) => Promise<NextResponse<unknown>>
+) => {
+  return async (req: ApiRequest) => {
+    try {
+      await authorize(req);
+      return await handler(req);
+    } catch (error: any) {
+      return errorResponse(error);
+    }
+  };
+};
+
 export const authorize = async (request: ApiRequest) => {
   const authHeader = request.headers.get("Authorization");
   if (!authHeader || !authHeader.startsWith("Bearer ")) {

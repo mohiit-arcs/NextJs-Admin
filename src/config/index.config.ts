@@ -1,4 +1,5 @@
 export const config = {
+  applicationName: process.env.NEXT_PUBLIC_APP_NAME,
   jwt: {
     secret: process.env.JWT_SECRET,
     expiry: Number(process.env.NEXT_PUBLIC_JWT_EXPIRY || "604800"),

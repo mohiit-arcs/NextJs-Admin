@@ -168,7 +168,17 @@ const RestaurantList = () => {
           <tbody>
             {restaurants!.map((restaurant: any) => (
               <tr key={restaurant.id} className="hover:bg-gray-200">
-                <td className="px-4 py-3">{restaurant.name}</td>
+                <td className="px-4 py-3">
+                  <span
+                    className="cursor-pointer hover:text-blue-500"
+                    onClick={() =>
+                      router.push(`/restaurant-info/${restaurant.id}`, {
+                        scroll: true,
+                      })
+                    }>
+                    {restaurant.name}
+                  </span>
+                </td>
                 <td className="px-4 py-3">{restaurant.email}</td>
                 <td className="px-4 py-3">{restaurant.phoneNumber}</td>
                 <td className="px-4 py-3">{restaurant.street}</td>

@@ -58,4 +58,11 @@ export const messages = {
     badResponse: "There is some internal problem will be resolved soon!",
     wrongFileType: "Please upload image file of type .jpg or .png",
   },
+  configuration: {
+    userProfileContext: {
+      error: {
+        noContext: "useUserProfile must be used within a UserProfileProvider",
+      },
+    },
+  },
 };

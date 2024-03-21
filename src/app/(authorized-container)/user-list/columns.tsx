@@ -17,16 +17,13 @@ const UserColumns: React.FC<UserColumnsProps> = ({ handleSortByAndOrder }) => {
       {userColumns.map((column) => {
         return (
           <th
+            onClick={() =>
+              column.sortable && handleSortByAndOrder(column.field)
+            }
             key={column.field}
-            className="px-5 py-4 text-sm text-white font-bold">
+            className="px-5 cursor-pointer py-4 text-sm text-white font-bold">
             {column.label}{" "}
-            {column.sortable ? (
-              <span
-                onClick={() => handleSortByAndOrder(column.field)}
-                className="cursor-pointer text-lg">
-                ↕️
-              </span>
-            ) : null}
+            {column.sortable ? <span className=" text-lg">↕️</span> : null}
           </th>
         );
       })}

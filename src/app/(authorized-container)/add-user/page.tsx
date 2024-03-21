@@ -33,6 +33,7 @@ const AddUser = () => {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<Inputs>();
   const router = useRouter();
@@ -76,6 +77,7 @@ const AddUser = () => {
       userRolesApi.findUserRoles().then((response: UserRolesResponse) => {
         const roles = response.data?.result as Role[];
         setRoles(roles);
+        setValue("role", roles[0]?.id);
       });
     } catch (error) {
       console.log(error);

@@ -19,7 +19,15 @@ LoginResponse.properties.data = {
           type: "string",
         },
         role: {
-          type: "string",
+          type: "object",
+          properties: {
+            name: {
+              type: "string",
+            },
+            slug: {
+              type: "string",
+            },
+          },
         },
       },
     },

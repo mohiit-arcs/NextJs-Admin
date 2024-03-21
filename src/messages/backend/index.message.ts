@@ -14,6 +14,7 @@ export const messages = {
     login: "User logged in successfully",
     requestUpdated: "Request updated successfully",
     signupUser: "User Registered Successfully",
+    passwordUpdate: "Password updated successfully.",
     deleteUser: "User deleted successfully",
     createRestaurant: "Restaurant added successfully",
     deleteRestaurant: "Restaurant deleted successfully",
@@ -33,5 +34,6 @@ export const messages = {
     notAllowed: "You are not allowed to perform this action",
     foodItemAlreadyExists: "Food Item already present with this name",
     notAdmin: "Only admin can login",
+    invalidCurrentPassword: "Invalid current password. Please try again.",
   },
 };

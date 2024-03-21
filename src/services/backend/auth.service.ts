@@ -48,7 +48,12 @@ export const login = async (email: string, password: string) => {
       name: true,
       email: true,
       password: true,
-      role: true,
+      role: {
+        select: {
+          name: true,
+          slug: true,
+        },
+      },
     },
   });
 
@@ -65,10 +70,10 @@ export const login = async (email: string, password: string) => {
     id: user.id,
     name: user.name,
     email: user.email,
-    role: user.role.slug,
+    role: user.role,
   };
 
-  if (profile.role == "customer") {
+  if (profile.role.slug == "customer") {
     throw unauthorized(messages.error.notAdmin);
   }
 

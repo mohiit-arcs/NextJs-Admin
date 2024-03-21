@@ -1,6 +1,8 @@
 "use client";
+import { useUserProfile } from "@/components/user-profile/page";
 import { setAuthToken } from "@/services/frontend/storage.service";
 import { AuthenticationApi, LoginResponse } from "@/swagger";
+import { RoleSlug } from "@prisma/client";
 import { Eye, EyeOff } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -14,6 +16,7 @@ type Inputs = {
 };
 
 export default function LoginPage() {
+  const { setUserProfile } = useUserProfile();
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
   const {
@@ -36,12 +39,18 @@ export default function LoginPage() {
           console.log(response);
           if (response.data?.profile) {
             const token = response.data.token;
+            setUserProfile(response.data.profile);
             setAuthToken(token);
-            if (response.data.profile.role === "superAdmin") {
+            if (response.data.profile.role?.slug === RoleSlug.superAdmin) {
               router.push("/user-list");
               toast.success(response.message);
-            } else {
+            } else if (
+              response.data.profile.role?.slug === RoleSlug.restaurantAdmin
+            ) {
               router.push("/restaurant-list");
+              toast.success(response.message);
+            } else {
+              router.push("/dashboard");
               toast.success(response.message);
             }
           } else {

@@ -9,6 +9,7 @@ import {
   RestaurantListResponse,
   RestaurantsApi,
 } from "@/swagger";
+import { Restaurant } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { useEffect, useState } from "react";
@@ -30,10 +31,11 @@ interface MenuCategory {
 
 const AddFoodItem = () => {
   const [menuCategories, setMenuCategories] = useState<MenuCategory[]>([]);
-  const [restaurants, setRestaurants] = useState<[]>([]);
+  const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<Inputs>();
   const router = useRouter();
@@ -71,8 +73,9 @@ const AddFoodItem = () => {
       menuCategoriesApi
         .findMenuCategories()
         .then((response: MenuCategoriesResponse) => {
-          const menuCategories = response.data?.result as [];
+          const menuCategories = response.data?.result as MenuCategory[];
           setMenuCategories(menuCategories);
+          setValue("categoryId", menuCategories[0].id);
         });
     } catch (error) {
       console.log(error);
@@ -91,8 +94,9 @@ const AddFoodItem = () => {
           sortOrder: "desc",
         })
         .then((response: RestaurantListResponse) => {
-          const restaurants = response.data?.rows as [];
+          const restaurants = response.data?.rows as Restaurant[];
           setRestaurants(restaurants);
+          setValue("restaurantId", restaurants[0].id);
         });
     } catch (error) {
       console.log(error);
@@ -138,11 +142,7 @@ const AddFoodItem = () => {
             <option disabled>-- Select Restaurant --</option>
             {restaurants.map((item: any, index) => {
               return (
-                <option
-                  selected
-                  key={item.id}
-                  className="text-gray-900"
-                  value={item.id}>
+                <option key={item.id} className="text-gray-900" value={item.id}>
                   {item.name}
                 </option>
               );
@@ -166,7 +166,6 @@ const AddFoodItem = () => {
             {menuCategories.map((item, index) => {
               return (
                 <option
-                  selected
                   key={item.slug}
                   className="text-gray-900"
                   value={item.id}>

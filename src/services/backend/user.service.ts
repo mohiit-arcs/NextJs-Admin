@@ -3,6 +3,7 @@ import { CreateUser } from "@/interfaces/backend/user.interface";
 import { messages } from "@/messages/backend/index.message";
 import { PrismaClient, RoleSlug } from "@prisma/client";
 import bcrypt from "bcrypt";
+import { comparePassword, validatePassword } from "./auth.service";
 
 const prisma = new PrismaClient();
 
@@ -268,4 +269,41 @@ export const getMenuCategories = async () => {
   });
 
   return { result: menuCategories, count: menuCategories.length };
+};
+
+export const changePassword = async (
+  userId: number,
+  currentPassword: string,
+  newPassword: string
+) => {
+  validatePassword(currentPassword);
+  validatePassword(newPassword);
+
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+    select: {
+      id: true,
+      password: true,
+    },
+  });
+  if (!user?.id) {
+    throw badRequest(messages.error.userNotFound);
+  }
+
+  const match = await comparePassword(currentPassword, user.password);
+
+  if (!match) {
+    throw badRequest(messages.error.invalidCurrentPassword);
+  }
+
+  const hashedNewPassword = await bcrypt.hash(newPassword, 10);
+
+  await prisma.user.update({
+    where: { id: userId },
+    data: {
+      password: hashedNewPassword,
+    },
+  });
+
+  return true;
 };

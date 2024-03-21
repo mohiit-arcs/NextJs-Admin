@@ -66,6 +66,17 @@ import {
   RemoveFromMenuRequest,
   RemoveFromMenuResponse,
 } from "@/app/api/v1/food-items/remove-from-menu/swagger";
+import {
+  UserProfileAPI,
+  UserProfileRequest,
+  UserProfileResponse,
+  UserProfileUpdateResponse,
+} from "@/app/api/v1/me/swagger";
+import {
+  ChangePasswordAPI,
+  ChangePasswordRequest,
+  ChangePasswordResponse,
+} from "@/app/api/v1/me/change-password/swagger";
 
 export const getApiDocs = () => {
   const spec = createSwaggerSpec({
@@ -110,6 +121,11 @@ export const getApiDocs = () => {
           AddToMenuResponse,
           RemoveFromMenuRequest,
           RemoveFromMenuResponse,
+          UserProfileRequest,
+          UserProfileResponse,
+          UserProfileUpdateResponse,
+          ChangePasswordRequest,
+          ChangePasswordResponse,
         },
       },
       servers: [
@@ -131,6 +147,8 @@ export const getApiDocs = () => {
         "/food-items/{id}": FoodItemByIdAPI,
         "/food-items/add-to-menu": AddToMenuAPI,
         "/food-items/remove-from-menu": RemoveFromMenuAPI,
+        "/me": UserProfileAPI,
+        "/me/change-password": ChangePasswordAPI,
       },
     },
   }) as Options;

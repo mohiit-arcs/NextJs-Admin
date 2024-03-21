@@ -1,5 +1,8 @@
 export interface TokenData {
   id: number;
   email: string;
-  role?: string;
+  role?: {
+    name: string;
+    slug: string;
+  };
 }
