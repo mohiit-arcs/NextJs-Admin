@@ -135,6 +135,7 @@ model MenuCategory {
 model FoodItem {
   id        Int       @id @default(autoincrement())
   name      String    @db.VarChar(255)
+  price     Int       @default(0)
   admin     User?     @relation(fields: [userId], references: [id])
   userId    Int?      @map("adminId")
   createdAt DateTime  @default(now())
