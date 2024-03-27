@@ -15,6 +15,9 @@ FoodItemDetailsResponse.properties.data = {
         name: {
           type: "string",
         },
+        price: {
+          type: "number",
+        },
         menu: {
           type: "array",
           items: {

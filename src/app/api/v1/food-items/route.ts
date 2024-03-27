@@ -12,7 +12,7 @@ import {
 
 export const POST = acl("restaurants", "full", async (request: ApiRequest) => {
   try {
-    const { name, restaurantId, categoryId } = await request.json();
+    const { name, price, restaurantId, categoryId } = await request.json();
 
     if (name.trim() === "") {
       throw badRequest("Food Item name cannot be empty");
@@ -24,6 +24,7 @@ export const POST = acl("restaurants", "full", async (request: ApiRequest) => {
 
     const foodItem = {
       name,
+      price: parseInt(price),
     };
 
     return successResponse({
@@ -76,7 +77,7 @@ export const GET = acl("restaurants", "full", async (request: ApiRequest) => {
 
 export const PATCH = acl("restaurants", "full", async (request: ApiRequest) => {
   try {
-    const { id, name } = await request.json();
+    const { id, name, price } = await request.json();
 
     if (name.trim() === "") {
       throw badRequest("Food Item name cannot be empty");
@@ -84,6 +85,7 @@ export const PATCH = acl("restaurants", "full", async (request: ApiRequest) => {
 
     const updatedFoodItem = {
       name,
+      price: parseInt(price),
     };
 
     return successResponse({

@@ -35,5 +35,7 @@ export const messages = {
     foodItemAlreadyExists: "Food Item already present with this name",
     notAdmin: "Only admin can login",
     invalidCurrentPassword: "Invalid current password. Please try again.",
+    taxFeeAlreadyExists: "Tax and Fees already exists with this restaurant",
+    taxFeeNotFound: "Tax and Fees not found",
   },
 };

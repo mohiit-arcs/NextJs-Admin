@@ -24,6 +24,9 @@ export const messages = {
       name: {
         required: "Please enter name",
       },
+      price: {
+        required: "Please enter price",
+      },
       email: emailFormValidation,
       password: passwordFormValidation,
       role: {

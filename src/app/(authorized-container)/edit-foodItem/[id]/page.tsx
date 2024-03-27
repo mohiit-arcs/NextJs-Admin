@@ -1,6 +1,5 @@
 "use client";
 
-import axiosFetch from "@/app/axios.interceptor";
 import { messages } from "@/messages/frontend/index.message";
 import {
   FoodItemRequestApi,
@@ -15,6 +14,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 type Inputs = {
   name: string;
+  price: number;
 };
 
 const apiUrl = "http://localhost:3000/api/v1/food-items";
@@ -47,6 +47,11 @@ const UpdateFoodItem = () => {
           shouldDirty: true,
           shouldTouch: true,
         });
+        setValue("price", restaurantData?.price!, {
+          shouldValidate: true,
+          shouldDirty: true,
+          shouldTouch: true,
+        });
       }
     } catch (error) {
       console.log(error);
@@ -58,7 +63,11 @@ const UpdateFoodItem = () => {
       const foodItemsApi = new FoodItemsApi();
       foodItemsApi
         .updateFoodItem({
-          updateFoodItemRequest: { id: Number(id), name: updateFoodItem.name },
+          updateFoodItemRequest: {
+            id: Number(id),
+            name: updateFoodItem.name,
+            price: updateFoodItem.price,
+          },
         })
         .then((response: UpdateFoodItemResponse) => {
           if (response.data?.success) {
@@ -103,6 +112,28 @@ const UpdateFoodItem = () => {
           {errors.name && (
             <div className="error text-red-500">
               {messages.form.validation.name.required}
+            </div>
+          )}
+          <hr />
+          <label className="text-black" htmlFor="price">
+            Price*
+          </label>
+          <div className="flex justify-center items-center">
+            <input
+              className="w-72 p-3 text-black"
+              type="text"
+              id="price"
+              autoComplete="off"
+              placeholder="Price"
+              {...register("price", {
+                required: true,
+                validate: (value) => value != 0,
+              })}
+            />
+          </div>
+          {errors.price && (
+            <div className="error text-red-500">
+              {messages.form.validation.price.required}
             </div>
           )}
           <hr />

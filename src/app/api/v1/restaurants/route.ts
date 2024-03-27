@@ -13,7 +13,7 @@ import { acl } from "@/services/backend/acl.service";
 
 export const POST = acl("restaurants", "full", async (request: ApiRequest) => {
   try {
-    if (request.user?.role != "restaurantAdmin") {
+    if (request.user?.role?.slug != "restaurantAdmin") {
       throw badRequest(messages.error.notAllowed);
     }
     const {

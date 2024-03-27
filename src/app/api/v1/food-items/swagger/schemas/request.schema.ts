@@ -42,6 +42,9 @@ export const CreateFoodItemRequest = {
     name: {
       type: "string",
     },
+    price: {
+      type: "number",
+    },
     restaurantId: {
       type: "number",
     },
@@ -59,6 +62,9 @@ export const UpdateFoodItemRequest = {
     },
     name: {
       type: "string",
+    },
+    price: {
+      type: "number",
     },
   },
 };

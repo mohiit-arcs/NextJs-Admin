@@ -8,6 +8,7 @@ import {
   RestaurantListResponse,
   RestaurantsApi,
 } from "@/swagger";
+import { Restaurant } from "@prisma/client";
 import { X } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -34,10 +35,11 @@ const AddToMenu = () => {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<Inputs>();
   const [menuCategories, setMenuCategories] = useState<MenuCategory[]>([]);
-  const [restaurants, setRestaurants] = useState<[]>([]);
+  const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
   const [foodItemData, setFoodItemData] = useState<any>();
 
   useEffect(() => {
@@ -94,8 +96,9 @@ const AddToMenu = () => {
       menuCategoriesApi
         .findMenuCategories()
         .then((response: MenuCategoriesResponse) => {
-          const menuCategories = response.data?.result as [];
+          const menuCategories = response.data?.result as MenuCategory[];
           setMenuCategories(menuCategories);
+          setValue("categoryId", menuCategories[0].id);
         });
     } catch (error) {
       console.log(error);
@@ -114,8 +117,9 @@ const AddToMenu = () => {
           sortOrder: "desc",
         })
         .then((response: RestaurantListResponse) => {
-          const restaurants = response.data?.rows as [];
+          const restaurants = response.data?.rows as Restaurant[];
           setRestaurants(restaurants);
+          setValue("restaurantId", restaurants[0].id);
         });
     } catch (error) {
       console.log(error);

@@ -19,6 +19,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 type Inputs = {
   name: string;
+  price: number;
   restaurantId: number;
   categoryId: number;
 };
@@ -128,6 +129,28 @@ const AddFoodItem = () => {
           {errors.name && (
             <div className="error text-red-500">
               {messages.form.validation.name.required}
+            </div>
+          )}
+          <hr />
+          <label className="text-black" htmlFor="price">
+            Price*
+          </label>
+          <div className="flex justify-center items-center">
+            <input
+              className="w-72 p-3 text-black"
+              type="text"
+              id="price"
+              autoComplete="off"
+              placeholder="Price"
+              {...register("price", {
+                required: true,
+                validate: (value) => value != 0,
+              })}
+            />
+          </div>
+          {errors.price && (
+            <div className="error text-red-500">
+              {messages.form.validation.price.required}
             </div>
           )}
           <hr />

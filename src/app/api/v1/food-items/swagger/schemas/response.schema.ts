@@ -40,6 +40,9 @@ export const FoodItemsListResponse = {
               name: {
                 type: "string",
               },
+              price: {
+                type: "number",
+              },
               restaurants: {
                 type: "array",
                 items: {

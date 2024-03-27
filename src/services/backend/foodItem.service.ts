@@ -33,6 +33,7 @@ export const createFoodItem = async (
   await prisma.foodItem.create({
     data: {
       name: foodItem.name,
+      price: foodItem.price,
       userId: userId,
       menu: {
         create: {
@@ -51,7 +52,6 @@ export const updateFoodItem = async (
   updateFoodItem: CreateFoodItem,
   userId: number
 ) => {
-  console.log("fdafdfadfa", id);
   const existingFoodItem = await prisma.foodItem.findFirst({
     where: { id: id, userId: userId },
   });
@@ -74,6 +74,7 @@ export const updateFoodItem = async (
     },
     data: {
       name: updateFoodItem.name,
+      price: updateFoodItem.price,
       updatedAt: new Date(),
     },
   });
@@ -128,6 +129,7 @@ export const foodItemList = async (
     select: {
       id: true,
       name: true,
+      price: true,
       menu: {
         select: {
           menuCategory: true,
@@ -181,6 +183,7 @@ export const getFoodItemById = async (id: number, userId: number) => {
     select: {
       id: true,
       name: true,
+      price: true,
       menu: {
         select: {
           restaurant: true,
