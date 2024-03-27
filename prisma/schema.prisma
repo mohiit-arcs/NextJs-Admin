@@ -113,10 +113,27 @@ model Restaurant {
   updatedAt   DateTime  @updatedAt
   deletedAt   DateTime?
   menu        Menu[]
+  TaxFee      TaxFee[]
 
   @@index([email])
   @@index([userId])
   @@map("restaurants")
+}
+
+model TaxFee {
+  id           Int         @id @default(autoincrement())
+  tax_name     String      @db.VarChar(255)
+  tax_type     TaxTypeSlug @unique
+  value        Int
+  restaurant   Restaurant? @relation(fields: [restaurantId], references: [id])
+  restaurantId Int?
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  deletedAt    DateTime?
+
+  @@index([id])
+  @@index([restaurantId])
+  @@map("tax_fees")
 }
 
 model MenuCategory {
@@ -177,4 +194,9 @@ enum MenuCategorySlug {
   lunch
   dinner
   snacks
+}
+
+enum TaxTypeSlug {
+  flat
+  percent
 }

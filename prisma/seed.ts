@@ -170,6 +170,36 @@ const seed = async () => {
           },
         });
       }
+
+      const taxFeesModule = await prisma.module.findFirst({
+        where: {
+          slug: "food-items",
+        },
+      });
+
+      if (!taxFeesModule?.id) {
+        await prisma.module.create({
+          data: {
+            name: "Tax Fees",
+            slug: "tax-fees",
+            description: "Tax Fees Module",
+            sortOrder: 2,
+            permission: {
+              create: [
+                {
+                  name: "Full",
+                  slug: "full",
+                  description: "Full Permission",
+                  sortOrder: 1,
+                  rolePermissions: {
+                    create: restaurantRolePermissions,
+                  },
+                },
+              ],
+            },
+          },
+        });
+      }
     }
 
     console.log({ user });
