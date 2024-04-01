@@ -28,17 +28,19 @@ model Role {
 }
 
 model User {
-  id          Int          @id @default(autoincrement())
-  name        String       @db.VarChar(255)
-  email       String       @unique @db.VarChar(100)
-  password    String       @db.VarChar(60)
-  role        Role         @relation(fields: [roleId], references: [id])
-  roleId      Int
-  restaurants Restaurant[]
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
-  deletedAt   DateTime?
-  foodItems   FoodItem[]
+  id           Int            @id @default(autoincrement())
+  name         String         @db.VarChar(255)
+  email        String         @unique @db.VarChar(100)
+  password     String         @db.VarChar(60)
+  role         Role           @relation(fields: [roleId], references: [id])
+  roleId       Int
+  restaurants  Restaurant[]
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  deletedAt    DateTime?
+  foodItems    FoodItem[]
+  menuCategory MenuCategory[]
+  order        Order[]
 
   @@index([email])
   @@index([roleId])
@@ -97,23 +99,25 @@ model RolePermission {
 }
 
 model Restaurant {
-  id          Int       @id @default(autoincrement())
-  name        String    @db.VarChar(255)
-  email       String    @unique @db.VarChar(150)
-  phoneNumber String    @db.VarChar(50)
-  image       String
-  street      String
-  city        String    @db.VarChar(100)
-  state       String    @db.VarChar(150)
-  zipcode     String    @db.VarChar(10)
-  country     String    @db.VarChar(100)
-  admin       User?     @relation(fields: [userId], references: [id])
-  userId      Int?      @map("adminId")
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  deletedAt   DateTime?
-  menu        Menu[]
-  TaxFee      TaxFee[]
+  id             Int            @id @default(autoincrement())
+  name           String         @db.VarChar(255)
+  email          String         @unique @db.VarChar(150)
+  phoneNumber    String         @db.VarChar(50)
+  image          String
+  street         String
+  city           String         @db.VarChar(100)
+  state          String         @db.VarChar(150)
+  zipcode        String         @db.VarChar(10)
+  country        String         @db.VarChar(100)
+  admin          User?          @relation(fields: [userId], references: [id])
+  userId         Int?           @map("adminId")
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  deletedAt      DateTime?
+  taxFee         TaxFee[]
+  menu           Menu[]
+  menuCategories MenuCategory[]
+  order          Order[]
 
   @@index([email])
   @@index([userId])
@@ -123,7 +127,7 @@ model Restaurant {
 model TaxFee {
   id           Int         @id @default(autoincrement())
   tax_name     String      @db.VarChar(255)
-  tax_type     TaxTypeSlug @unique
+  tax_type     TaxTypeSlug
   value        Int
   restaurant   Restaurant? @relation(fields: [restaurantId], references: [id])
   restaurantId Int?
@@ -137,15 +141,17 @@ model TaxFee {
 }
 
 model MenuCategory {
-  id        Int              @id @default(autoincrement())
-  name      String           @db.VarChar(255)
-  slug      MenuCategorySlug @unique
-  createdAt DateTime         @default(now())
-  updatedAt DateTime         @updatedAt
-  deletedAt DateTime?
-  menus     Menu[]
+  id           Int         @id @default(autoincrement())
+  name         String      @db.VarChar(255)
+  admin        User?       @relation(fields: [userId], references: [id])
+  userId       Int?        @map("adminId")
+  menus        Menu[]
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  deletedAt    DateTime?
+  restaurant   Restaurant? @relation(fields: [restaurantId], references: [id])
+  restaurantId Int?
 
-  @@index([slug])
   @@map("menu_categories")
 }
 
@@ -182,18 +188,23 @@ model Menu {
   @@map("menus")
 }
 
+model Order {
+  id           Int        @id @default(autoincrement())
+  amount       Int
+  user         User?      @relation(fields: [userId], references: [id])
+  userId       Int?
+  restaurant   Restaurant @relation(fields: [restaurantId], references: [id])
+  restaurantId Int
+
+  @@index([restaurantId, userId])
+  @@map("orders")
+}
+
 enum RoleSlug {
   superAdmin
   restaurantAdmin
   deliveryPartner
   customer
-}
-
-enum MenuCategorySlug {
-  breakfast
-  lunch
-  dinner
-  snacks
 }
 
 enum TaxTypeSlug {
