@@ -117,7 +117,7 @@ export default function LoginPage() {
                   />
                 </div>
                 {errors.email && (
-                  <div className=" absolute text-xs top-[60px] text-[red]">
+                  <div className=" absolute text-xs top-[70px] text-[red]">
                     {errors.email.type === "required" &&
                       messages.form.validation.email.required}
                     {errors.email.type === "pattern" &&
@@ -154,7 +154,7 @@ export default function LoginPage() {
                 </div>
                 {/* <span className="flex flex-row justify-end text-[#475569] text-sm underline underline-offset-1"><a className="" href="">Forgot Password?</a></span> */}
                 {errors.password && (
-                  <div className="absolute text-xs top-[60px] text-[red]">
+                  <div className="absolute text-xs top-[70px] text-[red]">
                     {messages.form.validation.password.required}
                   </div>
                 )}
