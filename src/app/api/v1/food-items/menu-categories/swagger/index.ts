@@ -26,6 +26,6 @@ export const MenuCategoriesAPI = {
     description: "This api is for Menu Categories.",
     summary: "Endpoint for Menu Categories",
     responses: publicListResponses,
-    operationId: "findMenuCategories",
+    operationId: "findMenuCategoriess",
   },
 };

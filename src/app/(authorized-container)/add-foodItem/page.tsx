@@ -4,8 +4,8 @@ import { messages } from "@/messages/frontend/index.message";
 import {
   CreateFoodItemResponse,
   FoodItemsApi,
-  MenuCategoriesApi,
-  MenuCategoriesResponse,
+  MenuCategoryApi,
+  MenuCategoryListResponse,
   RestaurantListResponse,
   RestaurantsApi,
 } from "@/swagger";
@@ -33,6 +33,7 @@ interface MenuCategory {
 const AddFoodItem = () => {
   const [menuCategories, setMenuCategories] = useState<MenuCategory[]>([]);
   const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
+  const [restaurantId, setRestaurantId] = useState<number>();
   const {
     register,
     handleSubmit,
@@ -43,8 +44,11 @@ const AddFoodItem = () => {
 
   useEffect(() => {
     getRestaurants();
-    getMenuCategories();
   }, []);
+
+  useEffect(() => {
+    getMenuCategories();
+  }, [restaurantId]);
 
   const addFoodItem: SubmitHandler<Inputs> = async (addFoodItem) => {
     try {
@@ -70,14 +74,28 @@ const AddFoodItem = () => {
 
   const getMenuCategories = async () => {
     try {
-      const menuCategoriesApi = new MenuCategoriesApi();
-      menuCategoriesApi
-        .findMenuCategories()
-        .then((response: MenuCategoriesResponse) => {
-          const menuCategories = response.data?.result as MenuCategory[];
-          setMenuCategories(menuCategories);
-          setValue("categoryId", menuCategories[0].id);
-        });
+      const menuCategoriesApi = new MenuCategoryApi();
+      console.log(restaurantId);
+      if (restaurantId)
+        menuCategoriesApi
+          .findMenuCategories({
+            limit: 10,
+            page: 1,
+            search: "",
+            sortBy: "createdAt",
+            sortOrder: "desc",
+            restaurantId: restaurantId,
+          })
+          .then((response: MenuCategoryListResponse) => {
+            const menuCategories = response.data?.rows as MenuCategory[];
+            setMenuCategories(menuCategories);
+            if (menuCategories.length != 0)
+              setValue("categoryId", menuCategories[0].id);
+            else
+              toast.warn(
+                "Please create menu category first for this restaurant"
+              );
+          });
     } catch (error) {
       console.log(error);
     }
@@ -98,10 +116,18 @@ const AddFoodItem = () => {
           const restaurants = response.data?.rows as Restaurant[];
           setRestaurants(restaurants);
           setValue("restaurantId", restaurants[0].id);
+          setRestaurantId(restaurants[0].id);
         });
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const handleRestaurantChange = (
+    event: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    const selectedRestaurantId = parseInt(event.target.value);
+    setRestaurantId(selectedRestaurantId);
   };
 
   return (
@@ -161,7 +187,9 @@ const AddFoodItem = () => {
           <select
             className="w-full cursor-pointer p-2 font-medium leading-6 text-black"
             id="restaurant"
-            {...register("restaurantId", { required: true })}>
+            {...register("restaurantId", { required: true })}
+            value={restaurantId}
+            onChange={handleRestaurantChange}>
             <option disabled>-- Select Restaurant --</option>
             {restaurants.map((item: any, index) => {
               return (
@@ -171,37 +199,43 @@ const AddFoodItem = () => {
               );
             })}
           </select>
-          {errors.categoryId && (
+          {errors.restaurantId && (
             <div className="error text-red-500">
               {messages.form.validation.restaurant.required}
             </div>
           )}
           <hr />
-          <label className="text-black" htmlFor="menu-category">
-            Menu Category*
-          </label>
-          <hr />
-          <select
-            className="w-full cursor-pointer p-2 font-medium leading-6 text-black"
-            id="menu-category"
-            {...register("categoryId", { required: true })}>
-            <option disabled>-- Select Category --</option>
-            {menuCategories.map((item, index) => {
-              return (
-                <option
-                  key={item.slug}
-                  className="text-gray-900"
-                  value={item.id}>
-                  {item.name}
-                </option>
-              );
-            })}
-          </select>
-          {errors.categoryId && (
-            <div className="error text-red-500">
-              {messages.form.validation.menuCategory.required}
-            </div>
+          {restaurantId && (
+            <>
+              <label className="text-black" htmlFor="menu-category">
+                Menu Category*
+              </label>
+              <hr />
+              <select
+                className="w-full cursor-pointer p-2 font-medium leading-6 text-black"
+                id="menu-category"
+                {...register("categoryId", { required: true })}>
+                <option disabled>-- Select Category --</option>
+                {menuCategories.length &&
+                  menuCategories.map((item, index) => {
+                    return (
+                      <option
+                        key={item.slug}
+                        className="text-gray-900"
+                        value={item.id}>
+                        {item.name}
+                      </option>
+                    );
+                  })}
+              </select>
+              {errors.categoryId && (
+                <div className="error text-red-500">
+                  {messages.form.validation.menuCategory.required}
+                </div>
+              )}
+            </>
           )}
+
           <hr />
           <hr />
           <button
