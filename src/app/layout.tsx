@@ -1,11 +1,15 @@
 "use client";
-import { Inter } from "next/font/google";
+import { Poppins } from "next/font/google";
 import "./globals.css";
 import { ToastContainer } from "react-toastify";
 import { UserProfileProvider } from "@/components/user-profile/page";
 import { config } from "@/config/index.config";
 
-const inter = Inter({ subsets: ["latin"] });
+const poppins = Poppins({
+  subsets: ["latin"],
+  variable: "--font-poppins",
+  weight: ["100", "200", "300", "400", "500", "600", "700","800", "900" ]
+});
 
 export default function RootLayout({
   children,
@@ -23,7 +27,7 @@ export default function RootLayout({
         <title>{config.applicationName}</title>
       </head>
       <html lang="en">
-        <body className={inter.className}>
+        <body className={poppins.className}>
           {children}
           <ToastContainer
             position="top-right"
