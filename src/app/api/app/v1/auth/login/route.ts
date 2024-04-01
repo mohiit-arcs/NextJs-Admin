@@ -1,78 +1,17 @@
-import { NextRequest, NextResponse } from "next/server";
-import bcrypt from "bcrypt";
-import { PrismaClient } from "@prisma/client";
-import { generateToken } from "@/services/backend/jwt.service";
-import { badRequest, notFound, unauthorized } from "@/core/errors/http.error";
+import { ApiRequest } from "@/interfaces/backend/request.interface";
 import { messages } from "@/messages/backend/index.message";
+import { login } from "@/services/backend/app/user.service";
+import { NextResponse } from "next/server";
 
-const prisma = new PrismaClient();
-
-const validateEmail = (email: string) => {
-  if (!email.trim()) {
-    throw badRequest("Please enter email");
-  }
-  if (
-    !email.match(
-      "^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+.[a-zA-Z]+"
-    )
-  ) {
-    throw badRequest(messages.error.invalidEmail);
-  }
-};
-
-const validatePassword = (password: string) => {
-  if (!password.trim()) {
-    throw badRequest(messages.error.invalidPassword);
-  }
-};
-
-const validate = (email: string, password: string) => {
-  validateEmail(email);
-  validatePassword(password);
-};
-
-const comparePassword = async (enteredPassword: string, dbPassword: string) => {
-  return await bcrypt.compare(enteredPassword, dbPassword);
-};
-
-export async function POST(request: NextRequest) {
+export async function POST(request: ApiRequest) {
   try {
     const { email, password } = await request.json();
-    validate(email, password);
-
-    const user = await prisma.user.findFirst({
-      where: { email },
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        password: true,
-        role: true,
-      },
-    });
-
-    if (!user || user.role.slug != "customer") {
-      throw notFound(messages.error.userNotFound);
-    }
-
-    const validPassword = await comparePassword(password, user.password);
-    if (!validPassword) {
-      throw unauthorized(messages.error.invalidCreds);
-    }
-
-    const profile = {
-      id: user.id,
-      email: user.email,
-      role: user.role,
-    };
-
-    const token = await generateToken(profile);
-
+    const loginResponse = await login(email, password);
     const response = NextResponse.json({
-      message: "Login successful",
-      success: true,
-      profile,
-      token: token,
+      message: messages.response.login,
+      success: loginResponse.success,
+      profile: loginResponse.profile,
+      token: loginResponse.token,
     });
 
     return response;

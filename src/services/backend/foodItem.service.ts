@@ -132,14 +132,18 @@ export const foodItemList = async (
       price: true,
       menu: {
         select: {
-          menuCategory: true,
+          menuCategory: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
           restaurant: true,
         },
       },
       _count: true,
     },
   });
-
   const processedData = foodItems.map((foodItem) => {
     const restaurants: any = {};
     const categories: any = {};
@@ -155,13 +159,13 @@ export const foodItemList = async (
       categories[menuItem.menuCategory.id] = {
         id: menuItem.menuCategory.id,
         name: menuItem.menuCategory.name,
-        slug: menuItem.menuCategory.slug,
       };
     });
 
     return {
       id: foodItem.id,
       name: foodItem.name,
+      price: foodItem.price,
       restaurants: Object.values(restaurants),
       categories: Object.values(categories),
     };

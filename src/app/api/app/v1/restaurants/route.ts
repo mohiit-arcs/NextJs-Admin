@@ -1,20 +1,12 @@
 import { errorResponse } from "@/core/http-responses/error.http-response";
 import { successResponse } from "@/core/http-responses/success.http-response";
 import { ApiRequest } from "@/interfaces/backend/request.interface";
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import { getAllRestaurants } from "@/services/backend/app/resturant.service";
 
 export const GET = async (request: ApiRequest) => {
   try {
-    const restaurants = await prisma.restaurant.findMany({
-      where: {
-        deletedAt: null,
-      },
-    });
-
     return successResponse({
-      data: restaurants,
+      data: await getAllRestaurants(),
     });
   } catch (error) {
     console.log(error);

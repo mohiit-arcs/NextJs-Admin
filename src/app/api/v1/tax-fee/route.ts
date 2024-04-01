@@ -20,7 +20,10 @@ export const POST = acl("tax-fees", "full", async (req: ApiRequest) => {
       value: parseInt(value),
     };
     return successResponse({
-      data: await createTaxFee(createTaxFeeData, parseInt(restaurantId)),
+      data: {
+        success: await createTaxFee(createTaxFeeData, parseInt(restaurantId)),
+      },
+      message: messages.response.taxFeeCreated,
     });
   } catch (error) {
     return errorResponse(error);
@@ -33,11 +36,12 @@ export const PATCH = acl("tax-fees", "full", async (req: ApiRequest) => {
     const updateTaxFeeData = {
       tax_name: tax_name,
       tax_type: tax_type,
-      value: value,
+      value: parseInt(value),
     };
 
     return successResponse({
-      data: await updateTaxFee(parseInt(id), updateTaxFeeData),
+      data: { success: await updateTaxFee(parseInt(id), updateTaxFeeData) },
+      message: messages.response.requestUpdated,
     });
   } catch (error) {
     return errorResponse(error);

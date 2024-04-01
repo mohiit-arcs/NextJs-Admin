@@ -169,6 +169,7 @@ const FoodItemList = () => {
             {foodItems!.map((foodItem: any) => (
               <tr key={foodItem.id} className="hover:bg-gray-200">
                 <td className="px-4 py-3">{foodItem.name}</td>
+                <td className="px-4 py-3">{foodItem.price}</td>
                 <td className="px-4 py-3">
                   {foodItem.restaurants.length == 1
                     ? foodItem.restaurants[0].name
@@ -192,13 +193,13 @@ const FoodItemList = () => {
                       onClick={() => onDelete(foodItem.id)}
                     />
                   </span> */}
-                  <span>
+                  {/* <span>
                     <button
                       onClick={() => onAddToMenu(foodItem.id)}
                       className="bg-black text-white rounded-md p-2 m-1">
                       Add To Menu
                     </button>
-                  </span>
+                  </span> */}
                 </td>
               </tr>
             ))}

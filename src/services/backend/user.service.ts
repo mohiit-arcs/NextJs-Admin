@@ -264,7 +264,6 @@ export const getMenuCategories = async () => {
     select: {
       id: true,
       name: true,
-      slug: true,
     },
   });
 

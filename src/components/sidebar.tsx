@@ -6,6 +6,7 @@ import {
   User,
   Users,
   Utensils,
+  Menu,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useUserProfile } from "./user-profile/page";
@@ -48,6 +49,14 @@ const Sidebar = () => {
             onClick={() => router.push("restaurant-list")}>
             <Hotel width={100} height={30} />
             <span className="text-sm">Restaurants</span>
+          </li>
+        )}
+        {userProfile?.role?.slug == RoleSlug.restaurantAdmin && (
+          <li
+            className="mb-2 flex rounded hover:shadow hover:bg-blue-500 py-2"
+            onClick={() => router.push("menu-category-list")}>
+            <Menu width={100} height={30} />
+            <span className="text-sm">Menu Categories</span>
           </li>
         )}
         {userProfile?.role?.slug == RoleSlug.restaurantAdmin && (

@@ -66,18 +66,15 @@ export const updateTaxFee = async (id: number, updateTaxFee: CreateTaxFee) => {
 };
 
 export const getTaxFeeById = async (id: number) => {
-  const taxFee = await prisma.foodItem.findFirst({
+  const taxFee = await prisma.taxFee.findFirst({
     where: { id: id },
     select: {
       id: true,
-      name: true,
-      price: true,
-      menu: {
-        select: {
-          restaurant: true,
-          menuCategory: true,
-        },
-      },
+      tax_name: true,
+      tax_type: true,
+      value: true,
+      restaurantId: true,
+      restaurant: true,
     },
   });
 
@@ -129,30 +126,57 @@ export const taxFeeList = async (
     };
   }
 
-  const taxFeeItems = await prisma.foodItem.findMany({
+  const taxFeeItems = await prisma.taxFee.findMany({
     skip,
     take,
     orderBy,
     where: whereCondition,
     select: {
       id: true,
-      name: true,
-      price: true,
-      menu: {
-        select: {
-          menuCategory: true,
-          restaurant: true,
-        },
-      },
-      _count: true,
+      tax_name: true,
+      tax_type: true,
+      value: true,
+      restaurant: true,
     },
   });
 
-  const taxFeeItemsCount = await prisma.foodItem.count({
+  const taxFeeItemsCount = await prisma.taxFee.count({
     where: {
       deletedAt: null,
     },
   });
 
   return { rows: taxFeeItems, count: taxFeeItemsCount };
+};
+
+export const deleteTaxFeeById = async (id: number) => {
+  const taxFee = await prisma.taxFee.findFirst({
+    where: { id: id },
+    select: {
+      id: true,
+    },
+  });
+  if (taxFee?.id) {
+    await prisma.taxFee.update({
+      where: { id: id },
+      data: {
+        deletedAt: new Date(),
+      },
+    });
+
+    const totalTaxFee = await prisma.taxFee.count({
+      where: {
+        deletedAt: { equals: null },
+      },
+    });
+
+    return {
+      data: {
+        success: true,
+        message: messages.response.deleteTaxFee,
+        count: totalTaxFee,
+      },
+    };
+  }
+  throw notFound(messages.error.taxFeeNotFound);
 };

@@ -77,6 +77,31 @@ import {
   ChangePasswordRequest,
   ChangePasswordResponse,
 } from "@/app/api/v1/me/change-password/swagger";
+import {
+  MenuCategoryAPI,
+  CreateMenuCategoryRequest,
+  CreateMenuCategoryResponse,
+  MenuCategoryListResponse,
+  UpdateMenuCategoryRequest,
+  UpdateMenuCategoryResponse,
+} from "@/app/api/v1/menu-categories/swagger";
+import {
+  MenuCategoryByIdAPI,
+  MenuCategoryDetailsResponse,
+} from "@/app/api/v1/menu-categories/[id]/swagger";
+import {
+  TaxFeeAPI,
+  CreateTaxFeeRequest,
+  CreateTaxFeeResponse,
+  TaxFeeListResponse,
+  UpdateTaxFeeRequest,
+  UpdateTaxFeeResponse,
+} from "@/app/api/v1/tax-fee/swagger";
+import {
+  TaxFeeByIdAPI,
+  TaxFeeDeleteResponse,
+  TaxFeeDetailsResponse,
+} from "@/app/api/v1/tax-fee/[id]/swagger";
 
 export const getApiDocs = () => {
   const spec = createSwaggerSpec({
@@ -126,6 +151,19 @@ export const getApiDocs = () => {
           UserProfileUpdateResponse,
           ChangePasswordRequest,
           ChangePasswordResponse,
+          CreateMenuCategoryRequest,
+          CreateMenuCategoryResponse,
+          MenuCategoryListResponse,
+          UpdateMenuCategoryRequest,
+          UpdateMenuCategoryResponse,
+          MenuCategoryDetailsResponse,
+          CreateTaxFeeRequest,
+          CreateTaxFeeResponse,
+          TaxFeeListResponse,
+          UpdateTaxFeeRequest,
+          UpdateTaxFeeResponse,
+          TaxFeeDeleteResponse,
+          TaxFeeDetailsResponse,
         },
       },
       servers: [
@@ -149,6 +187,10 @@ export const getApiDocs = () => {
         "/food-items/remove-from-menu": RemoveFromMenuAPI,
         "/me": UserProfileAPI,
         "/me/change-password": ChangePasswordAPI,
+        "/menu-categories": MenuCategoryAPI,
+        "/menu-categories/{id}": MenuCategoryByIdAPI,
+        "/tax-fee": TaxFeeAPI,
+        "/tax-fee/{id}": TaxFeeByIdAPI,
       },
     },
   }) as Options;

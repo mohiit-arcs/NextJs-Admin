@@ -43,27 +43,6 @@ const seed = async () => {
       ],
     });
 
-    await prisma.menuCategory.createMany({
-      data: [
-        {
-          name: "Breakfast",
-          slug: "breakfast",
-        },
-        {
-          name: "Lunch",
-          slug: "lunch",
-        },
-        {
-          name: "Dinner",
-          slug: "dinner",
-        },
-        {
-          name: "Snacks",
-          slug: "snacks",
-        },
-      ],
-    });
-
     const superAdminRolePermissions: { roleId: number }[] = [];
 
     if (superAdminRole.id) {
@@ -141,6 +120,36 @@ const seed = async () => {
         });
       }
 
+      const menuCategoryModule = await prisma.module.findFirst({
+        where: {
+          slug: "menu-category",
+        },
+      });
+
+      if (!menuCategoryModule?.id) {
+        await prisma.module.create({
+          data: {
+            name: "Menu Category",
+            slug: "menu-category",
+            description: "Menu Category Module",
+            sortOrder: 2,
+            permission: {
+              create: [
+                {
+                  name: "Full",
+                  slug: "full",
+                  description: "Full Permission",
+                  sortOrder: 1,
+                  rolePermissions: {
+                    create: restaurantRolePermissions,
+                  },
+                },
+              ],
+            },
+          },
+        });
+      }
+
       const foodItemsModule = await prisma.module.findFirst({
         where: {
           slug: "food-items",
@@ -173,7 +182,7 @@ const seed = async () => {
 
       const taxFeesModule = await prisma.module.findFirst({
         where: {
-          slug: "food-items",
+          slug: "tax-fees",
         },
       });
 

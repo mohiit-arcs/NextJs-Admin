@@ -21,6 +21,10 @@ export const messages = {
     createFoodItem: "Food Item added successfully",
     foodItemAddToMenu: "Food Item added to menu",
     foodItemRemoveFromMenu: "Food Item removed from menu",
+    menuCategoryCreated: "Menu Category Added successfully",
+    taxFeeCreated: "Tax Fee Added successfully",
+    deleteTaxFee: "Tax Fee Deleted successfully",
+    orderCreated: "Order has been placed",
   },
   error: {
     badRequest: "You entered something wrong. Please try again",
@@ -37,5 +41,7 @@ export const messages = {
     invalidCurrentPassword: "Invalid current password. Please try again.",
     taxFeeAlreadyExists: "Tax and Fees already exists with this restaurant",
     taxFeeNotFound: "Tax and Fees not found",
+    menuCategoryAlreadyExists: "Menu Category already exists with this name",
+    menuCategoryNotFound: "Menu Category Not Found",
   },
 };
