@@ -15,6 +15,7 @@ import { RoleSlug } from "@prisma/client";
 import { setAuthToken } from "@/services/frontend/storage.service";
 import Link from "next/link";
 
+const activeClass = "rounded-full text-[#FFFFFF] bg-[#F58220]";
 const Sidebar = () => {
   const router = useRouter();
   const pathname = usePathname();
@@ -26,123 +27,134 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="w-64 bg-gray-800 fixed h-full px-4 py-2">
-      <div className="my-2 mb-4">
-        <h1 className="text-2xl text-white font-bold">Admin Dashboard</h1>
+    <div className="bg-[#FFFFFF] h-full px-4 py-2">
+      <div className="text-center">
+        <h1 className="text-2xl text-[#0F172A] font-bold">Admin Dashboard</h1>
       </div>
-      <hr />
-      <ul className="mt-3 text-white font-bold">
-        <li className="mb-2 rounded hover:shadow py-2">
+      <ul className="mt-3 text-[#0F172A] font-bold">
+        <li>
           <Link
             className={
-              pathname == "/dashboard"
-                ? "flex bg-blue-500 py-2 rounded"
-                : "flex"
+              `flex items-center mb-2 p-2 ` +
+              (pathname === "/dashboard" ? activeClass : "")
             }
             href={"/dashboard"}>
-            <LayoutDashboardIcon width={100} height={30} />
-            <span className="text-sm">Dashboard</span>
+            <div className="p-1 flex justify-center items-center rounded-full w-10 h-10 bg-[#FFFFFF] text-[#0F172A]">
+              <LayoutDashboardIcon width={20} height={20} />
+            </div>
+            <span className="text-sm ml-2">Dashboard</span>
           </Link>
         </li>
         {userProfile?.role?.slug == RoleSlug.superAdmin && (
-          <li className="mb-2 flex rounded hover:shadow py-2">
+          <li>
             <Link
               className={
-                pathname == "/user-list"
-                  ? "flex bg-blue-500 py-2 rounded"
-                  : "flex"
+                `flex items-center mb-2 p-2 ` +
+                (pathname === "/user-list" ? activeClass : "")
               }
               href={"/user-list"}>
-              <Users width={100} height={30} />
-              <span className="text-sm">Users</span>
+              <div className="p-1 flex justify-center items-center rounded-full w-10 h-10 bg-[#FFFFFF] text-[#0F172A]">
+                <Users width={20} height={20} />
+              </div>
+              <span className="text-sm ml-2">Users</span>
             </Link>
           </li>
         )}
         {userProfile?.role?.slug == RoleSlug.restaurantAdmin && (
-          <li className="mb-2 flex rounded hover:shadow py-2">
+          <li>
             <Link
               className={
-                pathname == "/restaurant-list"
-                  ? "flex bg-blue-500 py-2 rounded"
-                  : "flex"
+                `flex items-center mb-2 p-2 ` +
+                (pathname === "/restaurant-list" ? activeClass : "")
               }
               href={"/restaurant-list"}>
-              <Hotel width={100} height={30} />
-              <span className="text-sm">Restaurants</span>
+              <div className="p-1 flex justify-center items-center rounded-full w-10 h-10 bg-[#FFFFFF] text-[#0F172A]">
+                <Hotel width={20} height={20} />
+              </div>
+              <span className="text-sm ml-2">Restaurants</span>
             </Link>
           </li>
         )}
         {userProfile?.role?.slug == RoleSlug.restaurantAdmin && (
-          <li className="mb-2 flex rounded hover:shadow py-2">
+          <li>
             <Link
               className={
-                pathname == "/taxFee-list"
-                  ? "flex bg-blue-500 py-2 rounded"
-                  : "flex"
+                `flex items-center mb-2 p-2 ` +
+                (pathname === "/taxFee-list" ? activeClass : "")
               }
               href={"/taxFee-list"}>
-              <Percent width={100} height={30} />
-              <span className="text-sm">Tax & Fees</span>
+              <div className="p-1 flex justify-center items-center rounded-full w-10 h-10 bg-[#FFFFFF] text-[#0F172A]">
+                <Percent width={20} height={20} />
+              </div>
+              <span className="text-sm ml-2">Tax & Fees</span>
             </Link>
           </li>
         )}
         {userProfile?.role?.slug == RoleSlug.restaurantAdmin && (
-          <li className="mb-2 flex rounded hover:shadow py-2">
+          <li>
             <Link
               className={
-                pathname == "/menu-category-list"
-                  ? "flex bg-blue-500 py-2 rounded"
-                  : "flex"
+                `flex items-center mb-2 p-2 ` +
+                (pathname === "/menu-category-list" ? activeClass : "")
               }
               href={"/menu-category-list"}>
-              <Menu width={100} height={30} />
-              <span className="text-sm">Menu Categories</span>
+              <div className="p-1 flex justify-center items-center rounded-full w-10 h-10 bg-[#FFFFFF] text-[#0F172A]">
+                <Menu width={20} height={20} />
+              </div>
+              <span className="text-sm ml-2">Menu Categories</span>
             </Link>
           </li>
         )}
         {userProfile?.role?.slug == RoleSlug.restaurantAdmin && (
-          <li className="mb-2 flex rounded hover:shado py-2">
+          <li>
             <Link
               className={
-                pathname == "/food-item-list"
-                  ? "flex bg-blue-500 py-2 rounded"
-                  : "flex"
+                `flex items-center mb-2 p-2 ` +
+                (pathname === "/food-item-list" ? activeClass : "")
               }
               href={"/food-item-list"}>
-              <Utensils width={100} height={30} />
-              <span className="text-sm">Food Items</span>
+              <div className="p-1 flex justify-center items-center rounded-full w-10 h-10 bg-[#FFFFFF] text-[#0F172A]">
+                <Utensils width={20} height={20} />
+              </div>
+              <span className="text-sm ml-2">Food Items</span>
             </Link>
           </li>
         )}
       </ul>
-      <ul className="mt-3 text-white font-bold">
-        <li className="mb-2 flex rounded hover:shadow py-2">
+      <ul className="mt-3 text-[#0F172A] font-bold">
+        <li>
           <Link
             className={
-              pathname == "/profile" ? "flex bg-blue-500 py-2 rounded" : "flex"
+              `flex items-center mb-2 p-2 ` +
+              (pathname === "/profile" ? activeClass : "")
             }
             href={"/profile"}>
-            <User width={100} height={30} />
-            <span className="text-sm">Profile</span>
+            <div className="p-1 flex justify-center items-center rounded-full w-10 h-10 bg-[#FFFFFF] text-[#0F172A]">
+              <User width={20} height={20} />
+            </div>
+            <span className="text-sm ml-2">Profile</span>
           </Link>
         </li>
-        <li className="mb-2 flex rounded hover:shadow py-2">
+        <li className="hover:text-[#f58220]">
           <Link
             className={
-              pathname == "/change-password"
-                ? "flex bg-blue-500 py-2 rounded"
-                : "flex"
+              `flex items-center mb-2 p-2 ` +
+              (pathname === "/change-password" ? activeClass : "")
             }
             href={"/change-password"}>
-            <Key width={100} height={30} />
-            <span className="text-sm">Change Password</span>
+            <div className="p-1 flex justify-center items-center rounded-full w-10 h-10 bg-[#FFFFFF] text-[#0F172A]">
+              <Key width={20} height={20} />
+            </div>
+            <span className="text-sm ml-2">Change Password</span>
           </Link>
         </li>
         <li
-          className="mb-2 flex rounded hover:shadow py-2"
+          className="flex cursor-pointer items-center hover:text-[#f58220] mb-2 p-2"
           onClick={() => logout()}>
-          <LogOut width={120} height={30} />
-          <span className="text-sm">Log Out</span>
+          <div className="p-1 flex justify-center items-center rounded-full w-10 h-10 bg-[#FFFFFF] text-[#0F172A]">
+            <LogOut width={20} height={20} />
+          </div>
+          <span className="text-sm ml-2">Log Out</span>
         </li>
       </ul>
     </div>

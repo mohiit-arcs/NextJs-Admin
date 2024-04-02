@@ -136,7 +136,7 @@ const UserList = () => {
   };
 
   return (
-    <div className="bg-gray-100 min-h-screen">
+    <div className="w-4/5 h-full">
       <h1 className="text-4xl text-center text-black">User List</h1>
       <div className="flex justify-end">
         <button
