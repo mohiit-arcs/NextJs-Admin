@@ -166,43 +166,44 @@ const FoodItemList = () => {
             <FoodItemListColumns handleSortByAndOrder={handleSortByAndOrder} />
           </thead>
           <tbody>
-            {foodItems!.map((foodItem: any) => (
-              <tr key={foodItem.id} className="hover:bg-gray-200">
-                <td className="px-4 py-3">{foodItem.name}</td>
-                <td className="px-4 py-3">{foodItem.price}</td>
-                <td className="px-4 py-3">
-                  {foodItem.restaurants.length == 1
-                    ? foodItem.restaurants[0].name
-                    : foodItem.restaurants.length}
-                </td>
-                <td className="px-4 py-3">
-                  {foodItem.categories.length == 1
-                    ? foodItem.categories[0].name
-                    : foodItem.categories.length}
-                </td>
-                <td className="flex">
-                  <span className="px-4 py-3">
-                    <Pencil
-                      className="cursor-pointer"
-                      onClick={() => onUpdate(foodItem.id)}
-                    />
-                  </span>
-                  {/* <span className="px-4 py-3">
+            {foodItems?.length != 0 &&
+              foodItems?.map((foodItem: any) => (
+                <tr key={foodItem.id} className="hover:bg-gray-200">
+                  <td className="px-4 py-3">{foodItem.name}</td>
+                  <td className="px-4 py-3">{foodItem.price}</td>
+                  <td className="px-4 py-3">
+                    {foodItem.restaurants.length == 1
+                      ? foodItem.restaurants[0].name
+                      : foodItem.restaurants.length}
+                  </td>
+                  <td className="px-4 py-3">
+                    {foodItem.categories.length == 1
+                      ? foodItem.categories[0].name
+                      : foodItem.categories.length}
+                  </td>
+                  <td className="flex">
+                    <span className="px-4 py-3">
+                      <Pencil
+                        className="cursor-pointer"
+                        onClick={() => onUpdate(foodItem.id)}
+                      />
+                    </span>
+                    {/* <span className="px-4 py-3">
                     <Trash
                       className="cursor-pointer"
                       onClick={() => onDelete(foodItem.id)}
                     />
                   </span> */}
-                  {/* <span>
+                    {/* <span>
                     <button
                       onClick={() => onAddToMenu(foodItem.id)}
                       className="bg-black text-white rounded-md p-2 m-1">
                       Add To Menu
                     </button>
                   </span> */}
-                </td>
-              </tr>
-            ))}
+                  </td>
+                </tr>
+              ))}
           </tbody>
         </table>
       </div>

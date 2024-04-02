@@ -1,9 +1,10 @@
 import { errorResponse } from "@/core/http-responses/error.http-response";
 import { successResponse } from "@/core/http-responses/success.http-response";
 import { ApiRequest } from "@/interfaces/backend/request.interface";
+import { auth } from "@/services/backend/acl.service";
 import { getRestaurantMenuById } from "@/services/backend/app/resturant.service";
 
-export const GET = async (request: ApiRequest, { params }: any) => {
+export const GET = auth(async (request: ApiRequest, { params }: any) => {
   try {
     const id = Number(params.id);
 
@@ -14,4 +15,4 @@ export const GET = async (request: ApiRequest, { params }: any) => {
     console.log(error);
     return errorResponse(error);
   }
-};
+});

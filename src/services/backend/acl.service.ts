@@ -69,12 +69,12 @@ export const acl = (
 };
 
 export const auth = (
-  handler: (req: ApiRequest) => Promise<NextResponse<unknown>>
+  handler: (req: ApiRequest, { params }: any) => Promise<NextResponse<unknown>>
 ) => {
-  return async (req: ApiRequest) => {
+  return async (req: ApiRequest, { params }: any) => {
     try {
       await authorize(req);
-      return await handler(req);
+      return await handler(req, { params });
     } catch (error: any) {
       return errorResponse(error);
     }

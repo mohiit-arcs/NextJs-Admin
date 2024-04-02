@@ -143,6 +143,7 @@ export default function LoginPage() {
                     })}
                   />
                   <button
+                    type="button"
                     className="w-2/12 bg-[#FFFFFF] border-t border-r border-b border-[#E2E8F0] rounded-r-lg p-4 ml-px mt-2"
                     onClick={() => setShowPassword(!showPassword)}>
                     {showPassword ? (

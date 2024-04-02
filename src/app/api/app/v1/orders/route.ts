@@ -2,18 +2,21 @@ import { errorResponse } from "@/core/http-responses/error.http-response";
 import { successResponse } from "@/core/http-responses/success.http-response";
 import { ApiRequest } from "@/interfaces/backend/request.interface";
 import { messages } from "@/messages/backend/index.message";
+import { auth } from "@/services/backend/acl.service";
 import { createOrder } from "@/services/backend/app/order.service";
 
-export const POST = async (request: ApiRequest) => {
+export const POST = auth(async (request: ApiRequest) => {
   try {
-    const { amount, restaurantId, userId } = await request.json();
+    const { amount, taxAmount, itemCount, restaurantId } = await request.json();
 
     return successResponse({
       data: {
         success: await createOrder(
-          parseInt(amount),
+          parseFloat(amount),
+          parseFloat(taxAmount),
+          parseInt(itemCount),
           parseInt(restaurantId),
-          parseInt(userId)
+          request.user?.id!
         ),
       },
       message: messages.response.orderCreated,
@@ -22,4 +25,4 @@ export const POST = async (request: ApiRequest) => {
     console.log(error);
     return errorResponse(error);
   }
-};
+});

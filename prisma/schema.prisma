@@ -189,12 +189,18 @@ model Menu {
 }
 
 model Order {
-  id           Int        @id @default(autoincrement())
-  amount       Int
-  user         User?      @relation(fields: [userId], references: [id])
+  id           Int             @id @default(autoincrement())
+  status       OrderStatusSlug @default(pending)
+  amount       Float           @map("order_amount")
+  taxAmount    Float           @map("order_tax_amount")
+  items        Int             @map("order_item_count")
+  user         User?           @relation(fields: [userId], references: [id])
   userId       Int?
-  restaurant   Restaurant @relation(fields: [restaurantId], references: [id])
+  restaurant   Restaurant      @relation(fields: [restaurantId], references: [id])
   restaurantId Int
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
+  deletedAt    DateTime?
 
   @@index([restaurantId, userId])
   @@map("orders")
@@ -210,4 +216,9 @@ enum RoleSlug {
 enum TaxTypeSlug {
   flat
   percent
+}
+
+enum OrderStatusSlug {
+  pending
+  delivered
 }

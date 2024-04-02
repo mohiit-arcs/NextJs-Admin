@@ -206,6 +206,16 @@ const RestaurantList = () => {
                       onClick={() => onDelete(restaurant.id)}
                     />
                   </span>
+                  <span className="px-4 py-3">
+                    <button
+                      className="bg-blue-500 hover:bg-blue-600 m-2 p-2 text-white rounded-md"
+                      type="button"
+                      onClick={() =>
+                        router.push(`order-list/${restaurant.id}`)
+                      }>
+                      View Orders
+                    </button>
+                  </span>
                 </td>
               </tr>
             ))}

@@ -211,6 +211,36 @@ const seed = async () => {
       }
     }
 
+    const ordersModule = await prisma.module.findFirst({
+      where: {
+        slug: "orders",
+      },
+    });
+
+    if (!ordersModule?.id) {
+      await prisma.module.create({
+        data: {
+          name: "Orders",
+          slug: "orders",
+          description: "Orders Module",
+          sortOrder: 2,
+          permission: {
+            create: [
+              {
+                name: "Full",
+                slug: "full",
+                description: "Full Permission",
+                sortOrder: 1,
+                rolePermissions: {
+                  create: restaurantRolePermissions,
+                },
+              },
+            ],
+          },
+        },
+      });
+    }
+
     console.log({ user });
   } catch (error) {
     console.log(error);

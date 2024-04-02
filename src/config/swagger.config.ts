@@ -102,6 +102,10 @@ import {
   TaxFeeDeleteResponse,
   TaxFeeDetailsResponse,
 } from "@/app/api/v1/tax-fee/[id]/swagger";
+import {
+  OrdersAPI,
+  OrdersListResponse,
+} from "@/app/api/v1/orders/[id]/swagger";
 
 export const getApiDocs = () => {
   const spec = createSwaggerSpec({
@@ -164,6 +168,7 @@ export const getApiDocs = () => {
           UpdateTaxFeeResponse,
           TaxFeeDeleteResponse,
           TaxFeeDetailsResponse,
+          OrdersListResponse,
         },
       },
       servers: [
@@ -191,6 +196,7 @@ export const getApiDocs = () => {
         "/menu-categories/{id}": MenuCategoryByIdAPI,
         "/tax-fee": TaxFeeAPI,
         "/tax-fee/{id}": TaxFeeByIdAPI,
+        "/orders/{id}": OrdersAPI,
       },
     },
   }) as Options;
