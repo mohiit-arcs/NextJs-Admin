@@ -5,9 +5,10 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-const checkTaxFeeExists = async (restaurantId: number) => {
+const checkTaxFeeExists = async (tax_name: string, restaurantId: number) => {
   const existingTaxFee = await prisma.taxFee.findFirst({
     where: {
+      tax_name: tax_name,
       restaurantId: restaurantId,
     },
   });
@@ -23,7 +24,10 @@ export const createTaxFee = async (
   createTaxFee: CreateTaxFee,
   restaurantId: number
 ) => {
-  const taxFeeExists = await checkTaxFeeExists(restaurantId);
+  const taxFeeExists = await checkTaxFeeExists(
+    createTaxFee.tax_name,
+    restaurantId
+  );
   if (taxFeeExists) {
     throw badRequest(messages.error.taxFeeAlreadyExists);
   }
