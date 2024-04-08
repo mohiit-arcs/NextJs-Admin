@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import TaxFeeColumnsListColumns from "./column";
+import TaxFeeColumnsListColumns, { FoodItemListColumnsProps } from "./column";
 import {
   TaxFeeApi,
   TaxFeeDeleteResponse,
@@ -135,12 +135,18 @@ const TaxFeeList = () => {
       setSortOrder("asc");
     }
   };
+
+  const foodItemListColProps: FoodItemListColumnsProps = {
+    handleSortByAndOrder,
+    sortBy,
+    sortOrder,
+  };
   return (
     <div className="min-h-screen">
-
-
       <div className="py-8">
-        <h1 className="text-4xl font-bold text-center text-black">Tax and Fee List</h1>
+        <h1 className="text-4xl font-bold text-center text-black">
+          Tax and Fee List
+        </h1>
       </div>
 
       <div className="flex justify-between items-center p-5">
@@ -163,19 +169,18 @@ const TaxFeeList = () => {
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
-
       </div>
 
       <div className="overflow-auto rounded-lg border border-gray-200 drop-shadow-sm m-5">
         <table className="bg-white text-left text-xs text-gray-500">
           <thead className="bg-[#0F172A]">
-            <TaxFeeColumnsListColumns
-              handleSortByAndOrder={handleSortByAndOrder}
-            />
+            <TaxFeeColumnsListColumns {...foodItemListColProps} />
           </thead>
           <tbody>
             {taxFee?.map((item: any) => (
-              <tr key={item.id} className="hover:bg-[#F4F5F7] border-b border-[#D8D9DB]">
+              <tr
+                key={item.id}
+                className="hover:bg-[#F4F5F7] border-b border-[#D8D9DB]">
                 <td className="px-2">{item.taxName}</td>
                 <td className="px-2">{_.capitalize(item.taxType)}</td>
                 <td className="px-2">{item.value}</td>

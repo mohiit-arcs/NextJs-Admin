@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import MenuCategoryListColumns from "./column";
+import MenuCategoryListColumns, { FoodItemListColumnsProps } from "./column";
 import { MenuCategoryApi, MenuCategoryListResponse } from "@/swagger";
 
 const entriesPerPageOptions = [5, 10, 15];
@@ -112,6 +112,11 @@ const MenuCategoryList = () => {
       setSortOrder("asc");
     }
   };
+  const menuCategoryColProps: FoodItemListColumnsProps = {
+    handleSortByAndOrder,
+    sortBy,
+    sortOrder,
+  };
   return (
     <div className="bg-gray-100 min-h-screen">
       <h1 className="text-4xl text-center text-black">Menu Category List</h1>
@@ -134,9 +139,7 @@ const MenuCategoryList = () => {
       <div className="rounded-lg border border-gray-200 drop-shadow-xl m-5">
         <table className="w-full rounded-md border-collapse bg-white text-left text-sm text-gray-500">
           <thead className="bg-gray-500">
-            <MenuCategoryListColumns
-              handleSortByAndOrder={handleSortByAndOrder}
-            />
+            <MenuCategoryListColumns {...menuCategoryColProps} />
           </thead>
           <tbody>
             {menuCategories!.map((menuCategory: any) => (

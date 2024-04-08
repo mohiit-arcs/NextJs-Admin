@@ -7,7 +7,7 @@ import { useParams, useRouter } from "next/navigation";
 import _ from "lodash";
 import Pagination from "@/components/ui/table/pagination/pagination";
 import useDebounce from "@/hooks/useDebounce";
-import UserColumns from "./columns";
+import UserColumns, { OrdersListColumnsProps } from "./columns";
 import { OrdersApi, OrdersListResponse } from "@/swagger";
 
 const entriesPerPageOptions = [5, 10, 15];
@@ -130,6 +130,12 @@ const UserList = () => {
     }
   };
 
+  const orderColProps: OrdersListColumnsProps = {
+    handleSortByAndOrder,
+    sortBy,
+    sortOrder,
+  };
+
   return (
     <div className="bg-gray-100 min-h-screen">
       <h1 className="text-4xl text-center text-black">Orders List</h1>
@@ -148,7 +154,7 @@ const UserList = () => {
       <div className="rounded-lg border border-gray-200 drop-shadow-xl m-5">
         <table className="w-full rounded-md border-collapse bg-white text-left text-sm text-gray-500">
           <thead className="bg-gray-500">
-            <UserColumns handleSortByAndOrder={handleSortByAndOrder} />
+            <UserColumns {...orderColProps} />
           </thead>
           <tbody>
             {orders &&

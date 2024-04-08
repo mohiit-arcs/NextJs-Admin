@@ -14,7 +14,7 @@ import "react-toastify/dist/ReactToastify.css";
 import _ from "lodash";
 import Pagination from "@/components/ui/table/pagination/pagination";
 import useDebounce from "@/hooks/useDebounce";
-import RestaurantColumns from "./columns";
+import RestaurantColumns, { RestaurantColumnsProps } from "./columns";
 import {
   RestaurantDeleteResponse,
   RestaurantListResponse,
@@ -37,7 +37,6 @@ const RestaurantList = () => {
   const [sortBy, setSortBy] = useState("createdAt");
   const [sortOrder, setSortOrder] = useState("desc");
   const router = useRouter();
-  
 
   const debouncedSearchQuery = useDebounce(searchQuery, 500);
 
@@ -148,20 +147,28 @@ const RestaurantList = () => {
     }
   };
 
+  const restaurantsColProps: RestaurantColumnsProps = {
+    handleSortByAndOrder,
+    sortBy,
+    sortOrder,
+  };
+
   return (
     <div className="min-h-screen">
-      
       <div className="flex justify-between items-center p-5">
         <button
           onClick={() => router.push("add-restaurant")}
-          className="bg-[#EBA232] hover:bg-[#EBA232] rounded-full w-40 py-4"
-        >
+          className="bg-[#EBA232] hover:bg-[#EBA232] rounded-full w-40 py-4">
           <a href="" className=" text-white text-sm">
             Add Restaurant
           </a>
         </button>
         <div className="flex items-center relative mb-2 w-[400px] mr-6">
-          <Search color="#EBA232" size={18} className="mx-3 mb-1 absolute focus:text-[#EBA232]" />
+          <Search
+            color="#EBA232"
+            size={18}
+            className="mx-3 mb-1 absolute focus:text-[#EBA232]"
+          />
           <input
             type="text"
             className="rounded-full bg-[#FFFFFF] px-9 py-4 text-sm text-[#EBA232] border border-[#EBA232] w-full 
@@ -174,15 +181,17 @@ const RestaurantList = () => {
           />
         </div>
       </div>
-      
+
       <div className="overflow-auto rounded-lg border border-gray-200 drop-shadow-sm m-5">
         <table className=" bg-white text-left text-xs text-gray-500">
           <thead className="bg-[#0F172A]">
-            <RestaurantColumns handleSortByAndOrder={handleSortByAndOrder} />
+            <RestaurantColumns {...restaurantsColProps} />
           </thead>
           <tbody>
             {restaurants!.map((restaurant: any) => (
-              <tr key={restaurant.id} className="hover:bg-[#F4F5F7] border-b border-[#D8D9DB]">
+              <tr
+                key={restaurant.id}
+                className="hover:bg-[#F4F5F7] border-b border-[#D8D9DB]">
                 <td className="px-3">
                   <span
                     className="cursor-pointer hover:text-[#0F172A]"
@@ -190,8 +199,7 @@ const RestaurantList = () => {
                       router.push(`/restaurant-info/${restaurant.id}`, {
                         scroll: true,
                       })
-                    }
-                  >
+                    }>
                     {restaurant.name}
                   </span>
                 </td>
