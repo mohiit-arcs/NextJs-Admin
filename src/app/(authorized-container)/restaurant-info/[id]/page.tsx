@@ -31,23 +31,18 @@ const RestaurantInfo = () => {
   };
 
   return (
-    <div className="bg-white min-h-screen">
-      <div className="bg-white max-w-2xl text-center m-auto shadow-lg">
-        <div className="px-4 py-5">
-          <h3 className="text-xl leading-6 font-medium text-gray-900">
+
+    <div className="bg-white min-h-screen pt-12 pb-12">
+
+      <div className="bg-white max-w-2xl text-center m-auto shadow-lg rounded-lg">
+
+        <div className="px-4 py-5 bg-[#0F172A] rounded-tl-lg rounded-tr-lg">
+          <h3 className="text-2xl leading-6 font-bold text-[#FFFFFF]">
             Restaurant Details
           </h3>
         </div>
-        <div className="border-t-2 border-gray-200">
-          <dl>
-            <div className="bg-gray-50 px-4 py-5">
-              <dt className="text-sm font-medium text-gray-500">Name</dt>
-              <dd className="mt-1 text-sm text-gray-900">
-                {restaurantData?.name}
-              </dd>
-            </div>
-            <div className="bg-gray-50 px-4 py-5">
-              <dt className="text-sm font-medium text-gray-500">Image</dt>
+
+        <div className=" px-4 py-5">
               <dd className="mt-1 text-sm text-gray-900">
                 <img
                   className="m-auto"
@@ -56,54 +51,76 @@ const RestaurantInfo = () => {
                 />
               </dd>
             </div>
-            <div className="bg-gray-50 px-4 py-5  ">
-              <dt className="text-sm font-medium text-gray-500">
-                Email address
-              </dt>
-              <dd className="mt-1 text-sm text-gray-900 ">
-                {restaurantData?.email}
+
+        <div className="">
+
+          <dl className="px-20 py-4 rounded-lg">
+
+            <div className="px-4 py-5 flex justify-between">
+              <dt className="text-sm font-medium text-gray-500">Name : </dt>
+              <dd className="mt-1 w-1/3 text-left text-sm text-gray-900">
+                <p>{restaurantData?.name}</p>
               </dd>
             </div>
-            <div className="bg-gray-50 px-4 py-5  ">
+
+           
+
+            <div className="px-4 py-5 flex justify-between ">
               <dt className="text-sm font-medium text-gray-500">
-                Phone Number
+                Email address : 
               </dt>
-              <dd className="mt-1 text-sm text-gray-900 ">
-                {restaurantData?.phoneNumber}
+              <dd className="mt-1 w-1/3 text-left text-sm text-gray-900 ">
+                <p>{restaurantData?.email}</p>
               </dd>
             </div>
-            <div className="bg-gray-50 px-4 py-5  ">
-              <dt className="text-sm font-medium text-gray-500">Street</dt>
-              <dd className="mt-1 text-sm text-gray-900 ">
+
+            <div className="px-4 py-5 flex justify-between ">
+              <dt className="text-sm font-medium text-gray-500">
+                Phone Number : 
+              </dt>
+              <dd className="mt-1 w-1/3 text-left text-sm text-gray-900">
+                <p>{restaurantData?.phoneNumber}</p>
+              </dd>
+            </div>
+
+            <div className="px-4 py-5 flex justify-between ">
+              <dt className="text-sm font-medium text-gray-500">Street : </dt>
+              <dd className="mt-1 w-1/3 text-left text-sm text-gray-900">
                 {restaurantData?.street}
               </dd>
             </div>
-            <div className="bg-gray-50 px-4 py-5  ">
-              <dt className="text-sm font-medium text-gray-500">Zipcode</dt>
-              <dd className="mt-1 text-sm text-gray-900 ">
+
+            <div className="px-4 py-5 flex justify-between ">
+              <dt className="text-sm font-medium text-gray-500">Zipcode : </dt>
+              <dd className="mt-1 w-1/3 text-left text-sm text-gray-900">
                 {restaurantData?.zipcode}
               </dd>
             </div>
-            <div className="bg-gray-50 px-4 py-5  ">
-              <dt className="text-sm font-medium text-gray-500">City</dt>
-              <dd className="mt-1 text-sm text-gray-900 ">
+
+            <div className="px-4 py-5 flex justify-between ">
+              <dt className="text-sm font-medium text-gray-500">City : </dt>
+              <dd className="mt-1 w-1/3 text-left text-sm text-gray-900">
                 {restaurantData?.city}
               </dd>
             </div>
-            <div className="bg-gray-50 px-4 py-5  ">
-              <dt className="text-sm font-medium text-gray-500">State</dt>
-              <dd className="mt-1 text-sm text-gray-900 ">
+
+            <div className="px-4 py-5 flex justify-between ">
+              <dt className="text-sm font-medium text-gray-500">State : </dt>
+              <dd className="mt-1 w-1/3 text-left text-sm text-gray-900">
                 {restaurantData?.state}
               </dd>
             </div>
-            <div className="bg-gray-50 px-4 py-5  ">
-              <dt className="text-sm font-medium text-gray-500">Country</dt>
-              <dd className="mt-1 text-sm text-gray-900 ">
+
+            <div className="px-4 py-5 flex justify-between ">
+              <dt className="text-sm font-medium text-gray-500">Country : </dt>
+              <dd className="mt-1 w-1/3 text-left text-sm text-gray-900">
                 {restaurantData?.country}
               </dd>
             </div>
+            
           </dl>
         </div>
+
       </div>
     </div>
   );

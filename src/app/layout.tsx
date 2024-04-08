@@ -27,7 +27,7 @@ export default function RootLayout({
         <title>{config.applicationName}</title>
       </head>
       <html lang="en">
-        <body className={poppins.className}>
+        <body className={poppins.className + ` scrollbar-thin scrollbar-webkit` }>
           {children}
           <ToastContainer
             position="top-right"

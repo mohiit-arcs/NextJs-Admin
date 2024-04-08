@@ -157,7 +157,7 @@ const UserList = () => {
       </div>
       <div className="rounded-lg border border-gray-200 drop-shadow-xl m-5">
         <table className="w-full rounded-md border-collapse bg-white text-left text-sm text-gray-500">
-          <thead className="bg-gray-500">
+          <thead className="bg-[#0F172A]">
             <UserColumns handleSortByAndOrder={handleSortByAndOrder} />
           </thead>
           <tbody>

@@ -160,15 +160,15 @@ const FoodItemList = () => {
           />
         </div>
       </div>
-      <div className="rounded-lg border border-gray-200 drop-shadow-xl m-5">
+      <div className="rounded-lg w-full border border-gray-200 drop-shadow-xl m-5">
         <table className="w-full rounded-md border-collapse bg-white text-left text-sm text-gray-500">
-          <thead className="bg-gray-500">
+          <thead className="bg-[#0F172A] min-w-full">
             <FoodItemListColumns handleSortByAndOrder={handleSortByAndOrder} />
           </thead>
           <tbody>
             {foodItems?.length != 0 &&
               foodItems?.map((foodItem: any) => (
-                <tr key={foodItem.id} className="hover:bg-gray-200">
+                <tr key={foodItem.id} className="hover:bg-gray-200 w-full py-10">
                   <td className="px-4 py-3">{foodItem.name}</td>
                   <td className="px-4 py-3">{foodItem.price}</td>
                   <td className="px-4 py-3">
