@@ -26,12 +26,16 @@ const RestaurantColumns: React.FC<RestaurantColumnsProps> = ({
 }) => {
   const getArrowIcon = (field: string) => {
     if (sortBy === field) {
-      return sortOrder === "asc" ? <ChevronUp /> : <ChevronDown />;
+      return sortOrder === "asc" ? (
+        <ChevronUp className="h-[12px]" />
+      ) : (
+        <ChevronDown className="h-[12px]" />
+      );
     }
     return (
       <>
-        <ChevronUp />
-        <ChevronDown />
+        <ChevronUp className="h-[12px]" />
+        <ChevronDown className="h-[12px]" />
       </>
     );
   };
@@ -44,11 +48,13 @@ const RestaurantColumns: React.FC<RestaurantColumnsProps> = ({
               column.sortable && handleSortByAndOrder(column.field)
             }
             key={column.field}
-            className="py-4 w-[10%] px-3  cursor-pointer text-sm text-white font-bold">
-            {column.label}{" "}
-            {column.sortable ? (
-              <span className="text-sm">{getArrowIcon(column.field)}</span>
-            ) : null}
+            className="py-4 px-3  cursor-pointer text-sm text-white font-bold">
+            <div className="flex flex-row items-center">
+              {column.label}{" "}
+              {column.sortable ? (
+                <span className="text-sm">{getArrowIcon(column.field)}</span>
+              ) : null}
+            </div>
           </th>
         );
       })}
