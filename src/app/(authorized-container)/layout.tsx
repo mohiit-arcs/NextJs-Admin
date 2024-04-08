@@ -6,10 +6,11 @@ import useInterceptor from "@/hooks/useInterceptor";
 import { getAuthToken } from "@/services/frontend/storage.service";
 import { MeApi, UserProfileResponse } from "@/swagger";
 import { redirect } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   const { setUserProfile } = useUserProfile();
+  const [sidebarOpen, setSidebarOpen] = useState(true);
 
   useEffect(() => {
     const token = getAuthToken();
@@ -34,14 +35,21 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
+  const handleSideBarToggle = () => {
+    setSidebarOpen(!sidebarOpen);
+  };
+
   return (
     <div className="flex w-full h-full bg-[#ffffff]">
       <div className="w-1/5 h-screen fixed">
-        <Sidebar />
+        <Sidebar
+          sidebarOpen={sidebarOpen}
+          handleSideBarToggle={handleSideBarToggle}
+        />
       </div>
 
       <div className="w-full flex justify-end">
-        <div className="w-4/5">{children}</div>
+        <div className={sidebarOpen ? "w-4/5" : "w-[99%]"}>{children}</div>
       </div>
     </div>
   );
