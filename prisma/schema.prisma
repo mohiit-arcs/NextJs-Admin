@@ -41,6 +41,7 @@ model User {
   foodItems    FoodItem[]
   menuCategory MenuCategory[]
   order        Order[]
+  Cart         Cart[]
 
   @@index([email])
   @@index([roleId])
@@ -118,6 +119,7 @@ model Restaurant {
   menu           Menu[]
   menuCategories MenuCategory[]
   order          Order[]
+  cart           Cart[]
 
   @@index([email])
   @@index([userId])
@@ -156,15 +158,17 @@ model MenuCategory {
 }
 
 model FoodItem {
-  id        Int       @id @default(autoincrement())
-  name      String    @db.VarChar(255)
-  price     Int       @default(0)
-  admin     User?     @relation(fields: [userId], references: [id])
-  userId    Int?      @map("adminId")
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  deletedAt DateTime?
-  menu      Menu[]
+  id         Int          @id @default(autoincrement())
+  name       String       @db.VarChar(255)
+  price      Int          @default(0)
+  admin      User?        @relation(fields: [userId], references: [id])
+  userId     Int?         @map("adminId")
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+  deletedAt  DateTime?
+  menu       Menu[]
+  cartItems  CartItems[]
+  orderItems OrderItems[]
 
   @@index([userId])
   @@map("food_items")
@@ -188,12 +192,46 @@ model Menu {
   @@map("menus")
 }
 
+model Cart {
+  id           Int         @id @default(autoincrement())
+  user         User        @relation(fields: [userId], references: [id])
+  userId       Int
+  amount       Float       @map("order_amount")
+  taxAmount    Float       @map("order_tax_amount")
+  totalAmount  Float       @map("order_total_amount")
+  restaurant   Restaurant  @relation(fields: [restaurantId], references: [id])
+  restaurantId Int
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  deletedAt    DateTime?
+  cartItems    CartItems[]
+
+  @@index([restaurantId])
+  @@map("cart")
+}
+
+model CartItems {
+  id         Int       @id @default(autoincrement())
+  cart       Cart      @relation(fields: [cartId], references: [id])
+  cartId     Int
+  foodItem   FoodItem  @relation(fields: [foodItemId], references: [id])
+  foodItemId Int
+  quantity   Int
+  price      Int
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  deletedAt  DateTime?
+
+  @@index([cartId])
+  @@map("cart_items")
+}
+
 model Order {
   id           Int             @id @default(autoincrement())
   status       OrderStatusSlug @default(pending)
   amount       Float           @map("order_amount")
   taxAmount    Float           @map("order_tax_amount")
-  items        Int             @map("order_item_count")
+  totalAmount  Float           @map("order_total_amount")
   user         User?           @relation(fields: [userId], references: [id])
   userId       Int?
   restaurant   Restaurant      @relation(fields: [restaurantId], references: [id])
@@ -201,9 +239,26 @@ model Order {
   createdAt    DateTime        @default(now())
   updatedAt    DateTime        @updatedAt
   deletedAt    DateTime?
+  orderItems   OrderItems[]
 
   @@index([restaurantId, userId])
   @@map("orders")
+}
+
+model OrderItems {
+  id              Int       @id @default(autoincrement())
+  order           Order     @relation(fields: [orderId], references: [id])
+  orderId         Int
+  foodItem        FoodItem  @relation(fields: [foodItemId], references: [id])
+  foodItemId      Int
+  quantity        Int
+  priceAtPurchase Float
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  deletedAt       DateTime?
+
+  @@index([orderId])
+  @@map("order_items")
 }
 
 enum RoleSlug {

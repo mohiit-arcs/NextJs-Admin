@@ -43,5 +43,7 @@ export const messages = {
     taxFeeNotFound: "Tax and Fees not found",
     menuCategoryAlreadyExists: "Menu Category already exists with this name",
     menuCategoryNotFound: "Menu Category Not Found",
+    cartAlreadyExists: "Cart already exists with user",
+    cartNotFoud: "Cart not found",
   },
 };

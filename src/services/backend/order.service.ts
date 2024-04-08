@@ -63,7 +63,7 @@ export const getOrdersListByRestaurantId = async (
       status: true,
       amount: true,
       taxAmount: true,
-      items: true,
+      orderItems: true,
       user: {
         select: { name: true },
       },
