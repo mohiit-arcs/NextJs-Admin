@@ -21,8 +21,28 @@ export const OrdersListResponse = {
               taxAmount: {
                 type: "number",
               },
-              items: {
-                type: "number",
+              orderItems: {
+                type: "array",
+                items: {
+                  type: "object",
+                  properties: {
+                    id: {
+                      type: "number",
+                    },
+                    orderId: {
+                      type: "number",
+                    },
+                    foodItemsId: {
+                      type: "number",
+                    },
+                    quantity: {
+                      type: "number",
+                    },
+                    priceAtPurchase: {
+                      type: "number",
+                    },
+                  },
+                },
               },
               user: {
                 type: "object",

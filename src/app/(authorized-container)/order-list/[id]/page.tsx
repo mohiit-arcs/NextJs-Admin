@@ -157,7 +157,7 @@ const UserList = () => {
                   <td className="px-4 py-3">{_.capitalize(order.status)}</td>
                   <td className="px-4 py-3">{order.amount}</td>
                   <td className="px-4 py-3">{order.taxAmount}</td>
-                  <td className="px-4 py-3">{order.items}</td>
+                  <td className="px-4 py-3">{order.orderItems.length}</td>
                   <td className="px-4 py-3">{order.user.name}</td>
                   <td className="px-4 py-3">{order.restaurant.name}</td>
                   <td className="flex">
