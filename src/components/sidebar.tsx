@@ -176,8 +176,10 @@ const Sidebar = ({
       <div
         onClick={() => handleSideBarToggle()}
         className="bg-[#0F172A] w-4 flex items-center justify-center">
-        <span>{sidebarOpen ? <ChevronLeft /> : null}</span>
-        <span>{sidebarOpen != true ? <ChevronRight /> : null}</span>
+        <span>{sidebarOpen ? <ChevronLeft color="white" /> : null}</span>
+        <span>
+          {sidebarOpen != true ? <ChevronRight color="white" /> : null}
+        </span>
       </div>
     </div>
   );
