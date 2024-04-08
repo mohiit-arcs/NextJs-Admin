@@ -174,8 +174,8 @@ const RestaurantList = () => {
         </div>
       </div>
 
-      <div className="overflow-auto rounded-lg border border-gray-200 drop-shadow-sm m-5">
-        <table className=" bg-white text-left text-xs text-gray-500">
+      <div className="overflow-auto rounded-lg border border-gray-200 drop-shadow-lg m-5">
+        <table className=" bg-white text-left text-xs text-gray-500 w-full">
           <thead className="bg-[#0F172A]">
             <RestaurantColumns {...restaurantsColProps} />
           </thead>
@@ -190,9 +190,9 @@ const RestaurantList = () => {
                 key={restaurant.id}
                 className="hover:bg-[#F4F5F7] border-b border-[#f5f5f5]">
                 <td className="px-3">
-                  <span className="cursor-pointer hover:text-[#0F172A]">
-                    {restaurant.name}
-                  </span>
+                  {/* <span className="cursor-pointer hover:text-[#0F172A]"> */}
+                  {restaurant.name}
+                  {/* </span> */}
                 </td>
                 <td className="px-2">{restaurant.email}</td>
                 <td className="px-2">{restaurant.phoneNumber}</td>
@@ -208,31 +208,35 @@ const RestaurantList = () => {
                     alt=""
                   />
                 </td> */}
-                <td className="flex items-center py-3">
-                  <span className="px-1">
-                    <ToolTip tooltip={"Edit Restaurant Details"}>
-                      {" "}
-                      <Pencil
+                <td className="py-3">
+                  <div className="flex flex-row items-center">
+                    <span className="px-1">
+                      <ToolTip tooltip={"Edit Restaurant Details"}>
+                        {" "}
+                        <Pencil
+                          size={15}
+                          className="cursor-pointer"
+                          onClick={() => onUpdate(restaurant.id)}
+                        />
+                      </ToolTip>
+                    </span>
+                    <span className="px-1">
+                      <Trash
                         size={15}
                         className="cursor-pointer"
-                        onClick={() => onUpdate(restaurant.id)}
+                        onClick={() => onDelete(restaurant.id)}
                       />
-                    </ToolTip>
-                  </span>
-                  <span className="px-1">
-                    <Trash
-                      size={15}
-                      className="cursor-pointer"
-                      onClick={() => onDelete(restaurant.id)}
-                    />
-                  </span>
-                  <span className="px-1">
-                    <ShoppingCart
-                      size={15}
-                      className="cursor-pointer"
-                      onClick={() => router.push(`order-list/${restaurant.id}`)}
-                    />
-                  </span>
+                    </span>
+                    <span className="px-1">
+                      <ShoppingCart
+                        size={15}
+                        className="cursor-pointer"
+                        onClick={() =>
+                          router.push(`order-list/${restaurant.id}`)
+                        }
+                      />
+                    </span>
+                  </div>
                 </td>
               </tr>
             ))}
