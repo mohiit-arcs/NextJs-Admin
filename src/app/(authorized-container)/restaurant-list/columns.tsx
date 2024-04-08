@@ -1,3 +1,4 @@
+import { ChevronDown, ChevronUp } from "lucide-react";
 import React from "react";
 
 const restaurantColumns = [
@@ -9,17 +10,31 @@ const restaurantColumns = [
   { field: "zipcode", label: "ZipCode", sortable: true },
   { field: "state", label: "State", sortable: true },
   { field: "country", label: "Country", sortable: true },
-  // { field: "image", label: "Image", sortable: false },
   { field: "actions", label: "Actions", sortable: false },
 ];
 
-interface RestaurantColumnsProps {
+export interface RestaurantColumnsProps {
   handleSortByAndOrder: (field: string) => void;
+  sortBy: string;
+  sortOrder: string;
 }
 
 const RestaurantColumns: React.FC<RestaurantColumnsProps> = ({
+  sortBy,
+  sortOrder,
   handleSortByAndOrder,
 }) => {
+  const getArrowIcon = (field: string) => {
+    if (sortBy === field) {
+      return sortOrder === "asc" ? <ChevronUp /> : <ChevronDown />;
+    }
+    return (
+      <>
+        <ChevronUp />
+        <ChevronDown />
+      </>
+    );
+  };
   return (
     <tr className="w-full">
       {restaurantColumns.map((column) => {
@@ -29,10 +44,11 @@ const RestaurantColumns: React.FC<RestaurantColumnsProps> = ({
               column.sortable && handleSortByAndOrder(column.field)
             }
             key={column.field}
-            className="py-4 w-[10%] px-3  cursor-pointer text-sm text-white font-bold"
-          >
+            className="py-4 w-[10%] px-3  cursor-pointer text-sm text-white font-bold">
             {column.label}{" "}
-            {column.sortable ? <span className="text-sm"></span> : null}
+            {column.sortable ? (
+              <span className="text-sm">{getArrowIcon(column.field)}</span>
+            ) : null}
           </th>
         );
       })}

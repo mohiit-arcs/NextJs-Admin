@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import FoodItemListColumns from "./columns";
+import FoodItemListColumns, { FoodItemListColumnsProps } from "./columns";
 import {
   FoodItemDeleteResponse,
   FoodItemRequestApi,
@@ -140,6 +140,11 @@ const FoodItemList = () => {
       setSortOrder("asc");
     }
   };
+  const foodItemsColProps: FoodItemListColumnsProps = {
+    handleSortByAndOrder,
+    sortBy,
+    sortOrder,
+  };
   return (
     <div className="bg-gray-100 min-h-screen">
       <h1 className="text-4xl text-center text-black">Food Item List</h1>
@@ -163,12 +168,14 @@ const FoodItemList = () => {
       <div className="rounded-lg w-full border border-gray-200 drop-shadow-xl m-5">
         <table className="w-full rounded-md border-collapse bg-white text-left text-sm text-gray-500">
           <thead className="bg-[#0F172A] min-w-full">
-            <FoodItemListColumns handleSortByAndOrder={handleSortByAndOrder} />
+            <FoodItemListColumns {...foodItemsColProps} />
           </thead>
           <tbody>
             {foodItems?.length != 0 &&
               foodItems?.map((foodItem: any) => (
-                <tr key={foodItem.id} className="hover:bg-gray-200 w-full py-10">
+                <tr
+                  key={foodItem.id}
+                  className="hover:bg-gray-200 w-full py-10">
                   <td className="px-4 py-3">{foodItem.name}</td>
                   <td className="px-4 py-3">{foodItem.price}</td>
                   <td className="px-4 py-3">

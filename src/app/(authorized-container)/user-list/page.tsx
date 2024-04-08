@@ -9,7 +9,7 @@ import "react-toastify/dist/ReactToastify.css";
 import _ from "lodash";
 import Pagination from "@/components/ui/table/pagination/pagination";
 import useDebounce from "@/hooks/useDebounce";
-import UserColumns from "./columns";
+import UserColumns, { UserColumnsProps } from "./columns";
 import {
   UserDeleteResponse,
   UserListResponse,
@@ -135,6 +135,12 @@ const UserList = () => {
     }
   };
 
+  const userColProps: UserColumnsProps = {
+    handleSortByAndOrder,
+    sortBy,
+    sortOrder,
+  };
+
   return (
     <div className="w-4/5 h-full">
       <h1 className="text-4xl text-center text-black">User List</h1>
@@ -158,7 +164,7 @@ const UserList = () => {
       <div className="rounded-lg border border-gray-200 drop-shadow-xl m-5">
         <table className="w-full rounded-md border-collapse bg-white text-left text-sm text-gray-500">
           <thead className="bg-[#0F172A]">
-            <UserColumns handleSortByAndOrder={handleSortByAndOrder} />
+            <UserColumns {...userColProps} />
           </thead>
           <tbody>
             {users &&
