@@ -19,11 +19,16 @@ import Link from "next/link";
 import { useState } from "react";
 
 const activeClass = "rounded-full text-[#FFFFFF] bg-[#EBA232]";
-const Sidebar = () => {
+const Sidebar = ({
+  sidebarOpen,
+  handleSideBarToggle,
+}: {
+  sidebarOpen: boolean;
+  handleSideBarToggle: () => void;
+}) => {
   const router = useRouter();
   const pathname = usePathname();
   const { userProfile } = useUserProfile();
-  const [sidebarOpen, setSidebarOpen] = useState(true);
   const sidebarCloseClass = " hidden";
 
   const logout = () => {
@@ -31,12 +36,9 @@ const Sidebar = () => {
     router.push("/login");
   };
 
-  const handleSideBarToggle = () => {
-    setSidebarOpen(!sidebarOpen);
-  };
   return (
-    <div className="flex gap-0 h-full">
-      <div className={sidebarOpen == false ? sidebarCloseClass : ""}>
+    <div className="flex h-full">
+      <div className={sidebarOpen == false ? sidebarCloseClass : "w-full"}>
         <div className="bg-[#0F172A] h-full relative px-4 py-2">
           <div className="text-center">
             <h1 className="text-2xl text-[#FFFFFF] font-bold my-3">
