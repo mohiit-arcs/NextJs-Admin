@@ -1,12 +1,6 @@
 "use client";
 
-import {
-  ChevronRight,
-  Pencil,
-  Search,
-  ShoppingCart,
-  Trash,
-} from "lucide-react";
+import { Pencil, Search, ShoppingCart, Trash } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
@@ -159,21 +153,19 @@ const RestaurantList = () => {
         <button
           onClick={() => router.push("add-restaurant")}
           className="bg-[#EBA232] hover:bg-[#EBA232] rounded-full w-40 py-4">
-          <a href="" className=" text-white text-sm">
-            Add Restaurant
-          </a>
+          <a className=" text-white text-sm">Add Restaurant</a>
         </button>
         <div className="flex items-center relative mb-2 w-[400px] mr-6">
           <Search
-            color="#EBA232"
+            color="#dddddd"
             size={18}
             className="mx-3 mb-1 absolute focus:text-[#EBA232]"
           />
           <input
             type="text"
-            className="rounded-full bg-[#FFFFFF] px-9 py-4 text-sm text-[#EBA232] border border-[#EBA232] w-full 
-            placeholder-[#EBA232] placeholder:text-sm
-            focus:border-[#EBA232] focus:outline-none"
+            className="rounded-full bg-[#FFFFFF] px-9 py-4 text-sm text-gray-800 border border-[#dddddd] w-full 
+            placeholder-[#dddddd] placeholder:text-sm
+            focus:border-[#f5f5f5] focus:outline-none"
             placeholder="Search here..."
             value={searchQuery}
             // onChange={(e) => debouncedUserResults(e)}
@@ -190,16 +182,15 @@ const RestaurantList = () => {
           <tbody>
             {restaurants!.map((restaurant: any) => (
               <tr
+                onClick={() =>
+                  router.push(`/restaurant-info/${restaurant.id}`, {
+                    scroll: true,
+                  })
+                }
                 key={restaurant.id}
-                className="hover:bg-[#F4F5F7] border-b border-[#D8D9DB]">
+                className="hover:bg-[#F4F5F7] border-b border-[#f5f5f5]">
                 <td className="px-3">
-                  <span
-                    className="cursor-pointer hover:text-[#0F172A]"
-                    onClick={() =>
-                      router.push(`/restaurant-info/${restaurant.id}`, {
-                        scroll: true,
-                      })
-                    }>
+                  <span className="cursor-pointer hover:text-[#0F172A]">
                     {restaurant.name}
                   </span>
                 </td>

@@ -24,7 +24,6 @@ type Inputs = {
   country: string;
   image: FileList;
 };
-const apiUrl = "http://localhost:3000/api/v1/restaurants";
 const baseUrl = "http://localhost:3000";
 
 const UpdateRestaurant = () => {
@@ -208,335 +207,298 @@ const UpdateRestaurant = () => {
   };
 
   return (
-    <div className="bg-gray-100 p-10 min-h-screen">
-
-
-      <div className="px-44">
-        <h1 className="text-4xl text-left text-black font-extrabold px-4">
-          Update Restuarant
-        </h1>
-      </div>
-
-      <div className="py-8 px-44">
-
-        <form onSubmit={handleSubmit(updateRestaurant)}>
-
-          <div className="flex gap-[6%] flex-row w-full ">
-
-            <div className="flex flex-col w-[47%]">
-
-              <div className="relative">
-                
-                <p className="px-4 py-3 text-sm">
-                <label className="text-black" htmlFor="name">
-                  Name*
-                </label>
-                </p>
-
-                <input
-                  className="p-3 mb-5 w-full text-black rounded-full text-sm"
-                  type="text"
-                  id="name"
-                  autoComplete="off"
-                  placeholder="Name"
-                  {...register("name", {
-                    required: true,
-                    validate: validateNoWhiteSpace,
-                  })}
-                />
-
-                {errors.name && (
-                  <div className="error text-red-500">
-                    {messages.form.validation.name.required}
-                  </div>
-                )}
-
-              </div>
-
-              
-
-          <div className="relative">
-            
-            <p className="px-4 py-3 text-sm">
-            <label className="text-black" htmlFor="email">
-              Email*
-            </label>
-            </p>
-
-            <input
-              className="p-3 mb-5 w-full text-black rounded-full text-sm"
-              type="text"
-              id="email"
-              autoComplete="off"
-              placeholder="Email"
-              {...register("email", {
-                required: true,
-                pattern: {
-                  value:
-                    /^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+/,
-                  message: messages.form.validation.email.invalid,
-                },
-              })}
-            />
-
-            {errors.email && (
-              <div className="error text-red-500">
-                {errors.email.type === "required" &&
-                  messages.form.validation.email.required}
-                {errors.email.type === "pattern" &&
-                  messages.form.validation.email.invalid}
-              </div>
-            )}
-
-          </div>
-
-          
-
-          
-          
-          <div className="relative">
-            
-            <p className="px-4 py-3 text-sm">
-            <label className="text-black" htmlFor="phoneNumber">
-              Phone Number*
-            </label>
-            </p>
-
-            <input
-              className="p-3 mb-5 w-full text-black rounded-full text-sm"
-              type="text"
-              id="phoneNumber"
-              autoComplete="off"
-              placeholder="Phone Number"
-              {...register("phoneNumber", {
-                required: true,
-                pattern: {
-                  value: /^[0-9]{10}$/,
-                  message: messages.form.validation.phoneNumber.invalid,
-                },
-                validate: validateNoWhiteSpace,
-              })}
-            />
-
-            {errors.phoneNumber && (
-              <div className="error text-red-500">
-                {errors.phoneNumber.type === "required" &&
-                  messages.form.validation.phoneNumber.required}
-                {errors.phoneNumber.type === "pattern" &&
-                  messages.form.validation.phoneNumber.invalid}
-              </div>
-            )}
-
-          </div>
-
-          
-          <div className="relative">
- 
-            <p className="px-4 py-3 text-sm">
-            <label className="text-black" htmlFor="street">
-              Street*
-            </label>
-            </p>
-
-            <input
-              className="p-3 mb-5 w-full text-black rounded-full text-sm"
-              type="text"
-              id="street"
-              autoComplete="off"
-              placeholder="Street"
-              {...register("street", {
-                required: true,
-                validate: validateNoWhiteSpace,
-              })}
-            />
-          
-            {errors.street && (
-              <div className="error text-red-500">
-                {messages.form.validation.street.required}
-              </div>
-            )}
-
-         </div>
-
-         </div>
-
-         <div className="flex flex-col w-[47%]">
-          
-          <div className="relative">
-            
-            <p className="px-4 py-3 text-sm">
-            <label className="text-black" htmlFor="city">
-              City*
-            </label>
-            </p>
-
-            <input
-              className="p-3 mb-5 w-full text-black rounded-full text-sm"
-              type="text"
-              id="city"
-              autoComplete="off"
-              placeholder="City"
-              {...register("city", {
-                required: true,
-                validate: validateNoWhiteSpace,
-              })}
-            />
-
-          
-            {errors.city && (
-              <div className="error text-red-500">
-                {messages.form.validation.city.required}
-              </div>
-            )}
-
-          </div>
-
-          
-          <div className="relative">
- 
-            <p className="px-4 py-3 text-sm">
-            <label className="text-black" htmlFor="zipcode">
-              ZipCode*
-            </label>
-            </p>
-
-            <input
-              className="p-3 mb-5 w-full text-black rounded-full text-sm"
-              id="zipcode"
-              autoComplete="off"
-              placeholder="ZipCode"
-              {...register("zipcode", {
-                required: true,
-                pattern: {
-                  value: /^[0-9]{6}$/,
-                  message: messages.form.validation.zipCode.invalid,
-                },
-                validate: validateNoWhiteSpace,
-              })}
-            />
-
-          
-            {errors.zipcode && (
-              <div className="error text-red-500">
-                {errors.zipcode.type === "required" &&
-                  messages.form.validation.zipCode.required}
-                {errors.zipcode.type === "pattern" &&
-                  messages.form.validation.zipCode.invalid}
-              </div>
-            )}
-
-          </div>
-
-          
-          <div className="relative">
-
-            <p className="px-4 py-3 text-sm">
-            <label className="text-black" htmlFor="state">
-              State*
-            </label>
-            </p>
-
-            <input
-              className="p-3 mb-5 w-full text-black rounded-full text-sm"
-              type="text"
-              id="state"
-              autoComplete="off"
-              placeholder="State"
-              {...register("state", {
-                required: true,
-                validate: validateNoWhiteSpace,
-              })}
-            />
-          
-            {errors.state && (
-              <div className="error text-red-500">
-                {messages.form.validation.state.required}
-              </div>
-            )}
-
-          </div>
-
-          
-          <div className="relative">
-
-            <p className="px-4 py-3 text-sm">
-            <label className="text-black" htmlFor="country">
-              Country*
-            </label>
-            </p>
-
-            <input
-              className="p-3 mb-5 w-full text-black rounded-full text-sm"
-              type="text"
-              id="country"
-              autoComplete="off"
-              placeholder="Country"
-              {...register("country", {
-                required: true,
-                validate: validateNoWhiteSpace,
-              })}
-            />
-
-          
-            {errors.country && (
-              <div className="error text-red-500">
-                {messages.form.validation.country.required}
-              </div>
-            )}
-            
-          </div>
-
+    <div className="bg-gray-100 p-10 min-h-screen px-32">
+      <div className="border px-8 pt-8 rounded-xl shadow-lg bg-[#dfe2e7]">
+        <div className="px-4">
+          <h1 className="text-4xl text-left text-black font-extrabold px-4">
+            Update Restuarant
+          </h1>
         </div>
 
-      </div>
+        <div className="py-8 px-4">
+          <form onSubmit={handleSubmit(updateRestaurant)}>
+            <div className="flex gap-[6%] flex-row w-full ">
+              <div className="flex flex-col w-[47%]">
+                <div className="relative">
+                  <p className="px-4 py-3 text-sm">
+                    <label className="text-black" htmlFor="name">
+                      Name*
+                    </label>
+                  </p>
 
-          <div className="relative">
+                  <input
+                    className="p-3 mb-5 w-full text-black rounded-full text-sm"
+                    type="text"
+                    id="name"
+                    autoComplete="off"
+                    placeholder="Name"
+                    {...register("name", {
+                      required: true,
+                      validate: validateNoWhiteSpace,
+                    })}
+                  />
 
-            <p className="px-4 py-3 text-sm">
-              <label className="text-black" htmlFor="image">
-                Image*
-              </label>
-            </p>
+                  {errors.name && (
+                    <div className="error text-red-500">
+                      {messages.form.validation.name.required}
+                    </div>
+                  )}
+                </div>
 
-            <input
-              className="p-3 mb-5 w-full text-black rounded-full text-sm"
-              type="file"
-              accept="image/jpeg, image/png"
-              id="image"
-              onChange={handleImageChange} hidden
-            />
+                <div className="relative">
+                  <p className="px-4 py-3 text-sm">
+                    <label className="text-black" htmlFor="email">
+                      Email*
+                    </label>
+                  </p>
 
-            <div className="bg-[#FFFFFF] p-3 mb-5 w-full text-black rounded-full text-sm">
-              <button type="button" className="bg-blue-500 hover:bg-blue-600 m-2 py-3 text-white rounded-full w-[150px]">Choose File</button>
-            </div>
-            
-            {previewImageUrl.trim() !== "" ? (
-              <div>
-                <img
-                  className="h-12 object-cover absolute top-[48%] right-[7%]"
-                  src={previewImageUrl}
-                  alt=""
-                />
+                  <input
+                    className="p-3 mb-5 w-full text-black rounded-full text-sm"
+                    type="text"
+                    id="email"
+                    autoComplete="off"
+                    placeholder="Email"
+                    {...register("email", {
+                      required: true,
+                      pattern: {
+                        value:
+                          /^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+/,
+                        message: messages.form.validation.email.invalid,
+                      },
+                    })}
+                  />
+
+                  {errors.email && (
+                    <div className="error text-red-500">
+                      {errors.email.type === "required" &&
+                        messages.form.validation.email.required}
+                      {errors.email.type === "pattern" &&
+                        messages.form.validation.email.invalid}
+                    </div>
+                  )}
+                </div>
+
+                <div className="relative">
+                  <p className="px-4 py-3 text-sm">
+                    <label className="text-black" htmlFor="phoneNumber">
+                      Phone Number*
+                    </label>
+                  </p>
+
+                  <input
+                    className="p-3 mb-5 w-full text-black rounded-full text-sm"
+                    type="text"
+                    id="phoneNumber"
+                    autoComplete="off"
+                    placeholder="Phone Number"
+                    {...register("phoneNumber", {
+                      required: true,
+                      pattern: {
+                        value: /^[0-9]{10}$/,
+                        message: messages.form.validation.phoneNumber.invalid,
+                      },
+                      validate: validateNoWhiteSpace,
+                    })}
+                  />
+
+                  {errors.phoneNumber && (
+                    <div className="error text-red-500">
+                      {errors.phoneNumber.type === "required" &&
+                        messages.form.validation.phoneNumber.required}
+                      {errors.phoneNumber.type === "pattern" &&
+                        messages.form.validation.phoneNumber.invalid}
+                    </div>
+                  )}
+                </div>
+
+                <div className="relative">
+                  <p className="px-4 py-3 text-sm">
+                    <label className="text-black" htmlFor="street">
+                      Street*
+                    </label>
+                  </p>
+
+                  <input
+                    className="p-3 mb-5 w-full text-black rounded-full text-sm"
+                    type="text"
+                    id="street"
+                    autoComplete="off"
+                    placeholder="Street"
+                    {...register("street", {
+                      required: true,
+                      validate: validateNoWhiteSpace,
+                    })}
+                  />
+
+                  {errors.street && (
+                    <div className="error text-red-500">
+                      {messages.form.validation.street.required}
+                    </div>
+                  )}
+                </div>
               </div>
-            ) : null}
 
-            {imageError && (
-            <div className="error text-red-500">
-              {messages.form.validation.image.required}
+              <div className="flex flex-col w-[47%]">
+                <div className="relative">
+                  <p className="px-4 py-3 text-sm">
+                    <label className="text-black" htmlFor="city">
+                      City*
+                    </label>
+                  </p>
+
+                  <input
+                    className="p-3 mb-5 w-full text-black rounded-full text-sm"
+                    type="text"
+                    id="city"
+                    autoComplete="off"
+                    placeholder="City"
+                    {...register("city", {
+                      required: true,
+                      validate: validateNoWhiteSpace,
+                    })}
+                  />
+
+                  {errors.city && (
+                    <div className="error text-red-500">
+                      {messages.form.validation.city.required}
+                    </div>
+                  )}
+                </div>
+
+                <div className="relative">
+                  <p className="px-4 py-3 text-sm">
+                    <label className="text-black" htmlFor="zipcode">
+                      ZipCode*
+                    </label>
+                  </p>
+
+                  <input
+                    className="p-3 mb-5 w-full text-black rounded-full text-sm"
+                    id="zipcode"
+                    autoComplete="off"
+                    placeholder="ZipCode"
+                    {...register("zipcode", {
+                      required: true,
+                      pattern: {
+                        value: /^[0-9]{6}$/,
+                        message: messages.form.validation.zipCode.invalid,
+                      },
+                      validate: validateNoWhiteSpace,
+                    })}
+                  />
+
+                  {errors.zipcode && (
+                    <div className="error text-red-500">
+                      {errors.zipcode.type === "required" &&
+                        messages.form.validation.zipCode.required}
+                      {errors.zipcode.type === "pattern" &&
+                        messages.form.validation.zipCode.invalid}
+                    </div>
+                  )}
+                </div>
+
+                <div className="relative">
+                  <p className="px-4 py-3 text-sm">
+                    <label className="text-black" htmlFor="state">
+                      State*
+                    </label>
+                  </p>
+
+                  <input
+                    className="p-3 mb-5 w-full text-black rounded-full text-sm"
+                    type="text"
+                    id="state"
+                    autoComplete="off"
+                    placeholder="State"
+                    {...register("state", {
+                      required: true,
+                      validate: validateNoWhiteSpace,
+                    })}
+                  />
+
+                  {errors.state && (
+                    <div className="error text-red-500">
+                      {messages.form.validation.state.required}
+                    </div>
+                  )}
+                </div>
+
+                <div className="relative">
+                  <p className="px-4 py-3 text-sm">
+                    <label className="text-black" htmlFor="country">
+                      Country*
+                    </label>
+                  </p>
+
+                  <input
+                    className="p-3 mb-5 w-full text-black rounded-full text-sm"
+                    type="text"
+                    id="country"
+                    autoComplete="off"
+                    placeholder="Country"
+                    {...register("country", {
+                      required: true,
+                      validate: validateNoWhiteSpace,
+                    })}
+                  />
+
+                  {errors.country && (
+                    <div className="error text-red-500">
+                      {messages.form.validation.country.required}
+                    </div>
+                  )}
+                </div>
+              </div>
             </div>
-            )} 
 
-          </div>
+            <div className="relative">
+              <p className="px-4 py-3 text-sm">
+                <label className="text-black" htmlFor="image">
+                  Image*
+                </label>
+              </p>
 
-          
+              <input
+                className="p-3 mb-5 w-full text-black rounded-full text-sm"
+                type="file"
+                accept="image/jpeg, image/png"
+                id="image"
+                onChange={handleImageChange}
+                hidden
+              />
 
-          <button
-            type="submit"
-            className="bg-blue-500 hover:bg-blue-600 m-2 py-3 text-white rounded-full w-[150px]">
-            Submit
-          </button>
+              <div className="bg-[#FFFFFF] p-3 mb-5 w-full text-black rounded-full text-sm">
+                <button
+                  type="button"
+                  className="bg-[#EBA232] hover:bg-[#cc861d] m-2 py-3 text-white rounded-full w-[150px]">
+                  Choose File
+                </button>
+              </div>
 
-        </form>
+              {previewImageUrl.trim() !== "" ? (
+                <div>
+                  <img
+                    className="h-12 object-cover absolute top-[48%] right-[7%]"
+                    src={previewImageUrl}
+                    alt=""
+                  />
+                </div>
+              ) : null}
+
+              {imageError && (
+                <div className="error text-red-500">
+                  {messages.form.validation.image.required}
+                </div>
+              )}
+            </div>
+
+            <button
+              type="submit"
+              className="bg-[#EBA232] hover:bg-[#cc861d] m-2 py-3 text-white rounded-full w-[150px]">
+              Submit
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   );
