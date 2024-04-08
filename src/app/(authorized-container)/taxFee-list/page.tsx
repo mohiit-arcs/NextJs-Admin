@@ -136,38 +136,50 @@ const TaxFeeList = () => {
     }
   };
   return (
-    <div className="bg-gray-100 min-h-screen">
-      <h1 className="text-4xl text-center text-black">Tax and Fee List</h1>
-      <div className="flex justify-end">
+    <div className="min-h-screen">
+
+
+      <div className="py-8">
+        <h1 className="text-4xl font-bold text-center text-black">Tax and Fee List</h1>
+      </div>
+
+      <div className="flex justify-between items-center p-5">
         <button
           onClick={() => router.push("add-taxfee")}
-          className="bg-blue-500 hover:bg-blue-600 m-2 p-2 text-white rounded-md w-44">
-          Add New Tax Fee
+          className="bg-[#EBA232] hover:bg-[#EBA232] rounded-full w-40 py-4">
+          <a href="" className=" text-white text-sm">
+            Add new tax fee
+          </a>
         </button>
-        <div className="relative mb-2 w-[400px] mr-6">
+
+        <div className="flex items-center relative mb-2 w-[400px] mr-6">
           <input
             type="text"
-            className="m-0 block h-[58px] w-full rounded shadow-lg border-2 border-solid border-neutral-300 bg-transparent bg-clip-padding px-3 py-4 text-base font-normal leading-tight text-black"
+            className="rounded-full bg-[#FFFFFF] px-9 py-4 text-sm text-[#EBA232] border border-[#EBA232] w-full 
+            placeholder-[#EBA232] placeholder:text-sm
+            focus:border-[#EBA232] focus:outline-none"
             placeholder="Search here..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
+
       </div>
-      <div className="rounded-lg border border-gray-200 drop-shadow-xl m-5">
-        <table className="w-full rounded-md border-collapse bg-white text-left text-sm text-gray-500">
-          <thead className="bg-gray-500">
+
+      <div className="overflow-auto rounded-lg border border-gray-200 drop-shadow-sm m-5">
+        <table className="bg-white text-left text-xs text-gray-500">
+          <thead className="bg-[#0F172A]">
             <TaxFeeColumnsListColumns
               handleSortByAndOrder={handleSortByAndOrder}
             />
           </thead>
           <tbody>
             {taxFee?.map((item: any) => (
-              <tr key={item.id} className="hover:bg-gray-200">
-                <td className="px-4 py-3">{item.taxName}</td>
-                <td className="px-4 py-3">{_.capitalize(item.taxType)}</td>
-                <td className="px-4 py-3">{item.value}</td>
-                <td className="px-4 py-3">{item.restaurant.name}</td>
+              <tr key={item.id} className="hover:bg-[#F4F5F7] border-b border-[#D8D9DB]">
+                <td className="px-2">{item.taxName}</td>
+                <td className="px-2">{_.capitalize(item.taxType)}</td>
+                <td className="px-2">{item.value}</td>
+                <td className="px-2">{item.restaurant.name}</td>
                 <td className="flex">
                   <span className="px-4 py-3">
                     <Pencil

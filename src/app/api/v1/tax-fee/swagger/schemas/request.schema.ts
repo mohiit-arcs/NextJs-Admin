@@ -48,6 +48,9 @@ export const CreateTaxFeeRequest = {
     value: {
       type: "number",
     },
+    restaurantId: {
+      type: "number",
+    },
   },
 };
 

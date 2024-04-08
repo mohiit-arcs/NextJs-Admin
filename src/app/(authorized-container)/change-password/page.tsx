@@ -59,61 +59,80 @@ const ChangePassword = () => {
   };
 
   return (
-    <div className="bg-gray-100">
-      <h1 className="text-4xl text-center text-black">Change password</h1>
-      <div className="flex flex-col items-center justify-center min-h-screen py-2">
-        <hr />
+    <div className="bg-gray-100 p-10 min-h-screen ">
+
+      <div className="px-44">
+        <h1 className="text-4xl text-left text-black font-extrabold px-4">
+          Change Password
+        </h1>
+      </div>
+
+      <div className="py-8 px-44">
         <form onSubmit={handleSubmit(onSubmit)}>
-          <label className="text-black" htmlFor="currentPassword">
-            Current Password
-          </label>
-          <div className="flex justify-center items-center">
+          {/* <div className="flex gap-[6%] flex-row w-full ">
+
+           <div className="flex flex-col w-[47%]"> */}
+
+          <div className="relative">
+            <p className="px-4 py-3 text-sm">
+              <label className="text-black" htmlFor="currentPassword">
+                Current Password
+              </label>
+            </p>
+
             <input
-              className="w-72 p-3 text-black"
+              className="p-3 mb-5 w-1/2 text-black rounded-full text-sm"
               type={showCurrentPassword ? "text" : "password"}
               id="currentPassword"
               {...register("currentPassword")}
             />
+
             <div
-              className="-ml-7 cursor-pointer"
-              onClick={() => setShowCurrentPassword(!showCurrentPassword)}>
+              className="-ml-7 cursor-pointer absolute top-[50%] left-[48%]"
+              onClick={() => setShowCurrentPassword(!showCurrentPassword)}
+            >
               {showCurrentPassword ? (
                 <Eye color="black" />
               ) : (
                 <EyeOff color="black" />
               )}
             </div>
+
+            {errors.currentPassword && (
+              <span className="text-red-500">
+                {errors.currentPassword.message}
+              </span>
+            )}
           </div>
-          {errors.currentPassword && (
-            <span className="text-red-500">
-              {errors.currentPassword.message}
-            </span>
-          )}
-          <hr />
-          <hr />
-          <label className="text-black" htmlFor="newPassword">
-            New Password
-          </label>
-          <div className="flex justify-center items-center">
+
+          <div className="relative">
+            <p className="px-4 py-3 text-sm">
+              <label className="text-black" htmlFor="newPassword">
+                New Password
+              </label>
+            </p>
+
             <input
-              className="w-72 p-3 text-black"
+              className="p-3 mb-5 w-1/2 text-black rounded-full text-sm"
               type="password"
               id="newPassword"
               {...register("newPassword")}
             />
+
+            {errors.newPassword && (
+              <span className="text-red-500">{errors.newPassword.message}</span>
+            )}
           </div>
-          {errors.newPassword && (
-            <span className="text-red-500">{errors.newPassword.message}</span>
-          )}
-          <br />
+
           <button
             type="submit"
-            className="bg-blue-500 hover:bg-blue-600 m-2 p-2 text-white rounded-md w-full">
+            className="bg-blue-500 hover:bg-blue-600 m-2 py-3 text-white rounded-full w-[150px]"
+          >
             Submit
           </button>
         </form>
       </div>
-    </div>
+      </div>
   );
 };
 

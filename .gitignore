@@ -41,3 +41,6 @@ next-env.d.ts
 
 #front end swagger
 /src/swagger
+
+#restaurant images
+/public/assets/images/restaurants

@@ -1,6 +1,12 @@
 "use client";
 
-import { Pencil, Trash } from "lucide-react";
+import {
+  ChevronRight,
+  Pencil,
+  Search,
+  ShoppingCart,
+  Trash,
+} from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
@@ -16,6 +22,7 @@ import {
   RestaurantsApi,
 } from "@/swagger";
 import { Restaurant } from "@prisma/client";
+import ToolTip from "@/components/ui/tooltip/tooltip";
 
 const entriesPerPageOptions = [5, 10, 15];
 const baseUrl = "http://localhost:3000";
@@ -30,6 +37,7 @@ const RestaurantList = () => {
   const [sortBy, setSortBy] = useState("createdAt");
   const [sortOrder, setSortOrder] = useState("desc");
   const router = useRouter();
+  
 
   const debouncedSearchQuery = useDebounce(searchQuery, 500);
 
@@ -141,18 +149,24 @@ const RestaurantList = () => {
   };
 
   return (
-    <div className="bg-gray-100 min-h-screen">
-      <h1 className="text-4xl text-center text-black">Restaurant List</h1>
-      <div className="flex justify-end">
+    <div className="min-h-screen">
+      
+      <div className="flex justify-between items-center p-5">
         <button
           onClick={() => router.push("add-restaurant")}
-          className="bg-blue-500 hover:bg-blue-600 m-2 p-2 text-white rounded-md w-44">
-          Add New Restaurant
+          className="bg-[#EBA232] hover:bg-[#EBA232] rounded-full w-40 py-4"
+        >
+          <a href="" className=" text-white text-sm">
+            Add Restaurant
+          </a>
         </button>
-        <div className="relative mb-2 w-[400px] mr-6">
+        <div className="flex items-center relative mb-2 w-[400px] mr-6">
+          <Search color="#EBA232" size={18} className="mx-3 mb-1 absolute focus:text-[#EBA232]" />
           <input
             type="text"
-            className="m-0 block h-[58px] w-full rounded shadow-lg border-2 border-solid border-neutral-300 bg-transparent bg-clip-padding px-3 py-4 text-base font-normal leading-tight text-black"
+            className="rounded-full bg-[#FFFFFF] px-9 py-4 text-sm text-[#EBA232] border border-[#EBA232] w-full 
+            placeholder-[#EBA232] placeholder:text-sm
+            focus:border-[#EBA232] focus:outline-none"
             placeholder="Search here..."
             value={searchQuery}
             // onChange={(e) => debouncedUserResults(e)}
@@ -160,61 +174,65 @@ const RestaurantList = () => {
           />
         </div>
       </div>
-      <div className="rounded-lg border border-gray-200 drop-shadow-xl m-5">
-        <table className="w-full rounded-md border-collapse bg-white text-left text-sm text-gray-500">
-          <thead className="bg-gray-500">
+      
+      <div className="overflow-auto rounded-lg border border-gray-200 drop-shadow-sm m-5">
+        <table className=" bg-white text-left text-xs text-gray-500">
+          <thead className="bg-[#0F172A]">
             <RestaurantColumns handleSortByAndOrder={handleSortByAndOrder} />
           </thead>
           <tbody>
             {restaurants!.map((restaurant: any) => (
-              <tr key={restaurant.id} className="hover:bg-gray-200">
-                <td className="px-4 py-3">
+              <tr key={restaurant.id} className="hover:bg-[#F4F5F7] border-b border-[#D8D9DB]">
+                <td className="px-3">
                   <span
-                    className="cursor-pointer hover:text-blue-500"
+                    className="cursor-pointer hover:text-[#0F172A]"
                     onClick={() =>
                       router.push(`/restaurant-info/${restaurant.id}`, {
                         scroll: true,
                       })
-                    }>
+                    }
+                  >
                     {restaurant.name}
                   </span>
                 </td>
-                <td className="px-4 py-3">{restaurant.email}</td>
-                <td className="px-4 py-3">{restaurant.phoneNumber}</td>
-                <td className="px-4 py-3">{restaurant.street}</td>
-                <td className="px-4 py-3">{restaurant.city}</td>
-                <td className="px-4 py-3">{restaurant.zipcode}</td>
-                <td className="px-4 py-3">{restaurant.state}</td>
-                <td className="px-4 py-3">{restaurant.country}</td>
-                <td className="px-4 py-3">
+                <td className="px-2">{restaurant.email}</td>
+                <td className="px-2">{restaurant.phoneNumber}</td>
+                <td className="px-2">{restaurant.street}</td>
+                <td className="px-2">{restaurant.city}</td>
+                <td className="px-2">{restaurant.zipcode}</td>
+                <td className="px-2">{restaurant.state}</td>
+                <td className="px-2">{restaurant.country}</td>
+                {/* <td className="px-2">
                   <img
-                    className="h-16 object-cover"
+                    className="h-12 w-12 object-cover"
                     src={`${baseUrl}/assets/images/restaurants/thumbnail/${restaurant.image}`}
                     alt=""
                   />
-                </td>
-                <td className="flex">
-                  <span className="px-4 py-3">
-                    <Pencil
-                      className="cursor-pointer"
-                      onClick={() => onUpdate(restaurant.id)}
-                    />
+                </td> */}
+                <td className="flex items-center py-3">
+                  <span className="px-1">
+                    <ToolTip tooltip={"Edit Restaurant Details"}>
+                      {" "}
+                      <Pencil
+                        size={15}
+                        className="cursor-pointer"
+                        onClick={() => onUpdate(restaurant.id)}
+                      />
+                    </ToolTip>
                   </span>
-                  <span className="px-4 py-3">
+                  <span className="px-1">
                     <Trash
+                      size={15}
                       className="cursor-pointer"
                       onClick={() => onDelete(restaurant.id)}
                     />
                   </span>
-                  <span className="px-4 py-3">
-                    <button
-                      className="bg-blue-500 hover:bg-blue-600 m-2 p-2 text-white rounded-md"
-                      type="button"
-                      onClick={() =>
-                        router.push(`order-list/${restaurant.id}`)
-                      }>
-                      View Orders
-                    </button>
+                  <span className="px-1">
+                    <ShoppingCart
+                      size={15}
+                      className="cursor-pointer"
+                      onClick={() => router.push(`order-list/${restaurant.id}`)}
+                    />
                   </span>
                 </td>
               </tr>

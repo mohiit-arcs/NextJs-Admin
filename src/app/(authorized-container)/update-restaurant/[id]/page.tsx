@@ -208,39 +208,63 @@ const UpdateRestaurant = () => {
   };
 
   return (
-    <div className="bg-gray-100">
-      <h1 className="text-4xl text-center text-black">Update Restuarant</h1>
-      <div className="flex flex-col items-center justify-center min-h-screen py-2">
-        <hr />
+    <div className="bg-gray-100 p-10 min-h-screen">
+
+
+      <div className="px-44">
+        <h1 className="text-4xl text-left text-black font-extrabold px-4">
+          Update Restuarant
+        </h1>
+      </div>
+
+      <div className="py-8 px-44">
+
         <form onSubmit={handleSubmit(updateRestaurant)}>
-          <label className="text-black" htmlFor="name">
-            Name*
-          </label>
-          <div className="flex justify-center items-center">
+
+          <div className="flex gap-[6%] flex-row w-full ">
+
+            <div className="flex flex-col w-[47%]">
+
+              <div className="relative">
+                
+                <p className="px-4 py-3 text-sm">
+                <label className="text-black" htmlFor="name">
+                  Name*
+                </label>
+                </p>
+
+                <input
+                  className="p-3 mb-5 w-full text-black rounded-full text-sm"
+                  type="text"
+                  id="name"
+                  autoComplete="off"
+                  placeholder="Name"
+                  {...register("name", {
+                    required: true,
+                    validate: validateNoWhiteSpace,
+                  })}
+                />
+
+                {errors.name && (
+                  <div className="error text-red-500">
+                    {messages.form.validation.name.required}
+                  </div>
+                )}
+
+              </div>
+
+              
+
+          <div className="relative">
+            
+            <p className="px-4 py-3 text-sm">
+            <label className="text-black" htmlFor="email">
+              Email*
+            </label>
+            </p>
+
             <input
-              className="w-72 p-3 text-black"
-              type="text"
-              id="name"
-              autoComplete="off"
-              placeholder="Name"
-              {...register("name", {
-                required: true,
-                validate: validateNoWhiteSpace,
-              })}
-            />
-          </div>
-          {errors.name && (
-            <div className="error text-red-500">
-              {messages.form.validation.name.required}
-            </div>
-          )}
-          <hr />
-          <label className="text-black" htmlFor="email">
-            Email*
-          </label>
-          <div className="flex justify-center items-center">
-            <input
-              className="w-72 p-3 text-black"
+              className="p-3 mb-5 w-full text-black rounded-full text-sm"
               type="text"
               id="email"
               autoComplete="off"
@@ -254,48 +278,32 @@ const UpdateRestaurant = () => {
                 },
               })}
             />
-          </div>
-          {errors.email && (
-            <div className="error text-red-500">
-              {errors.email.type === "required" &&
-                messages.form.validation.email.required}
-              {errors.email.type === "pattern" &&
-                messages.form.validation.email.invalid}
-            </div>
-          )}
-          <label className="text-black" htmlFor="image">
-            Image*
-          </label>
-          <div className="flex justify-between items-center">
-            <input
-              className="w-72 p-3 text-black"
-              type="file"
-              accept="image/jpeg, image/png"
-              id="image"
-              onChange={handleImageChange}
-            />
-            {previewImageUrl.trim() !== "" ? (
-              <div>
-                <img
-                  className="h-12 object-cover"
-                  src={previewImageUrl}
-                  alt=""
-                />
+
+            {errors.email && (
+              <div className="error text-red-500">
+                {errors.email.type === "required" &&
+                  messages.form.validation.email.required}
+                {errors.email.type === "pattern" &&
+                  messages.form.validation.email.invalid}
               </div>
-            ) : null}
+            )}
+
           </div>
-          {imageError && (
-            <div className="error text-red-500">
-              {messages.form.validation.image.required}
-            </div>
-          )}
-          <hr />
-          <label className="text-black" htmlFor="phoneNumber">
-            Phone Number*
-          </label>
-          <div className="flex justify-center items-center">
+
+          
+
+          
+          
+          <div className="relative">
+            
+            <p className="px-4 py-3 text-sm">
+            <label className="text-black" htmlFor="phoneNumber">
+              Phone Number*
+            </label>
+            </p>
+
             <input
-              className="w-72 p-3 text-black"
+              className="p-3 mb-5 w-full text-black rounded-full text-sm"
               type="text"
               id="phoneNumber"
               autoComplete="off"
@@ -309,22 +317,29 @@ const UpdateRestaurant = () => {
                 validate: validateNoWhiteSpace,
               })}
             />
+
+            {errors.phoneNumber && (
+              <div className="error text-red-500">
+                {errors.phoneNumber.type === "required" &&
+                  messages.form.validation.phoneNumber.required}
+                {errors.phoneNumber.type === "pattern" &&
+                  messages.form.validation.phoneNumber.invalid}
+              </div>
+            )}
+
           </div>
-          {errors.phoneNumber && (
-            <div className="error text-red-500">
-              {errors.phoneNumber.type === "required" &&
-                messages.form.validation.phoneNumber.required}
-              {errors.phoneNumber.type === "pattern" &&
-                messages.form.validation.phoneNumber.invalid}
-            </div>
-          )}
-          <hr />
-          <label className="text-black" htmlFor="street">
-            Street*
-          </label>
-          <div className="flex justify-center items-center">
+
+          
+          <div className="relative">
+ 
+            <p className="px-4 py-3 text-sm">
+            <label className="text-black" htmlFor="street">
+              Street*
+            </label>
+            </p>
+
             <input
-              className="w-72 p-3 text-black"
+              className="p-3 mb-5 w-full text-black rounded-full text-sm"
               type="text"
               id="street"
               autoComplete="off"
@@ -334,19 +349,29 @@ const UpdateRestaurant = () => {
                 validate: validateNoWhiteSpace,
               })}
             />
-          </div>
-          {errors.street && (
-            <div className="error text-red-500">
-              {messages.form.validation.street.required}
-            </div>
-          )}
-          <hr />
-          <label className="text-black" htmlFor="city">
-            City*
-          </label>
-          <div className="flex justify-center items-center">
+          
+            {errors.street && (
+              <div className="error text-red-500">
+                {messages.form.validation.street.required}
+              </div>
+            )}
+
+         </div>
+
+         </div>
+
+         <div className="flex flex-col w-[47%]">
+          
+          <div className="relative">
+            
+            <p className="px-4 py-3 text-sm">
+            <label className="text-black" htmlFor="city">
+              City*
+            </label>
+            </p>
+
             <input
-              className="w-72 p-3 text-black"
+              className="p-3 mb-5 w-full text-black rounded-full text-sm"
               type="text"
               id="city"
               autoComplete="off"
@@ -356,19 +381,27 @@ const UpdateRestaurant = () => {
                 validate: validateNoWhiteSpace,
               })}
             />
+
+          
+            {errors.city && (
+              <div className="error text-red-500">
+                {messages.form.validation.city.required}
+              </div>
+            )}
+
           </div>
-          {errors.city && (
-            <div className="error text-red-500">
-              {messages.form.validation.city.required}
-            </div>
-          )}
-          <hr />
-          <label className="text-black" htmlFor="zipcode">
-            ZipCode*
-          </label>
-          <div className="flex justify-center items-center">
+
+          
+          <div className="relative">
+ 
+            <p className="px-4 py-3 text-sm">
+            <label className="text-black" htmlFor="zipcode">
+              ZipCode*
+            </label>
+            </p>
+
             <input
-              className="w-72 p-3 text-black"
+              className="p-3 mb-5 w-full text-black rounded-full text-sm"
               id="zipcode"
               autoComplete="off"
               placeholder="ZipCode"
@@ -381,22 +414,30 @@ const UpdateRestaurant = () => {
                 validate: validateNoWhiteSpace,
               })}
             />
+
+          
+            {errors.zipcode && (
+              <div className="error text-red-500">
+                {errors.zipcode.type === "required" &&
+                  messages.form.validation.zipCode.required}
+                {errors.zipcode.type === "pattern" &&
+                  messages.form.validation.zipCode.invalid}
+              </div>
+            )}
+
           </div>
-          {errors.zipcode && (
-            <div className="error text-red-500">
-              {errors.zipcode.type === "required" &&
-                messages.form.validation.zipCode.required}
-              {errors.zipcode.type === "pattern" &&
-                messages.form.validation.zipCode.invalid}
-            </div>
-          )}
-          <hr />
-          <label className="text-black" htmlFor="state">
-            State*
-          </label>
-          <div className="flex justify-center items-center">
+
+          
+          <div className="relative">
+
+            <p className="px-4 py-3 text-sm">
+            <label className="text-black" htmlFor="state">
+              State*
+            </label>
+            </p>
+
             <input
-              className="w-72 p-3 text-black"
+              className="p-3 mb-5 w-full text-black rounded-full text-sm"
               type="text"
               id="state"
               autoComplete="off"
@@ -406,19 +447,26 @@ const UpdateRestaurant = () => {
                 validate: validateNoWhiteSpace,
               })}
             />
+          
+            {errors.state && (
+              <div className="error text-red-500">
+                {messages.form.validation.state.required}
+              </div>
+            )}
+
           </div>
-          {errors.state && (
-            <div className="error text-red-500">
-              {messages.form.validation.state.required}
-            </div>
-          )}
-          <hr />
-          <label className="text-black" htmlFor="country">
-            Country*
-          </label>
-          <div className="flex justify-center items-center">
+
+          
+          <div className="relative">
+
+            <p className="px-4 py-3 text-sm">
+            <label className="text-black" htmlFor="country">
+              Country*
+            </label>
+            </p>
+
             <input
-              className="w-72 p-3 text-black"
+              className="p-3 mb-5 w-full text-black rounded-full text-sm"
               type="text"
               id="country"
               autoComplete="off"
@@ -428,19 +476,66 @@ const UpdateRestaurant = () => {
                 validate: validateNoWhiteSpace,
               })}
             />
+
+          
+            {errors.country && (
+              <div className="error text-red-500">
+                {messages.form.validation.country.required}
+              </div>
+            )}
+            
           </div>
-          {errors.country && (
-            <div className="error text-red-500">
-              {messages.form.validation.country.required}
+
+        </div>
+
+      </div>
+
+          <div className="relative">
+
+            <p className="px-4 py-3 text-sm">
+              <label className="text-black" htmlFor="image">
+                Image*
+              </label>
+            </p>
+
+            <input
+              className="p-3 mb-5 w-full text-black rounded-full text-sm"
+              type="file"
+              accept="image/jpeg, image/png"
+              id="image"
+              onChange={handleImageChange} hidden
+            />
+
+            <div className="bg-[#FFFFFF] p-3 mb-5 w-full text-black rounded-full text-sm">
+              <button type="button" className="bg-blue-500 hover:bg-blue-600 m-2 py-3 text-white rounded-full w-[150px]">Choose File</button>
             </div>
-          )}
-          <hr />
-          <hr />
+            
+            {previewImageUrl.trim() !== "" ? (
+              <div>
+                <img
+                  className="h-12 object-cover absolute top-[48%] right-[7%]"
+                  src={previewImageUrl}
+                  alt=""
+                />
+              </div>
+            ) : null}
+
+            {imageError && (
+            <div className="error text-red-500">
+              {messages.form.validation.image.required}
+            </div>
+            )} 
+
+          </div>
+
+          
+
           <button
             type="submit"
-            className="bg-blue-500 hover:bg-blue-600 m-2 p-2 text-white rounded-md w-full">
+            className="bg-blue-500 hover:bg-blue-600 m-2 py-3 text-white rounded-full w-[150px]">
             Submit
           </button>
+
         </form>
       </div>
     </div>

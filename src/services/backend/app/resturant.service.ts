@@ -19,6 +19,7 @@ export const getRestaurantMenuById = async (id: number) => {
       deletedAt: null,
     },
     select: {
+      name: true,
       taxFee: {
         select: {
           tax_name: true,
@@ -50,6 +51,7 @@ export const getRestaurantMenuById = async (id: number) => {
   }));
 
   return {
+    name: menu?.name,
     menu: menuArray,
     taxFee: menu?.taxFee,
   };
