@@ -12,7 +12,7 @@ const ToolTip: React.FC<props> = ({ children, tooltip }) => {
       <span
         className="invisible group-hover:visible opacity:0
         group-hover:opacity-100 transition bg-black text-white p-1
-        rounded absolute bottom-full right-1 text-[8px] whitespace-nowrap mt-2"
+        rounded absolute bottom-full right-1 text-[10px] whitespace-nowrap mt-2"
       >
         {tooltip}
       </span>
