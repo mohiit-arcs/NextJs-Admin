@@ -16,9 +16,8 @@ import { useUserProfile } from "./user-profile/page";
 import { RoleSlug } from "@prisma/client";
 import { setAuthToken } from "@/services/frontend/storage.service";
 import Link from "next/link";
-import { useState } from "react";
 
-const activeClass = "rounded-full text-[#FFFFFF] bg-[#EBA232]";
+const activeClass = "rounded-full text-[#FFFFFF] bg-[#EBA232] transition-all";
 const Sidebar = ({
   sidebarOpen,
   handleSideBarToggle,
@@ -29,7 +28,7 @@ const Sidebar = ({
   const router = useRouter();
   const pathname = usePathname();
   const { userProfile } = useUserProfile();
-  const sidebarCloseClass = " hidden";
+  const sidebarCloseClass = " hidden transition-all";
 
   const logout = () => {
     setAuthToken("");
@@ -38,14 +37,17 @@ const Sidebar = ({
 
   return (
     <div className="flex h-full">
-      <div className={sidebarOpen == false ? sidebarCloseClass : "w-full"}>
+      <div
+        className={
+          sidebarOpen == false ? sidebarCloseClass : "w-full transition-all"
+        }>
         <div className="bg-[#0F172A] h-full relative px-4 py-2">
           <div className="text-center">
             <h1 className="text-2xl text-[#FFFFFF] font-bold my-3">
               Admin Dashboard
             </h1>
           </div>
-          <ul className="mt-3 overflow-y-auto text-[#FFFFFF] font-normal pr-10">
+          <ul className="mt-3 overflow-y-auto text-[#FFFFFF] font-normal pr-10 transition-all">
             <li className="group hover:text-[#EBA232]">
               <Link
                 className={
@@ -135,7 +137,7 @@ const Sidebar = ({
               </li>
             )}
           </ul>
-          <ul className="text-[#FFFFFF] font-normal absolute bottom-0 pr-10 w-[90%]">
+          <ul className="text-[#FFFFFF] font-normal absolute bottom-0 pr-10 w-[90%] transition-all">
             <li className="group hover:text-[#EBA232]">
               <Link
                 className={
