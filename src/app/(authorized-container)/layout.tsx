@@ -41,7 +41,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <div className="flex w-full h-full bg-[#ffffff]">
-      <div className="w-1/5 h-screen fixed">
+      <div className="lg:w-1/5 h-screen fixed w-full z-10">
         <Sidebar
           sidebarOpen={sidebarOpen}
           handleSideBarToggle={handleSideBarToggle}
@@ -49,7 +49,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       </div>
 
       <div className="w-full flex justify-end">
-        <div className={sidebarOpen ? "w-4/5" : "w-[99%]"}>{children}</div>
+        <div className={sidebarOpen ? "w-4/5 transition-all" : "w-[99%] transition-all"}>{children}</div>
       </div>
     </div>
   );

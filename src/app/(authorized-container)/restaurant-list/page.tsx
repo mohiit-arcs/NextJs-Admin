@@ -153,10 +153,10 @@ const RestaurantList = () => {
       <div className="flex justify-between items-center p-5">
         <button
           onClick={() => router.push("add-restaurant")}
-          className="bg-[#EBA232] hover:bg-[#EBA232] rounded-full w-40 py-4">
-          <a className=" text-white text-sm">Add Restaurant</a>
+          className="bg-[#EBA232] hover:bg-[#EBA232] rounded-full lg:w-40 w-36 py-4">
+          <a className=" text-white lg:text-sm text-xs">Add Restaurant</a>
         </button>
-        <div className="flex items-center relative mb-2 w-[400px] mr-6">
+        <div className="flex items-center relative mb-2 lg:w-[400px] w-[300px] mr-6">
           <Search
             color="#dddddd"
             size={18}
@@ -176,7 +176,7 @@ const RestaurantList = () => {
       </div>
 
       <div className="overflow-auto rounded-lg border border-gray-200 drop-shadow-lg m-5">
-        <table className=" bg-white text-left text-xs text-gray-500 w-full">
+        <table className=" bg-white text-left text-xs text-gray-600 w-full">
           <thead className="bg-[#0F172A]">
             <RestaurantColumns {...restaurantsColProps} />
           </thead>
@@ -216,26 +216,42 @@ const RestaurantList = () => {
                         {" "}
                         <Pencil
                           size={15}
+                          color="black"
                           className="cursor-pointer"
-                          onClick={() => onUpdate(restaurant.id)}
+                          onClick={(event) => {
+                            event.stopPropagation();
+                            onUpdate(restaurant.id);
+                          }}
                         />
                       </ToolTip>
                     </span>
                     <span className="px-1">
-                      <Trash
-                        size={15}
-                        className="cursor-pointer"
-                        onClick={() => onDelete(restaurant.id)}
-                      />
+                      <ToolTip tooltip={"Delete Restaurant"}>
+                        {" "}
+                        <Trash
+                          size={15}
+                          color="black"
+                          className="cursor-pointer"
+                          onClick={(event) => {
+                            event.stopPropagation();
+                            onDelete(restaurant.id);
+                          }}
+                        />
+                      </ToolTip>
                     </span>
                     <span className="px-1">
-                      <ShoppingCart
-                        size={15}
-                        className="cursor-pointer"
-                        onClick={() =>
-                          router.push(`order-list/${restaurant.id}`)
-                        }
-                      />
+                      <ToolTip tooltip={"View Orders"}>
+                        {" "}
+                        <ShoppingCart
+                          size={15}
+                          color="black"
+                          className="cursor-pointer"
+                          onClick={(event) => {
+                            event.stopPropagation();
+                            router.push(`order-list/${restaurant.id}`);
+                          }}
+                        />
+                      </ToolTip>
                     </span>
                   </div>
                 </td>

@@ -16,9 +16,8 @@ import { useUserProfile } from "./user-profile/page";
 import { RoleSlug } from "@prisma/client";
 import { setAuthToken } from "@/services/frontend/storage.service";
 import Link from "next/link";
-import { useState } from "react";
 
-const activeClass = "rounded-full text-[#FFFFFF] bg-[#EBA232]";
+const activeClass = "rounded-full text-[#FFFFFF] bg-[#EBA232] transition-all";
 const Sidebar = ({
   sidebarOpen,
   handleSideBarToggle,
@@ -29,7 +28,7 @@ const Sidebar = ({
   const router = useRouter();
   const pathname = usePathname();
   const { userProfile } = useUserProfile();
-  const sidebarCloseClass = " hidden";
+  const sidebarCloseClass = " hidden transition-all";
 
   const logout = () => {
     setAuthToken("");
@@ -38,14 +37,17 @@ const Sidebar = ({
 
   return (
     <div className="flex h-full">
-      <div className={sidebarOpen == false ? sidebarCloseClass : "w-full"}>
+      <div
+        className={
+          sidebarOpen == false ? sidebarCloseClass : "w-full transition-all"
+        }>
         <div className="bg-[#0F172A] h-full relative px-4 py-2">
           <div className="text-center">
             <h1 className="text-2xl text-[#FFFFFF] font-bold my-3">
               Admin Dashboard
             </h1>
           </div>
-          <ul className="mt-3 overflow-y-auto text-[#FFFFFF] font-normal pr-10">
+          <ul className="mt-3 overflow-y-auto text-[#FFFFFF] font-normal pr-10 transition-all">
             <li className="group hover:text-[#EBA232]">
               <Link
                 className={
@@ -135,7 +137,7 @@ const Sidebar = ({
               </li>
             )}
           </ul>
-          <ul className="text-[#FFFFFF] font-normal absolute bottom-0 pr-10 w-[90%]">
+          <ul className="text-[#FFFFFF] font-normal absolute bottom-0 pr-10 w-[90%] transition-all">
             <li className="group hover:text-[#EBA232]">
               <Link
                 className={
@@ -175,10 +177,64 @@ const Sidebar = ({
       </div>
       <div
         onClick={() => handleSideBarToggle()}
-        className="bg-[#0F172A] w-4 flex items-center justify-center">
-        <span>{sidebarOpen ? <ChevronLeft color="white" /> : null}</span>
-        <span>
-          {sidebarOpen != true ? <ChevronRight color="white" /> : null}
+        className="bg-[#ffffff] w-0 flex items-center justify-center">
+        <span className="mr-7 z-10 absolute right-[-32px]">
+          {sidebarOpen ? (
+            <div>
+              <svg
+                width="16"
+                className="transform scale-x-[-1]"
+                height="96"
+                viewBox="0 0 16 96"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                stroke="#FFFFFF">
+                <path
+                  d="M2.5 0H3C3 20 15 12 15 32V64C15 84 3 76 3 96H2.5V0Z"
+                  fill="#FFFFFF"
+                  fill-opacity="0.12"
+                  stroke="transparent"
+                  stroke-width="0px"></path>
+                <path
+                  d="M0 0H2.5C2.5 20 14.5 12 14.5 32V64C14.5 84 2.5 76 2.5 96H0V0Z"
+                  fill="#FFFFFF"></path>
+              </svg>
+              <ChevronLeft
+                color="black"
+                className="absolute top-[40%] left-[2px]"
+                size={16}
+              />
+            </div>
+          ) : null}
+        </span>
+        <span className="ml-0 z-10 absolute left-[-4px]">
+          {sidebarOpen != true ? (
+            <div>
+              <svg
+                width="16"
+                className=""
+                height="96"
+                viewBox="0 0 16 96"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                stroke="black">
+                <path
+                  d="M2.5 0H3C3 20 15 12 15 32V64C15 84 3 76 3 96H2.5V0Z"
+                  fill="black"
+                  fill-opacity="0.12"
+                  stroke="transparent"
+                  stroke-width="0px"></path>
+                <path
+                  d="M0 0H2.5C2.5 20 14.5 12 14.5 32V64C14.5 84 2.5 76 2.5 96H0V0Z"
+                  fill="black"></path>
+              </svg>
+              <ChevronRight
+                color="white"
+                className="absolute top-[40%]"
+                size={16}
+              />
+            </div>
+          ) : null}
         </span>
       </div>
     </div>
