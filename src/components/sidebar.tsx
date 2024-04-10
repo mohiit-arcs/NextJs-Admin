@@ -10,6 +10,7 @@ import {
   Percent,
   ChevronRight,
   ChevronLeft,
+  ShoppingCart,
 } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { useUserProfile } from "./user-profile/page";
@@ -17,7 +18,8 @@ import { RoleSlug } from "@prisma/client";
 import { setAuthToken } from "@/services/frontend/storage.service";
 import Link from "next/link";
 
-const activeClass = "rounded-full text-[#FFFFFF] bg-[#EBA232] transition-all";
+const activeClass =
+  "rounded-l-full w-full text-[#FFFFFF] bg-[#EBA232] transition-all";
 const Sidebar = ({
   sidebarOpen,
   handleSideBarToggle,
@@ -41,13 +43,13 @@ const Sidebar = ({
         className={
           sidebarOpen == false ? sidebarCloseClass : "w-full transition-all"
         }>
-        <div className="bg-[#0F172A] h-full relative px-4 py-2">
+        <div className="bg-[#0F172A] h-full relative pl-4 py-2">
           <div className="text-center">
             <h1 className="text-2xl text-[#FFFFFF] font-bold my-3">
               Admin Dashboard
             </h1>
           </div>
-          <ul className="mt-3 overflow-y-auto text-[#FFFFFF] font-normal pr-10 transition-all">
+          <ul className="mt-3 overflow-y-auto text-[#FFFFFF] font-normal transition-all">
             <li className="group hover:text-[#EBA232]">
               <Link
                 className={
@@ -136,6 +138,21 @@ const Sidebar = ({
                 </Link>
               </li>
             )}
+            {userProfile?.role?.slug == RoleSlug.restaurantAdmin && (
+              <li className="group hover:text-[#EBA232]">
+                <Link
+                  className={
+                    `flex items-center  p-2 ` +
+                    (pathname === "/order-list" ? activeClass : "")
+                  }
+                  href={"/order-list"}>
+                  <div className="p-1 flex justify-center group-hover:text-[#EBA232] items-center rounded-full w-8 h-8 bg-[#0F172A] text-[#FFFFFF]">
+                    <ShoppingCart width={16} height={16} />
+                  </div>
+                  <span className="text-xs ml-2">Orders</span>
+                </Link>
+              </li>
+            )}
           </ul>
           <ul className="text-[#FFFFFF] font-normal absolute bottom-0 pr-10 w-[90%] transition-all">
             <li className="group hover:text-[#EBA232]">
@@ -192,9 +209,9 @@ const Sidebar = ({
                 <path
                   d="M2.5 0H3C3 20 15 12 15 32V64C15 84 3 76 3 96H2.5V0Z"
                   fill="#FFFFFF"
-                  fill-opacity="0.12"
+                  fillOpacity="0.12"
                   stroke="transparent"
-                  stroke-width="0px"></path>
+                  strokeWidth="0px"></path>
                 <path
                   d="M0 0H2.5C2.5 20 14.5 12 14.5 32V64C14.5 84 2.5 76 2.5 96H0V0Z"
                   fill="#FFFFFF"></path>
@@ -221,9 +238,9 @@ const Sidebar = ({
                 <path
                   d="M2.5 0H3C3 20 15 12 15 32V64C15 84 3 76 3 96H2.5V0Z"
                   fill="black"
-                  fill-opacity="0.12"
+                  fillOpacity="0.12"
                   stroke="transparent"
-                  stroke-width="0px"></path>
+                  strokeWidth="0px"></path>
                 <path
                   d="M0 0H2.5C2.5 20 14.5 12 14.5 32V64C14.5 84 2.5 76 2.5 96H0V0Z"
                   fill="black"></path>
