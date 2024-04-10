@@ -5,7 +5,6 @@ const taxFeeColumns = [
   { field: "tax_name", label: "Name", sortable: true },
   { field: "tax_type", label: "Type", sortable: true },
   { field: "value", label: "Value", sortable: true },
-  { field: "restaurant", label: "Restaurant", sortable: false },
   { field: "actions", label: "Actions", sortable: false },
 ];
 

@@ -1,13 +1,5 @@
 export const OrdersListRequest = [
   {
-    name: "id",
-    required: true,
-    in: "path",
-    schema: {
-      type: "number",
-    },
-  },
-  {
     name: "page",
     in: "query",
     schema: {
@@ -40,6 +32,13 @@ export const OrdersListRequest = [
     in: "query",
     schema: {
       type: "string",
+    },
+  },
+  {
+    name: "restaurantId",
+    in: "query",
+    schema: {
+      type: "number",
     },
   },
 ];

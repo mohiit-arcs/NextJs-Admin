@@ -1,6 +1,6 @@
 import _ from "lodash";
 import { OrdersListRequest } from "./schemas";
-import { publicResponses } from "../../../swagger";
+import { publicResponses } from "../../swagger";
 
 export * from "./schemas";
 const successListResponse = {

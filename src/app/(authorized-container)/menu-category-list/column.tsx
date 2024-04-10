@@ -3,7 +3,6 @@ import { ChevronDown, ChevronUp } from "lucide-react";
 
 const menuCategoryColumns = [
   { field: "name", label: "Name", sortable: true },
-  { field: "restaurant", label: "Restaurant", sortable: false },
   { field: "actions", label: "Actions", sortable: false },
 ];
 

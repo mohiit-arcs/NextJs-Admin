@@ -102,21 +102,15 @@ export const listMenuCategory = async (
   skip: number,
   take: number,
   userId: number,
-  restaurantId?: number
+  restaurantId: number
 ) => {
   let whereCondition: any;
-  if (!Number.isNaN(restaurantId)) {
-    whereCondition = {
-      userId: userId,
-      restaurantId: restaurantId,
-      deletedAt: { equals: null },
-    };
-  } else {
-    whereCondition = {
-      userId: userId,
-      deletedAt: { equals: null },
-    };
-  }
+  whereCondition = {
+    userId: userId,
+    restaurantId: restaurantId,
+    deletedAt: { equals: null },
+  };
+
   const orderBy = {
     [sortBy]: sortOrder,
   };
@@ -126,6 +120,7 @@ export const listMenuCategory = async (
       AND: [
         {
           userId: userId,
+          restaurantId: restaurantId,
           deletedAt: {
             equals: null,
           },

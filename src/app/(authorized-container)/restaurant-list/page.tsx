@@ -1,6 +1,6 @@
 "use client";
 
-import { Pencil, Search, ShoppingCart, Trash } from "lucide-react";
+import { Pencil, Search, Trash } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
@@ -153,7 +153,7 @@ const RestaurantList = () => {
       <div className="flex justify-between items-center p-5">
         <button
           onClick={() => router.push("add-restaurant")}
-          className="bg-[#EBA232] hover:bg-[#EBA232] rounded-full lg:w-40 w-36 py-4">
+          className="bg-[#EBA232] hover:bg-[#EBA232] rounded-[8px] lg:w-40 w-36 py-4">
           <a className=" text-white lg:text-sm text-xs">Add Restaurant</a>
         </button>
         <div className="flex items-center relative mb-2 lg:w-[400px] w-[300px] mr-6">
@@ -235,20 +235,6 @@ const RestaurantList = () => {
                           onClick={(event) => {
                             event.stopPropagation();
                             onDelete(restaurant.id);
-                          }}
-                        />
-                      </ToolTip>
-                    </span>
-                    <span className="px-1">
-                      <ToolTip tooltip={"View Orders"}>
-                        {" "}
-                        <ShoppingCart
-                          size={15}
-                          color="black"
-                          className="cursor-pointer"
-                          onClick={(event) => {
-                            event.stopPropagation();
-                            router.push(`order-list/${restaurant.id}`);
                           }}
                         />
                       </ToolTip>

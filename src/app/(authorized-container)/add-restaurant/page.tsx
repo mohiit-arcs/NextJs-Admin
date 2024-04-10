@@ -137,8 +137,8 @@ const AddRestaurant = () => {
   };
 
   return (
-    <div className="bg-gray-100 p-10 min-h-screen px-32">
-      <div className="border px-8 pt-8 rounded-xl shadow-lg bg-[#dfe2e7]">
+    <div className="bg-[#FFFFFF] p-5 min-h-screen px-5">
+      <div className="border px-4 pt-8 rounded-xl shadow-lg bg-[#dfe2e7]">
         <div className="px-4">
           <h1 className="text-4xl text-left text-black font-extrabold px-4">
             Add Restuarant
@@ -150,14 +150,14 @@ const AddRestaurant = () => {
             <div className="flex gap-[6%] flex-row w-full ">
               <div className="flex flex-col w-[47%]">
                 <div className="relative">
-                  <p className="px-4 py-3 text-sm">
+                  <p className="px-0 py-3 text-sm">
                     <label className="text-black" htmlFor="name">
-                      Name :
+                      Name:
                     </label>
                   </p>
 
                   <input
-                    className="p-3 mb-5 w-full text-black rounded-full text-sm"
+                    className="p-3 mb-5 w-full text-black rounded-[8px] text-sm"
                     type="text"
                     id="name"
                     autoComplete="off"
@@ -176,14 +176,14 @@ const AddRestaurant = () => {
                 </div>
 
                 <div className="relative">
-                  <p className="px-4 py-3 text-sm">
+                  <p className="px-0 py-3 text-sm">
                     <label className="text-black" htmlFor="email">
-                      Email :
+                      Email:
                     </label>
                   </p>
 
                   <input
-                    className="p-3 mb-5 w-full text-black rounded-full text-sm"
+                    className="p-3 mb-5 w-full text-black rounded-[8px] text-sm"
                     type="text"
                     id="email"
                     autoComplete="off"
@@ -209,14 +209,14 @@ const AddRestaurant = () => {
                 </div>
 
                 <div className="relative">
-                  <p className="px-4 py-3 text-sm">
+                  <p className="px-0 py-3 text-sm">
                     <label className="text-black" htmlFor="phoneNumber">
-                      Phone Number :
+                      Phone Number:
                     </label>
                   </p>
 
                   <input
-                    className="p-3 mb-5 w-full text-black rounded-full text-sm"
+                    className="p-3 mb-5 w-full text-black rounded-[8px] text-sm"
                     type="text"
                     id="phoneNumber"
                     autoComplete="off"
@@ -242,14 +242,14 @@ const AddRestaurant = () => {
                 </div>
 
                 <div className="relative">
-                  <p className="px-4 py-3 text-sm">
+                  <p className="px-0 py-3 text-sm">
                     <label className="text-black" htmlFor="street">
-                      Street :
+                      Street:
                     </label>
                   </p>
 
                   <input
-                    className="p-3 mb-5 w-full text-black rounded-full text-sm"
+                    className="p-3 mb-5 w-full text-black rounded-[8px] text-sm"
                     type="text"
                     id="street"
                     autoComplete="off"
@@ -270,14 +270,14 @@ const AddRestaurant = () => {
 
               <div className="flex flex-col w-[47%]">
                 <div className="relative">
-                  <p className="px-4 py-3 text-sm">
+                  <p className="px-0 py-3 text-sm">
                     <label className="text-black" htmlFor="city">
-                      City :
+                      City:
                     </label>
                   </p>
 
                   <input
-                    className="p-3 mb-5 w-full text-black rounded-full text-sm"
+                    className="p-3 mb-5 w-full text-black rounded-[8px] text-sm"
                     type="text"
                     id="city"
                     autoComplete="off"
@@ -296,14 +296,14 @@ const AddRestaurant = () => {
                 </div>
 
                 <div className="relative">
-                  <p className="px-4 py-3 text-sm">
+                  <p className="px-0 py-3 text-sm">
                     <label className="text-black" htmlFor="zipcode">
-                      ZipCode :
+                      ZipCode:
                     </label>
                   </p>
 
                   <input
-                    className="p-3 mb-5 w-full text-black rounded-full text-sm"
+                    className="p-3 mb-5 w-full text-black rounded-[8px] text-sm"
                     type="number"
                     id="zipcode"
                     autoComplete="off"
@@ -329,14 +329,14 @@ const AddRestaurant = () => {
                 </div>
 
                 <div className="relative">
-                  <p className="px-4 py-3 text-sm">
+                  <p className="px-0 py-3 text-sm">
                     <label className="text-black" htmlFor="state">
-                      State :
+                      State:
                     </label>
                   </p>
 
                   <input
-                    className="p-3 mb-5 w-full text-black rounded-full text-sm"
+                    className="p-3 mb-5 w-full text-black rounded-[8px] text-sm"
                     type="text"
                     id="state"
                     autoComplete="off"
@@ -355,14 +355,14 @@ const AddRestaurant = () => {
                 </div>
 
                 <div className="relative">
-                  <p className="px-4 py-3 text-sm">
+                  <p className="px-0 py-3 text-sm">
                     <label className="text-black" htmlFor="country">
-                      Country :
+                      Country:
                     </label>
                   </p>
 
                   <input
-                    className="p-3 mb-5 w-full text-black rounded-full text-sm"
+                    className="p-3 mb-5 w-full text-black rounded-[8px] text-sm"
                     type="text"
                     id="country"
                     autoComplete="off"
@@ -383,12 +383,12 @@ const AddRestaurant = () => {
             </div>
 
             <div className="relative">
-              <p className="px-4 py-3 text-sm">
-                <p className="text-black w-full">Image : </p>
+              <p className="px-0 py-3 text-sm">
+                <p className="text-black w-full">Image: </p>
               </p>
 
-              <div className="bg-[#FFFFFF] p-3 mb-5 w-full text-black rounded-full text-sm">
-                <div className="bg-[#EBA232] hover:bg-[#cc861d] m-2 py-4 flex items-center text-center text-white rounded-full w-[150px]">
+              <div className="bg-[#FFFFFF] p-1 mb-5 w-full text-black rounded-[8px] text-sm">
+                <div className="bg-[#EBA232] hover:bg-[#cc861d] m-2 py-4 flex items-center text-center text-white rounded-[8px] w-[150px]">
                   <label className="w-full" htmlFor="image">
                     Choose file
                   </label>
@@ -420,7 +420,7 @@ const AddRestaurant = () => {
 
             <button
               type="submit"
-              className="bg-[#EBA232] hover:bg-[#cc861d] m-2 py-3 text-white rounded-full w-[150px]">
+              className="bg-[#EBA232] hover:bg-[#cc861d] m-2 py-3 text-white rounded-[8px] w-[150px]">
               Submit
             </button>
           </form>

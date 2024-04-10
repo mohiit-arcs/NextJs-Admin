@@ -56,13 +56,21 @@ export const GET = acl("tax-fees", "full", async (request: ApiRequest) => {
     const search = searchParams.get("search")?.trim() || "";
     const sortBy = searchParams.get("sortBy") || "createdAt";
     const sortOrder = searchParams.get("sortOrder") || "desc";
+    const restaurantId = searchParams.get("restaurantId")!;
     if (isNaN(parseInt(page)) || isNaN(parseInt(limit))) {
       throw badRequest(messages.error.badRequest);
     }
     const skip = (parseInt(page) - 1) * parseInt(limit);
     const take = parseInt(limit);
     return successResponse({
-      data: await taxFeeList(search, sortBy, sortOrder, skip, take),
+      data: await taxFeeList(
+        search,
+        sortBy,
+        sortOrder,
+        skip,
+        take,
+        parseInt(restaurantId)
+      ),
     });
   } catch (error) {
     return errorResponse(error);
