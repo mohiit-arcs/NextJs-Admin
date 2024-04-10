@@ -99,9 +99,11 @@ export const taxFeeList = async (
   sortBy: string,
   sortOrder: string,
   skip: number,
-  take: number
+  take: number,
+  restaurantId: number
 ) => {
   let whereCondition: any = {
+    restaurantId: restaurantId,
     deletedAt: { equals: null },
   };
   const orderBy = {
@@ -112,6 +114,7 @@ export const taxFeeList = async (
     whereCondition = {
       AND: [
         {
+          restaurantId: restaurantId,
           deletedAt: {
             equals: null,
           },
@@ -135,6 +138,10 @@ export const taxFeeList = async (
     take,
     orderBy,
     where: whereCondition,
+    // where: {
+    //     restaurantId: restaurantId,
+    //     deletedAt: null,
+    // },
     select: {
       id: true,
       tax_name: true,

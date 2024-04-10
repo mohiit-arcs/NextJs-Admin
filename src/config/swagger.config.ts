@@ -105,7 +105,7 @@ import {
 import {
   OrdersAPI,
   OrdersListResponse,
-} from "@/app/api/v1/orders/[id]/swagger";
+} from "@/app/api/v1/orders/swagger";
 
 export const getApiDocs = () => {
   const spec = createSwaggerSpec({
@@ -196,7 +196,7 @@ export const getApiDocs = () => {
         "/menu-categories/{id}": MenuCategoryByIdAPI,
         "/tax-fee": TaxFeeAPI,
         "/tax-fee/{id}": TaxFeeByIdAPI,
-        "/orders/{id}": OrdersAPI,
+        "/orders": OrdersAPI,
       },
     },
   }) as Options;

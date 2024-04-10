@@ -1,7 +1,5 @@
 import { messages } from "@/messages/frontend/index.message";
-import { setAuthToken } from "@/services/frontend/storage.service";
 import { LoginResponseDataProfile } from "@/swagger";
-import { useRouter } from "next/navigation";
 import { ReactNode, createContext, useContext, useState } from "react";
 
 type UserProfileContextType = {

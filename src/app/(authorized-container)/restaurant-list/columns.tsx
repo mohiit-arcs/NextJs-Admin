@@ -35,7 +35,7 @@ const RestaurantColumns: React.FC<RestaurantColumnsProps> = ({
     return (
       <>
         <ChevronUp className="h-[12px]" />
-        <ChevronDown className="h-[12px]" />
+        <ChevronDown className="h-[12px] -mt-1" />
       </>
     );
   };

@@ -1,19 +1,26 @@
 "use client";
 
-import { User } from "@prisma/client";
+import { Restaurant, User } from "@prisma/client";
 import { Pencil } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import _ from "lodash";
 import Pagination from "@/components/ui/table/pagination/pagination";
 import useDebounce from "@/hooks/useDebounce";
 import UserColumns, { OrdersListColumnsProps } from "./columns";
-import { OrdersApi, OrdersListResponse } from "@/swagger";
+import {
+  OrdersApi,
+  OrdersListResponse,
+  RestaurantListResponse,
+  RestaurantsApi,
+} from "@/swagger";
+import { useRestaurantContext } from "@/contexts/restaurant/RestaurantContext";
 
 const entriesPerPageOptions = [5, 10, 15];
 
 const UserList = () => {
-  const { id } = useParams();
+  const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
+  const { defaultRestuarant, setDefaultRestaurant } = useRestaurantContext();
   const [orders, setOrders] = useState<User[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [ordersLimit, setOrdersLimit] = useState(5);
@@ -27,24 +34,52 @@ const UserList = () => {
   const debouncedSearchQuery = useDebounce(searchQuery, 500);
 
   useEffect(() => {
+    getRestaurants();
     getOrders();
 
     return () => {
       // debouncedUserResults.cancel();
     };
-  }, [currentPage, ordersLimit, debouncedSearchQuery, sortBy, sortOrder]);
+  }, [
+    currentPage,
+    ordersLimit,
+    debouncedSearchQuery,
+    sortBy,
+    sortOrder,
+    defaultRestuarant,
+  ]);
+
+  const getRestaurants = async () => {
+    try {
+      const restaurantsApi = new RestaurantsApi();
+      restaurantsApi
+        .findRestaurants({
+          limit: 10,
+          page: 1,
+          search: "",
+          sortBy: "createdAt",
+          sortOrder: "desc",
+        })
+        .then((response: RestaurantListResponse) => {
+          const restaurants = response.data?.rows as Restaurant[];
+          setRestaurants(restaurants);
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const getOrders = async () => {
     try {
       const ordersApi = new OrdersApi();
       ordersApi
         .findOrdersByRestaurantId({
-          id: Number(id),
           limit: ordersLimit,
           page: currentPage,
           search: debouncedSearchQuery,
           sortBy: sortBy,
           sortOrder: sortOrder,
+          restaurantId: defaultRestuarant?.id,
         })
         .then((response: OrdersListResponse) => {
           const orders = response.data?.rows as [];
@@ -57,30 +92,6 @@ const UserList = () => {
       console.log(error);
     }
   };
-
-  //   const onDelete = async (orderId: number) => {
-  //     try {
-  //       const toDelete = confirm("Are you sure, you want to delete the order?");
-  //       if (toDelete) {
-  //         const userRequestApi = new UserRequestApi();
-  //         userRequestApi
-  //           .deleteUserById({
-  //             id: orderId,
-  //           })
-  //           .then((response: UserDeleteResponse) => {
-  //             if (response.data?.success) {
-  //               const updatedUsers = orders.filter((order) => order.id != orderId);
-  //               setOrders(updatedUsers);
-  //               setTotalOrders(response.data.count);
-  //               toast.success(response.data.message);
-  //             }
-  //           });
-  //       }
-  //       return;
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   };
 
   const onUpdate = async (userId: number) => {
     router.push(`/update-user/${userId}`, { scroll: true });
@@ -137,9 +148,41 @@ const UserList = () => {
   };
 
   return (
-    <div className="bg-gray-100 min-h-screen">
-      <h1 className="text-4xl text-center text-black">Orders List</h1>
-      <div className="flex justify-end">
+    <div className="min-h-screen">
+      <div className="py-8">
+        <h1 className="text-4xl font-bold text-center text-black">
+          Orders List
+        </h1>
+      </div>
+
+      <div className="w-44 m-2">
+        <label className="text-black" htmlFor="restaurant">
+          Default Restaurant
+        </label>
+        <hr />
+        <select
+          value={defaultRestuarant?.id}
+          className="w-full cursor-pointer p-2 font-medium leading-6 text-black"
+          onChange={(e) => {
+            setDefaultRestaurant(
+              restaurants.find(
+                (restaurant) => restaurant.id === parseInt(e.target.value)
+              ) as any
+            );
+          }}
+          id="restaurant">
+          <option disabled>-- Select Restaurant --</option>
+          {restaurants.map((item: any) => {
+            return (
+              <option key={item.id} className="text-gray-900" value={item.id}>
+                {item.name}
+              </option>
+            );
+          })}
+        </select>
+      </div>
+
+      <div className="flex justify-end items-center p-5">
         <div className="relative mb-2 w-[400px] mr-6">
           <input
             type="text"

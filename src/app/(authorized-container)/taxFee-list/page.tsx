@@ -10,16 +10,21 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import TaxFeeColumnsListColumns, { FoodItemListColumnsProps } from "./column";
 import {
+  RestaurantListResponse,
+  RestaurantsApi,
   TaxFeeApi,
   TaxFeeDeleteResponse,
   TaxFeeListResponse,
   TaxFeeRequestApi,
 } from "@/swagger";
-import { TaxFee } from "@prisma/client";
+import { Restaurant, TaxFee } from "@prisma/client";
+import { useRestaurantContext } from "@/contexts/restaurant/RestaurantContext";
 
 const entriesPerPageOptions = [5, 10, 15];
 
 const TaxFeeList = () => {
+  const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
+  const { defaultRestuarant, setDefaultRestaurant } = useRestaurantContext();
   const [taxFee, setTaxFee] = useState<TaxFee[]>();
   const [currentPage, setCurrentPage] = useState(1);
   const [taxFeeLimit, setTaxFeeLimit] = useState(5);
@@ -34,10 +39,35 @@ const TaxFeeList = () => {
 
   useEffect(() => {
     getTaxFee();
+  }, [defaultRestuarant]);
+
+  useEffect(() => {
+    getRestaurants();
+
     return () => {
       debouncedUserResults.cancel();
     };
   }, [currentPage, taxFeeLimit, debouncedSearchQuery, sortBy, sortOrder]);
+
+  const getRestaurants = async () => {
+    try {
+      const restaurantsApi = new RestaurantsApi();
+      restaurantsApi
+        .findRestaurants({
+          limit: 10,
+          page: 1,
+          search: "",
+          sortBy: "createdAt",
+          sortOrder: "desc",
+        })
+        .then((response: RestaurantListResponse) => {
+          const restaurants = response.data?.rows as Restaurant[];
+          setRestaurants(restaurants);
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const getTaxFee = async () => {
     try {
@@ -49,6 +79,7 @@ const TaxFeeList = () => {
           search: debouncedSearchQuery,
           sortBy: sortBy,
           sortOrder: sortOrder,
+          restaurantId: defaultRestuarant?.id,
         })
         .then((response: TaxFeeListResponse) => {
           const taxFee = response.data?.rows as TaxFee[];
@@ -149,6 +180,33 @@ const TaxFeeList = () => {
         </h1>
       </div>
 
+      <div className="w-44 m-2">
+        <label className="text-black" htmlFor="restaurant">
+          Default Restaurant
+        </label>
+        <hr />
+        <select
+          value={defaultRestuarant?.id}
+          className="w-full cursor-pointer p-2 font-medium leading-6 text-black"
+          onChange={(e) => {
+            setDefaultRestaurant(
+              restaurants.find(
+                (restaurant) => restaurant.id === parseInt(e.target.value)
+              ) as any
+            );
+          }}
+          id="restaurant">
+          <option disabled>-- Select Restaurant --</option>
+          {restaurants.map((item: any) => {
+            return (
+              <option key={item.id} className="text-gray-900" value={item.id}>
+                {item.name}
+              </option>
+            );
+          })}
+        </select>
+      </div>
+
       <div className="flex justify-between items-center p-5">
         <button
           onClick={() => router.push("add-taxfee")}
@@ -184,7 +242,6 @@ const TaxFeeList = () => {
                 <td className="px-2">{item.taxName}</td>
                 <td className="px-2">{_.capitalize(item.taxType)}</td>
                 <td className="px-2">{item.value}</td>
-                <td className="px-2">{item.restaurant.name}</td>
                 <td className="flex">
                   <span className="px-4 py-3">
                     <Pencil

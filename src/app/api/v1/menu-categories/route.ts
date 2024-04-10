@@ -69,7 +69,7 @@ export const GET = acl("menu-category", "full", async (request: ApiRequest) => {
     const search = searchParams.get("search")?.trim() || "";
     const sortBy = searchParams.get("sortBy") || "createdAt";
     const sortOrder = searchParams.get("sortOrder") || "desc";
-    const restaurantId = searchParams.get("restaurantId") as string;
+    const restaurantId = searchParams.get("restaurantId")!;
     if (isNaN(parseInt(page)) || isNaN(parseInt(limit))) {
       throw badRequest(messages.error.badRequest);
     }

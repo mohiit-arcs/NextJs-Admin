@@ -34,6 +34,13 @@ export const TaxFeeListRequest = [
       type: "string",
     },
   },
+  {
+    name: "restaurantId",
+    in: "query",
+    schema: {
+      type: "number",
+    },
+  },
 ];
 
 export const CreateTaxFeeRequest = {

@@ -9,11 +9,20 @@ import { useEffect, useMemo, useState } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import MenuCategoryListColumns, { FoodItemListColumnsProps } from "./column";
-import { MenuCategoryApi, MenuCategoryListResponse } from "@/swagger";
+import {
+  MenuCategoryApi,
+  MenuCategoryListResponse,
+  RestaurantListResponse,
+  RestaurantsApi,
+} from "@/swagger";
+import { Restaurant } from "@prisma/client";
+import { useRestaurantContext } from "@/contexts/restaurant/RestaurantContext";
 
 const entriesPerPageOptions = [5, 10, 15];
 
 const MenuCategoryList = () => {
+  const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
+  const { defaultRestuarant, setDefaultRestaurant } = useRestaurantContext();
   const [menuCategories, setMenuCategories] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [menuCategoriesLimit, setMenuCategoriesLimit] = useState(5);
@@ -27,6 +36,7 @@ const MenuCategoryList = () => {
   const debouncedSearchQuery = useDebounce(searchQuery, 500);
 
   useEffect(() => {
+    getRestaurants();
     getMenuCategories();
 
     return () => {
@@ -38,7 +48,28 @@ const MenuCategoryList = () => {
     debouncedSearchQuery,
     sortBy,
     sortOrder,
+    defaultRestuarant,
   ]);
+
+  const getRestaurants = async () => {
+    try {
+      const restaurantsApi = new RestaurantsApi();
+      restaurantsApi
+        .findRestaurants({
+          limit: 10,
+          page: 1,
+          search: "",
+          sortBy: "createdAt",
+          sortOrder: "desc",
+        })
+        .then((response: RestaurantListResponse) => {
+          const restaurants = response.data?.rows as Restaurant[];
+          setRestaurants(restaurants);
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const getMenuCategories = async () => {
     try {
@@ -50,6 +81,7 @@ const MenuCategoryList = () => {
           search: debouncedSearchQuery,
           sortBy: sortBy,
           sortOrder: sortOrder,
+          restaurantId: defaultRestuarant?.id,
         })
         .then((response: MenuCategoryListResponse) => {
           const menuCategories: [] = response.data?.rows as [];
@@ -118,9 +150,41 @@ const MenuCategoryList = () => {
     sortOrder,
   };
   return (
-    <div className="bg-gray-100 min-h-screen">
-      <h1 className="text-4xl text-center text-black">Menu Category List</h1>
-      <div className="flex justify-end">
+    <div className="min-h-screen">
+      <div className="py-8">
+        <h1 className="text-4xl font-bold text-center text-black">
+          Menu Category List
+        </h1>
+      </div>
+
+      <div className="w-44 m-2">
+        <label className="text-black" htmlFor="restaurant">
+          Default Restaurant
+        </label>
+        <hr />
+        <select
+          value={defaultRestuarant?.id}
+          className="w-full cursor-pointer p-2 font-medium leading-6 text-black"
+          onChange={(e) => {
+            setDefaultRestaurant(
+              restaurants.find(
+                (restaurant) => restaurant.id === parseInt(e.target.value)
+              ) as any
+            );
+          }}
+          id="restaurant">
+          <option disabled>-- Select Restaurant --</option>
+          {restaurants.map((item: any) => {
+            return (
+              <option key={item.id} className="text-gray-900" value={item.id}>
+                {item.name}
+              </option>
+            );
+          })}
+        </select>
+      </div>
+
+      <div className="flex justify-end items-center p-5">
         <button
           onClick={() => router.push("add-menu-category")}
           className="bg-blue-500 hover:bg-blue-600 m-2 p-2 text-white rounded-md w-44">
@@ -145,7 +209,6 @@ const MenuCategoryList = () => {
             {menuCategories!.map((menuCategory: any) => (
               <tr key={menuCategory.id} className="hover:bg-gray-200">
                 <td className="px-4 py-3">{menuCategory.name}</td>
-                <td className="px-4 py-3">{menuCategory.restaurant.name}</td>
                 <td className="flex">
                   <span className="px-4 py-3">
                     <Pencil
