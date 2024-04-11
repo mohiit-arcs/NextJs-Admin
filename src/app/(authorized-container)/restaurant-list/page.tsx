@@ -17,6 +17,7 @@ import {
 } from "@/swagger";
 import { Restaurant } from "@prisma/client";
 import ToolTip from "@/components/ui/tooltip/tooltip";
+import LimiPerPage from "@/components/ui/table/pagination/limitPerPage/limitPerPage";
 
 const entriesPerPageOptions = [5, 10, 15];
 const baseUrl = "http://localhost:3000";
@@ -174,6 +175,13 @@ const RestaurantList = () => {
         </div>
       </div>
 
+      <div className="text-right pr-6">
+        <LimiPerPage
+          usersLimit={restaurantsLimit}
+          handleEntriesPerPageChange={handleEntriesPerPageChange}
+          entriesPerPageOptions={entriesPerPageOptions}></LimiPerPage>
+      </div>
+
       <div className="overflow-auto rounded-lg border border-gray-200 drop-shadow-lg m-5">
         <table className=" bg-white text-left text-xs text-gray-600 w-full">
           <thead className="bg-[#0F172A]">
@@ -248,10 +256,7 @@ const RestaurantList = () => {
 
       <Pagination
         totalUsers={totalRestaurants}
-        usersLimit={restaurantsLimit}
         currentPage={currentPage}
-        entriesPerPageOptions={entriesPerPageOptions}
-        handleEntriesPerPageChange={handleEntriesPerPageChange}
         goToPrevPage={goToPrevPage}
         goToNextPage={goToNextPage}
       />

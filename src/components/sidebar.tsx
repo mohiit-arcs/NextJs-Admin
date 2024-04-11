@@ -11,12 +11,20 @@ import {
   ChevronRight,
   ChevronLeft,
   ShoppingCart,
+  Pencil,
 } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { useUserProfile } from "./user-profile/page";
-import { RoleSlug } from "@prisma/client";
+import { Restaurant, RoleSlug } from "@prisma/client";
 import { setAuthToken } from "@/services/frontend/storage.service";
 import Link from "next/link";
+import { useRestaurantContext } from "@/contexts/restaurant/RestaurantContext";
+import { useEffect, useState } from "react";
+import Dialog from "./ui/dialog/dialog";
+import { RestaurantListResponse, RestaurantsApi } from "@/swagger";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { messages } from "@/messages/frontend/index.message";
 
 const activeClass =
   "rounded-l-full w-full text-[#FFFFFF] bg-[#EBA232] transition-all";
@@ -30,11 +38,73 @@ const Sidebar = ({
   const router = useRouter();
   const pathname = usePathname();
   const { userProfile } = useUserProfile();
+  const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
+  const { defaultRestuarant, setDefaultRestaurant } = useRestaurantContext();
+  const [isShowDialog, setIsShowDialog] = useState(false);
   const sidebarCloseClass = " hidden transition-all";
+
+  const handleCloseDialog = () => {
+    setIsShowDialog(!isShowDialog);
+  };
 
   const logout = () => {
     setAuthToken("");
     router.push("/login");
+  };
+
+  useEffect(() => {
+    if (userProfile?.role?.slug == RoleSlug.restaurantAdmin) {
+      getRestaurants();
+    }
+  }, [defaultRestuarant]);
+
+  const getRestaurants = async () => {
+    try {
+      const restaurantsApi = new RestaurantsApi();
+      restaurantsApi
+        .findRestaurants({
+          limit: 10,
+          page: 1,
+          search: "",
+          sortBy: "createdAt",
+          sortOrder: "desc",
+        })
+        .then((response: RestaurantListResponse) => {
+          const restaurants = response.data?.rows as Restaurant[];
+          setRestaurants(restaurants);
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const DialogActions = () => {
+    return (
+      <div className="bg-gray-50 px-4 pb-6">
+        <select
+          value={defaultRestuarant?.id}
+          className="w-full cursor-pointer p-2 font-medium leading-6 text-black transition-all"
+          onChange={(e) => {
+            setDefaultRestaurant(
+              restaurants.find(
+                (restaurant) => restaurant.id === parseInt(e.target.value)
+              ) as any
+            );
+            setIsShowDialog(!isShowDialog);
+            toast.success(messages.defaultResataurantUpdate);
+          }}
+          id="restaurant">
+          <option disabled>-- Select Restaurant --</option>
+          {restaurants.map((item: any) => {
+            return (
+              <option key={item.id} className="text-gray-900" value={item.id}>
+                {item.name}
+              </option>
+            );
+          })}
+        </select>
+      </div>
+    );
   };
 
   return (
@@ -49,6 +119,27 @@ const Sidebar = ({
               Admin Dashboard
             </h1>
           </div>
+          {defaultRestuarant != null ? (
+            <div className="flex justify-between px-6">
+              <p className="text-right">{defaultRestuarant?.name}</p>
+              {restaurants.length > 0 ? (
+                <Pencil
+                  onClick={handleCloseDialog}
+                  color="white"
+                  width={16}
+                  height={16}
+                />
+              ) : null}
+              {isShowDialog && (
+                <Dialog
+                  title={"Select Restaurant"}
+                  handleCloseDialog={handleCloseDialog}
+                  actionsPannel={DialogActions()}
+                  size={"w-2/7"}
+                  color={"bg-green"}></Dialog>
+              )}
+            </div>
+          ) : null}
           <ul className="mt-3 overflow-y-auto text-[#FFFFFF] font-normal transition-all">
             <li className="group hover:text-[#EBA232]">
               <Link
@@ -154,7 +245,7 @@ const Sidebar = ({
               </li>
             )}
           </ul>
-          <ul className="text-[#FFFFFF] font-normal absolute bottom-0 pr-10 w-[90%] transition-all">
+          <ul className="text-[#FFFFFF] font-normal absolute bottom-0 w-full pr-4 transition-all">
             <li className="group hover:text-[#EBA232]">
               <Link
                 className={
