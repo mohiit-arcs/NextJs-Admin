@@ -153,6 +153,7 @@ export const taxFeeList = async (
 
   const taxFeeItemsCount = await prisma.taxFee.count({
     where: {
+      restaurantId: restaurantId,
       deletedAt: null,
     },
   });
