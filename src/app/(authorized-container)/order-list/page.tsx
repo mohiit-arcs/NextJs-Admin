@@ -8,18 +8,13 @@ import _ from "lodash";
 import Pagination from "@/components/ui/table/pagination/pagination";
 import useDebounce from "@/hooks/useDebounce";
 import UserColumns, { OrdersListColumnsProps } from "./columns";
-import {
-  OrdersApi,
-  OrdersListResponse,
-  RestaurantListResponse,
-  RestaurantsApi,
-} from "@/swagger";
+import { OrdersApi, OrdersListResponse } from "@/swagger";
 import { useRestaurantContext } from "@/contexts/restaurant/RestaurantContext";
+import LimiPerPage from "@/components/ui/table/pagination/limitPerPage/limitPerPage";
 
 const entriesPerPageOptions = [5, 10, 15];
 
 const UserList = () => {
-  const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
   const { defaultRestuarant, setDefaultRestaurant } = useRestaurantContext();
   const [orders, setOrders] = useState<User[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -34,7 +29,6 @@ const UserList = () => {
   const debouncedSearchQuery = useDebounce(searchQuery, 500);
 
   useEffect(() => {
-    getRestaurants();
     getOrders();
 
     return () => {
@@ -48,26 +42,6 @@ const UserList = () => {
     sortOrder,
     defaultRestuarant,
   ]);
-
-  const getRestaurants = async () => {
-    try {
-      const restaurantsApi = new RestaurantsApi();
-      restaurantsApi
-        .findRestaurants({
-          limit: 10,
-          page: 1,
-          search: "",
-          sortBy: "createdAt",
-          sortOrder: "desc",
-        })
-        .then((response: RestaurantListResponse) => {
-          const restaurants = response.data?.rows as Restaurant[];
-          setRestaurants(restaurants);
-        });
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   const getOrders = async () => {
     try {
@@ -155,33 +129,6 @@ const UserList = () => {
         </h1>
       </div>
 
-      <div className="w-44 m-2">
-        <label className="text-black" htmlFor="restaurant">
-          Default Restaurant
-        </label>
-        <hr />
-        <select
-          value={defaultRestuarant?.id}
-          className="w-full cursor-pointer p-2 font-medium leading-6 text-black"
-          onChange={(e) => {
-            setDefaultRestaurant(
-              restaurants.find(
-                (restaurant) => restaurant.id === parseInt(e.target.value)
-              ) as any
-            );
-          }}
-          id="restaurant">
-          <option disabled>-- Select Restaurant --</option>
-          {restaurants.map((item: any) => {
-            return (
-              <option key={item.id} className="text-gray-900" value={item.id}>
-                {item.name}
-              </option>
-            );
-          })}
-        </select>
-      </div>
-
       <div className="flex justify-end items-center p-5">
         <div className="relative mb-2 w-[400px] mr-6">
           <input
@@ -194,6 +141,14 @@ const UserList = () => {
           />
         </div>
       </div>
+
+      <div className="text-right pr-6">
+        <LimiPerPage
+          usersLimit={ordersLimit}
+          handleEntriesPerPageChange={handleEntriesPerPageChange}
+          entriesPerPageOptions={entriesPerPageOptions}></LimiPerPage>
+      </div>
+
       <div className="rounded-lg border border-gray-200 drop-shadow-xl m-5">
         <table className="w-full rounded-md border-collapse bg-white text-left text-sm text-gray-500">
           <thead className="bg-gray-500">
@@ -208,7 +163,6 @@ const UserList = () => {
                   <td className="px-4 py-3">{order.taxAmount}</td>
                   <td className="px-4 py-3">{order.orderItems.length}</td>
                   <td className="px-4 py-3">{order.user.name}</td>
-                  <td className="px-4 py-3">{order.restaurant.name}</td>
                   <td className="flex">
                     <span className="px-4 py-3">
                       <Pencil className="cursor-pointer" />
@@ -228,10 +182,7 @@ const UserList = () => {
 
       <Pagination
         totalUsers={totalOrders}
-        usersLimit={ordersLimit}
         currentPage={currentPage}
-        entriesPerPageOptions={entriesPerPageOptions}
-        handleEntriesPerPageChange={handleEntriesPerPageChange}
         goToPrevPage={goToPrevPage}
         goToNextPage={goToNextPage}
       />

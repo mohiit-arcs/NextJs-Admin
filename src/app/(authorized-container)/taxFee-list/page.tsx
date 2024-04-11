@@ -10,21 +10,19 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import TaxFeeColumnsListColumns, { FoodItemListColumnsProps } from "./column";
 import {
-  RestaurantListResponse,
-  RestaurantsApi,
   TaxFeeApi,
   TaxFeeDeleteResponse,
   TaxFeeListResponse,
   TaxFeeRequestApi,
 } from "@/swagger";
-import { Restaurant, TaxFee } from "@prisma/client";
+import { TaxFee } from "@prisma/client";
 import { useRestaurantContext } from "@/contexts/restaurant/RestaurantContext";
+import LimiPerPage from "@/components/ui/table/pagination/limitPerPage/limitPerPage";
 
 const entriesPerPageOptions = [5, 10, 15];
 
 const TaxFeeList = () => {
-  const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
-  const { defaultRestuarant, setDefaultRestaurant } = useRestaurantContext();
+  const { defaultRestuarant } = useRestaurantContext();
   const [taxFee, setTaxFee] = useState<TaxFee[]>();
   const [currentPage, setCurrentPage] = useState(1);
   const [taxFeeLimit, setTaxFeeLimit] = useState(5);
@@ -39,35 +37,17 @@ const TaxFeeList = () => {
 
   useEffect(() => {
     getTaxFee();
-  }, [defaultRestuarant]);
-
-  useEffect(() => {
-    getRestaurants();
-
     return () => {
       debouncedUserResults.cancel();
     };
-  }, [currentPage, taxFeeLimit, debouncedSearchQuery, sortBy, sortOrder]);
-
-  const getRestaurants = async () => {
-    try {
-      const restaurantsApi = new RestaurantsApi();
-      restaurantsApi
-        .findRestaurants({
-          limit: 10,
-          page: 1,
-          search: "",
-          sortBy: "createdAt",
-          sortOrder: "desc",
-        })
-        .then((response: RestaurantListResponse) => {
-          const restaurants = response.data?.rows as Restaurant[];
-          setRestaurants(restaurants);
-        });
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  }, [
+    currentPage,
+    taxFeeLimit,
+    debouncedSearchQuery,
+    sortBy,
+    sortOrder,
+    defaultRestuarant,
+  ]);
 
   const getTaxFee = async () => {
     try {
@@ -180,33 +160,6 @@ const TaxFeeList = () => {
         </h1>
       </div>
 
-      <div className="w-44 m-2">
-        <label className="text-black" htmlFor="restaurant">
-          Default Restaurant
-        </label>
-        <hr />
-        <select
-          value={defaultRestuarant?.id}
-          className="w-full cursor-pointer p-2 font-medium leading-6 text-black"
-          onChange={(e) => {
-            setDefaultRestaurant(
-              restaurants.find(
-                (restaurant) => restaurant.id === parseInt(e.target.value)
-              ) as any
-            );
-          }}
-          id="restaurant">
-          <option disabled>-- Select Restaurant --</option>
-          {restaurants.map((item: any) => {
-            return (
-              <option key={item.id} className="text-gray-900" value={item.id}>
-                {item.name}
-              </option>
-            );
-          })}
-        </select>
-      </div>
-
       <div className="flex justify-between items-center p-5">
         <button
           onClick={() => router.push("add-taxfee")}
@@ -228,6 +181,13 @@ const TaxFeeList = () => {
           />
         </div>
 
+      </div>
+
+      <div className="text-right pr-6">
+        <LimiPerPage
+          usersLimit={taxFeeLimit}
+          handleEntriesPerPageChange={handleEntriesPerPageChange}
+          entriesPerPageOptions={entriesPerPageOptions}></LimiPerPage>
       </div>
 
       <div className="overflow-auto rounded-lg border border-gray-200 drop-shadow-sm m-5">
@@ -265,10 +225,7 @@ const TaxFeeList = () => {
 
       <Pagination
         totalUsers={totalTaxFee}
-        usersLimit={taxFeeLimit}
         currentPage={currentPage}
-        entriesPerPageOptions={entriesPerPageOptions}
-        handleEntriesPerPageChange={handleEntriesPerPageChange}
         goToPrevPage={goToPrevPage}
         goToNextPage={goToNextPage}
       />

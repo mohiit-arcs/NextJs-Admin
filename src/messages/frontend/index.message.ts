@@ -68,4 +68,5 @@ export const messages = {
       },
     },
   },
+  defaultResataurantUpdate: "Default Restaurant updated.",
 };

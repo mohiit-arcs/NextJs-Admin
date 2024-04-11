@@ -7,7 +7,6 @@ const ordersColumns = [
   { field: "taxAmount", label: "Order Tax Amount", sortable: true },
   { field: "items", label: "Order Item Count", sortable: false },
   { field: "user", label: "Customer Name", sortable: false },
-  { field: "restaurant", label: "Restaurant Name", sortable: false },
   { field: "actions", label: "Actions", sortable: false },
 ];
 

@@ -15,6 +15,7 @@ import {
   FoodItemsApi,
   FoodItemsListResponse,
 } from "@/swagger";
+import LimiPerPage from "@/components/ui/table/pagination/limitPerPage/limitPerPage";
 
 const entriesPerPageOptions = [5, 10, 15];
 const baseUrl = "http://localhost:3000";
@@ -165,6 +166,14 @@ const FoodItemList = () => {
           />
         </div>
       </div>
+
+      <div className="text-right pr-6">
+        <LimiPerPage
+          usersLimit={itemsLimit}
+          handleEntriesPerPageChange={handleEntriesPerPageChange}
+          entriesPerPageOptions={entriesPerPageOptions}></LimiPerPage>
+      </div>
+
       <div className="rounded-lg w-full border border-gray-200 drop-shadow-xl m-5">
         <table className="w-full rounded-md border-collapse bg-white text-left text-sm text-gray-500">
           <thead className="bg-[#0F172A] min-w-full">
@@ -217,10 +226,7 @@ const FoodItemList = () => {
 
       <Pagination
         totalUsers={totalFoodItems}
-        usersLimit={itemsLimit}
         currentPage={currentPage}
-        entriesPerPageOptions={entriesPerPageOptions}
-        handleEntriesPerPageChange={handleEntriesPerPageChange}
         goToPrevPage={goToPrevPage}
         goToNextPage={goToNextPage}
       />
