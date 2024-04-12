@@ -113,17 +113,32 @@ const UpdateUser = () => {
   };
 
   return (
-    <div className="bg-gray-100">
-      <h1 className="text-4xl text-center text-black">Update User</h1>
-      <div className="flex flex-col items-center justify-center min-h-screen py-2">
-        <hr />
+
+    <div className="bg-[#FFFFFF] p-5 min-h-screen px-5">
+
+        <div className="">
+          <h1 className="md:text-4xl text-3xl mb-4 text-left text-black font-extrabold">
+            Update User
+          </h1>
+        </div>
+
+      <div className="border rounded-xl shadow-lg bg-[#FFFFFF]">
+
+      <div className="p-8">
+
         <form onSubmit={handleSubmit(updateUser)}>
-          <label className="text-black" htmlFor="name">
-            Name*
-          </label>
-          <div className="flex justify-center items-center">
+        <div className="flex gap-[6%] md:flex-row flex-col w-full ">
+        <div className="flex flex-col md:w-[47%] w-full">
+        <div className="relative">
+
+            <p className="mb-3 md:text-sm text-xs">
+              <label className="text-black" htmlFor="name">
+                Name:
+              </label>
+            </p>
+
             <input
-              className="w-72 p-3 text-black"
+              className="p-3 mb-5 w-full text-black rounded-[8px] border md:text-sm text-xs"
               type="text"
               id="name"
               autoComplete="off"
@@ -132,19 +147,21 @@ const UpdateUser = () => {
                 required: true,
               })}
             />
-          </div>
           {errors.name && (
-            <div className="error text-red-500">
+            <div className="error text-red-500 text-xs absolute bottom-0 px-4">
               {messages.form.validation.name.required}
             </div>
           )}
-          <hr />
-          <label className="text-black" htmlFor="email">
-            Email*
-          </label>
-          <div className="flex justify-center items-center">
+          </div>
+
+          <div className="relative">
+          <p className="mb-3 md:text-sm text-xs">
+              <label className="text-black" htmlFor="name">
+                Email:
+              </label>
+            </p>
             <input
-              className="w-72 p-3 text-black"
+              className="p-3 mb-5 w-full text-black rounded-[8px] border md:text-sm text-xs"
               type="text"
               id="email"
               autoComplete="off"
@@ -158,23 +175,31 @@ const UpdateUser = () => {
                 },
               })}
             />
-          </div>
           {errors.email && (
-            <div className="error text-red-500">
+            <div className="error text-red-500 text-xs absolute bottom-0 px-4">
               {errors.email.type === "required" &&
                 messages.form.validation.email.required}
               {errors.email.type === "pattern" &&
                 messages.form.validation.email.invalid}
             </div>
           )}
-          <hr />
+          </div>
 
-          <label className="text-black" htmlFor="role">
-            Role*
-          </label>
-          <hr />
+          </div>
+
+
+          <div className="flex flex-col md:w-[47%] w-full">
+
+          <div className="relative">
+
+          <p className="mb-3 md:text-sm text-xs">
+              <label className="text-black" htmlFor="name">
+                Role:
+              </label>
+            </p>
+
           <select
-            className="w-full cursor-pointer p-2 font-medium leading-6 text-black"
+            className="p-3 mb-5 w-full text-black rounded-[8px] border md:text-sm text-xs"
             id="role"
             {...register("role", { required: true })}>
             <option disabled>-- Select User Role --</option>
@@ -187,18 +212,20 @@ const UpdateUser = () => {
             })}
           </select>
           {errors.role && (
-            <div className="error text-red-500">
+            <div className="error text-red-500 text-xs absolute bottom-0 px-4">
               {messages.form.validation.role.required}
             </div>
           )}
-          <hr />
-          <hr />
+          </div>
+          </div>
+          </div>
           <button
             type="submit"
-            className="bg-blue-500 hover:bg-blue-600 m-2 p-2 text-white rounded-md w-full">
+            className="bg-[#EBA232] hover:bg-[#cc861d] m-2 py-3 text-white rounded-[8px] w-[150px]">
             Submit
           </button>
         </form>
+        </div>
       </div>
     </div>
   );

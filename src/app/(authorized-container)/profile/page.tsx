@@ -29,38 +29,40 @@ const Profile = () => {
 
   return (
 
-    <div className="bg-white min-h-screen pt-20">
+    <div className="bg-white min-h-screen p-5">
 
-      <div className="bg-white max-w-2xl text-center m-auto shadow-lg rounded-lg">
-        
-        <div className="px-4 py-5 bg-[#0F172A] rounded-tl-lg rounded-tr-lg">
-          <h3 className="text-2xl leading-6 font-bold text-[#FFFFFF]">
+        <div className="px-4 py-5 rounded-tl-lg rounded-tr-lg">
+          <h3 className="text-4xl leading-6 font-bold text-[#0F172A]">
             User Details
           </h3>
         </div>
 
-        <div className="border-t-2 border-gray-200">
-          <dl className="px-20 py-4 rounded-lg">
+      <div className="bg-white border w-full text-center shadow-lg rounded-lg">
+        
+        
 
-            <div className=" px-4 py-5 flex justify-between ">
+        <div className="">
+          <dl className="px-5 py-4 rounded-lg ">
+
+            <div className=" px-4 py-5 flex justify-start ">
               <dt className="text-sm font-medium text-gray-500">Name :</dt>
-              <dd className="mt-1 w-1/3 text-left text-sm text-gray-900">
+              <dd className=" w-1/3 pl-4 text-left text-sm text-gray-900">
                 <p className="">{profileData?.name}</p>
               </dd>
             </div>
 
-            <div className=" px-4 py-5 flex justify-between ">
+            <div className=" px-4 py-5 flex justify-start ">
               <dt className="text-sm font-medium text-gray-500">
                 <p>Email address :</p>
               </dt>
-              <dd className="mt-1 w-1/3 text-left text-sm text-gray-900 ">
+              <dd className=" w-1/3 pl-4 text-left text-sm text-gray-900 ">
                 <p className="">{profileData?.email}</p>
               </dd>
             </div>
 
-            <div className=" px-4 py-5 flex justify-between ">
+            <div className=" px-4 py-5 flex justify-start ">
               <dt className="text-sm font-medium text-gray-500"><p>User Role :</p></dt>
-              <dd className="mt-1 w-1/3 text-left text-sm text-gray-900 ">
+              <dd className=" pl-4 w-1/3 text-left text-sm text-gray-900 ">
                 <p className="">{profileData?.role?.name}</p>
               </dd>
             </div>

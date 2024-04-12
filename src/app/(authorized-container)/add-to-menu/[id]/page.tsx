@@ -94,7 +94,7 @@ const AddToMenu = () => {
     try {
       const menuCategoriesApi = new MenuCategoriesApi();
       menuCategoriesApi
-        .findMenuCategories()
+        .findMenuCategoriess()
         .then((response: MenuCategoriesResponse) => {
           const menuCategories = response.data?.result as MenuCategory[];
           setMenuCategories(menuCategories);

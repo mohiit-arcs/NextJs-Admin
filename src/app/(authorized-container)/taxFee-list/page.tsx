@@ -3,7 +3,7 @@
 import Pagination from "@/components/ui/table/pagination/pagination";
 import useDebounce from "@/hooks/useDebounce";
 import _ from "lodash";
-import { Pencil, Trash } from "lucide-react";
+import { Pencil, Search, Trash } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "react-toastify";
@@ -153,45 +153,60 @@ const TaxFeeList = () => {
     sortOrder,
   };
   return (
+
     <div className="min-h-screen">
-      <div className="py-8">
+
+      <div className="py-4 flex justify-start pl-5 border-b border-[#DDDDDD]">
         <h1 className="text-4xl font-bold text-center text-black">
           Tax and Fee List
         </h1>
       </div>
 
-      <div className="flex justify-between items-center p-5">
-        <button
-          onClick={() => router.push("add-taxfee")}
-          className="bg-[#EBA232] hover:bg-[#EBA232] rounded-full w-40 py-4">
-          <a href="" className=" text-white text-sm">
-            Add new tax fee
-          </a>
-        </button>
+      <div className="flex sm:flex-row flex-col sm:justify-between justify-center items-center px-5 mt-8">
 
-        <div className="flex items-center relative mb-2 w-[400px] mr-6">
+        <div className="flex items-center relative lg:w-[400px] sm:w-[250px] w-full sm:mr-6 mr-0 sm:mb-2 mb-8">
+          <Search
+            color="#dddddd"
+            size={18}
+            className="mx-3 mb-1 absolute focus:text-[#EBA232]"
+          />
           <input
             type="text"
-            className="rounded-full bg-[#FFFFFF] px-9 py-4 text-sm text-[#EBA232] border border-[#EBA232] w-full 
-            placeholder-[#EBA232] placeholder:text-sm
-            focus:border-[#EBA232] focus:outline-none"
+            className="rounded-full bg-[#FFFFFF] px-9 py-4 text-sm text-gray-800 border border-[#dddddd] w-full 
+            placeholder-[#dddddd] placeholder:text-sm
+            focus:border-[#f5f5f5] focus:outline-none"
             placeholder="Search here..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
 
-      </div>
+        <div className="flex sm:flex-row flex-col items-center">
 
-      <div className="text-right pr-6">
+        <div className="text-right text-xs pr-6 sm:mb-0 mb-8">
         <LimiPerPage
           usersLimit={taxFeeLimit}
           handleEntriesPerPageChange={handleEntriesPerPageChange}
-          entriesPerPageOptions={entriesPerPageOptions}></LimiPerPage>
+          entriesPerPageOptions={entriesPerPageOptions}
+        ></LimiPerPage>
+        </div>
+
+        <button
+          onClick={() => router.push("add-taxfee")}
+          className="bg-[#EBA232] hover:bg-[#EBA232] rounded-[8px] lg:w-40 w-28 py-4"
+        >
+          <a className=" text-white lg:text-sm text-xs">Add new tax fee</a>
+        </button>
+
+        </div>
+
+        
       </div>
 
-      <div className="overflow-auto rounded-lg border border-gray-200 drop-shadow-sm m-5">
-        <table className="bg-white text-left text-xs text-gray-500">
+      
+
+      <div className="overflow-auto rounded-lg border border-gray-200 drop-shadow-lg m-5">
+        <table className="bg-white text-left text-xs text-gray-600 w-full">
           <thead className="bg-[#0F172A]">
             <TaxFeeColumnsListColumns {...foodItemListColProps} />
           </thead>
@@ -199,23 +214,35 @@ const TaxFeeList = () => {
             {taxFee?.map((item: any) => (
               <tr
                 key={item.id}
-                className="hover:bg-[#F4F5F7] border-b border-[#D8D9DB]">
+                className="hover:bg-[#F4F5F7] border-b border-[#D8D9DB]"
+              >
                 <td className="px-2">{item.taxName}</td>
                 <td className="px-2">{_.capitalize(item.taxType)}</td>
                 <td className="px-2">{item.value}</td>
-                <td className="flex">
-                  <span className="px-4 py-3">
-                    <Pencil
-                      className="cursor-pointer"
-                      onClick={() => onUpdate(item.id)}
-                    />
-                  </span>
-                  <span className="px-4 py-3">
-                    <Trash
-                      className="cursor-pointer"
-                      onClick={() => onDelete(item.id)}
-                    />
-                  </span>
+                <td className="py-3">
+
+                  <div className="flex flex-row items-center">
+
+                    <span className="px-1">
+                      <Pencil
+                        size={15}
+                        color="black"
+                        className="cursor-pointer"
+                        onClick={() => onUpdate(item.id)}
+                      />
+                    </span>
+  
+                    <span className="px-1">
+                      <Trash
+                        size={15}
+                        color="black"
+                        className="cursor-pointer"
+                        onClick={() => onDelete(item.id)}
+                      />
+                    </span>
+
+                  </div>
+
                 </td>
               </tr>
             ))}

@@ -3,7 +3,7 @@
 import Pagination from "@/components/ui/table/pagination/pagination";
 import useDebounce from "@/hooks/useDebounce";
 import _ from "lodash";
-import { Pencil } from "lucide-react";
+import { Pencil, Search } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "react-toastify";
@@ -124,53 +124,77 @@ const MenuCategoryList = () => {
   };
   return (
     <div className="min-h-screen">
-      <div className="py-8">
-        <h1 className="text-4xl font-bold text-center text-black">
+
+      <div className="py-4 flex justify-start pl-5 border-b border-[#DDDDDD]">
+        <h1 className="text-4xl font-bold text-center text-[#0F172A]">
           Menu Category List
         </h1>
-      </div>
+      </div>                abc d
 
-      <div className="flex justify-end items-center p-5">
-        <button
-          onClick={() => router.push("add-menu-category")}
-          className="bg-blue-500 hover:bg-blue-600 m-2 p-2 text-white rounded-md w-44">
-          Add New Menu Category
-        </button>
-        <div className="relative mb-2 w-[400px] mr-6">
+      <div className="flex sm:flex-row flex-col sm:justify-between justify-center items-center px-5 mt-8">
+
+        <div className="flex items-center relative lg:w-[400px] sm:w-[250px] w-full sm:mr-6 mr-0 sm:mb-2 mb-8">
+          <Search
+            color="#dddddd"
+            size={18}
+            className="mx-3 mb-1 absolute focus:text-[#EBA232]"
+          />
           <input
             type="text"
-            className="m-0 block h-[58px] w-full rounded shadow-lg border-2 border-solid border-neutral-300 bg-transparent bg-clip-padding px-3 py-4 text-base font-normal leading-tight text-black"
+            className="rounded-full bg-[#FFFFFF] px-9 py-4 text-sm text-gray-800 border border-[#dddddd] w-full 
+            placeholder-[#dddddd] placeholder:text-sm
+            focus:border-[#f5f5f5] focus:outline-none"
             placeholder="Search here..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
-      </div>
 
-      <div className="text-right pr-6">
+        <div className="flex sm:flex-row flex-col items-center">
+
+        <div className="text-right text-xs pr-6 sm:mb-0 mb-8">
         <LimiPerPage
           usersLimit={menuCategoriesLimit}
           handleEntriesPerPageChange={handleEntriesPerPageChange}
           entriesPerPageOptions={entriesPerPageOptions}></LimiPerPage>
+        </div>    
+
+        <button
+          onClick={() => router.push("add-menu-category")}
+          className="bg-[#EBA232] hover:bg-[#EBA232] rounded-[8px] lg:w-40 w-28 py-4">
+          <a className=" text-white lg:text-sm text-xs">Add Menu Cetagory</a>
+        </button>
+
+        </div>
+
+        
       </div>
 
-      <div className="rounded-lg border border-gray-200 drop-shadow-xl m-5">
-        <table className="w-full rounded-md border-collapse bg-white text-left text-sm text-gray-500">
-          <thead className="bg-gray-500">
+      
+
+      <div className="overflow-auto rounded-lg border border-gray-200 drop-shadow-lg m-5">
+        <table className="bg-white text-left text-xs text-gray-600 w-full">
+          <thead className="bg-[#0F172A]">
             <MenuCategoryListColumns {...menuCategoryColProps} />
           </thead>
           <tbody>
             {menuCategories!.map((menuCategory: any) => (
-              <tr key={menuCategory.id} className="hover:bg-gray-200">
-                <td className="px-4 py-3">{menuCategory.name}</td>
-                <td className="flex">
-                  <span className="px-4 py-3">
+              <tr key={menuCategory.id} className="hover:bg-[#F4F5F7] border-b border-[#f5f5f5]">
+                <td className="px-3 w-[150px]">{menuCategory.name}</td>
+
+                <td className="">
+
+                  <span className="px-3">
                     <Pencil
-                      className="cursor-pointer"
+                      size={15}
+                      color="black"
+                      className="cursor-pointer ml-4"
                       onClick={() => onUpdate(menuCategory.id)}
                     />
                   </span>
+
                 </td>
+                
               </tr>
             ))}
           </tbody>

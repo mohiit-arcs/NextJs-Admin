@@ -1,7 +1,7 @@
 "use client";
 
 import { User } from "@prisma/client";
-import { Pencil, Trash } from "lucide-react";
+import { Pencil, Search, Trash } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
@@ -143,62 +143,109 @@ const UserList = () => {
   };
 
   return (
-    <div className="w-4/5 h-full">
-      <h1 className="text-4xl text-center text-black">User List</h1>
-      <div className="flex justify-end">
-        <button
-          onClick={() => router.push("add-user")}
-          className="bg-blue-500 hover:bg-blue-600 m-2 p-2 text-white rounded-md w-40">
-          Add New User
-        </button>
-        <div className="relative mb-2 w-[400px] mr-6">
+
+    <div className="min-h-screen">
+
+
+      <div className="py-4 flex justify-start pl-5 border-b border-[#DDDDDD]">
+        <h1 className="text-4xl font-bold text-center text-[#0F172A]">
+          User List
+        </h1>
+      </div>
+
+
+      <div className="flex sm:flex-row flex-col sm:justify-between justify-center items-center px-5 mt-8">
+
+          <div className="flex items-center relative lg:w-[400px] sm:w-[250px] w-full sm:mr-6 mr-0 sm:mb-2 mb-8">
+    
+          <Search
+            color="#dddddd"
+            size={18}
+            className="mx-3 mb-1 absolute focus:text-[#EBA232]"
+          />
+          
           <input
             type="text"
-            className="m-0 block h-[58px] w-full rounded shadow-lg border-2 border-solid border-neutral-300 bg-transparent bg-clip-padding px-3 py-4 text-base font-normal leading-tight text-black"
+            className="rounded-full bg-[#FFFFFF] px-9 py-4 text-sm text-gray-800 border border-[#dddddd] w-full 
+            placeholder-[#dddddd] placeholder:text-sm
+            focus:border-[#f5f5f5] focus:outline-none"
             placeholder="Search here..."
             value={searchQuery}
             // onChange={(e) => debouncedUserResults(e)}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
+          
+          </div>
+    
+          <div className="flex sm:flex-row flex-col items-center">
+
+        <div className="text-right text-xs pr-6 sm:mb-0 mb-8">
+          <LimiPerPage
+            usersLimit={usersLimit}
+            handleEntriesPerPageChange={handleEntriesPerPageChange}
+            entriesPerPageOptions={entriesPerPageOptions}></LimiPerPage>
         </div>
+
+        <button
+          onClick={() => router.push("add-user")}
+          className="bg-[#EBA232] hover:bg-[#EBA232] rounded-[8px] lg:w-28 w-20 py-4">
+          <a className=" text-white lg:text-sm text-xs">Add User</a>
+        </button>
+
       </div>
 
-      <div className="text-right pr-6">
-        <LimiPerPage
-          usersLimit={usersLimit}
-          handleEntriesPerPageChange={handleEntriesPerPageChange}
-          entriesPerPageOptions={entriesPerPageOptions}></LimiPerPage>
+       
+
       </div>
 
-      <div className="rounded-lg border border-gray-200 drop-shadow-xl m-5">
-        <table className="w-full rounded-md border-collapse bg-white text-left text-sm text-gray-500">
+      
+
+      <div className="overflow-auto rounded-lg border border-gray-200 drop-shadow-lg m-5">
+
+        <table className="bg-white text-left text-xs text-gray-600 w-full">
+
           <thead className="bg-[#0F172A]">
             <UserColumns {...userColProps} />
           </thead>
+
           <tbody>
             {users &&
               users!.map((user: any) => (
-                <tr key={user.id} className="hover:bg-gray-200">
-                  <td className="px-4 py-3">{user.name}</td>
-                  <td className="px-4 py-3">{user.email}</td>
-                  <td className="px-4 py-3">{user.role.name}</td>
-                  <td className="flex">
-                    <span className="px-4 py-3">
+                <tr key={user.id} className="hover:bg-[#F4F5F7] border-b border-[#f5f5f5]">
+                  <td className="px-2">{user.name}</td>
+                  <td className="px-2">{user.email}</td>
+                  <td className="px-2">{user.role.name}</td>
+
+                  <td className="py-3">
+
+                  <div className="flex flex-row items-center">
+
+                    <span className="px-1">
                       <Pencil
+                        size={15}
+                        color="black"
                         className="cursor-pointer"
                         onClick={() => onUpdate(user.id)}
                       />
                     </span>
-                    <span className="px-4 py-3">
+
+                    <span className="px-1">
                       <Trash
+                        size={15}
+                        color="black"
                         className="cursor-pointer"
                         onClick={() => onDelete(user.id)}
                       />
                     </span>
+
+                  </div>
+
                   </td>
+
                 </tr>
               ))}
           </tbody>
+
         </table>
       </div>
 
