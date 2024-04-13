@@ -1,7 +1,7 @@
 "use client";
 
 import { Restaurant, User } from "@prisma/client";
-import { Pencil } from "lucide-react";
+import { Pencil, Search } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import _ from "lodash";
@@ -123,49 +123,82 @@ const UserList = () => {
 
   return (
     <div className="min-h-screen">
-      <div className="py-8">
+
+      <div className="py-4 flex justify-start pl-5 border-b border-[#DDDDDD]">
         <h1 className="text-4xl font-bold text-center text-black">
           Orders List
         </h1>
       </div>
 
-      <div className="flex justify-end items-center p-5">
-        <div className="relative mb-2 w-[400px] mr-6">
+      <div className="flex sm:flex-row flex-col sm:justify-between justify-center items-center px-5 mt-8">
+
+        <div className="flex items-center relative lg:w-[400px] sm:w-[250px] w-full sm:mr-6 mr-0 sm:mb-2 mb-8">
+
+          <Search
+            color="#dddddd"
+            size={18}
+            className="mx-3 mb-1 absolute focus:text-[#EBA232]"
+          />
+
           <input
             type="text"
-            className="m-0 block h-[58px] w-full rounded shadow-lg border-2 border-solid border-neutral-300 bg-transparent bg-clip-padding px-3 py-4 text-base font-normal leading-tight text-black"
+            className="rounded-full bg-[#FFFFFF] px-9 py-4 text-sm text-gray-800 border border-[#dddddd] w-full 
+            placeholder-[#dddddd] placeholder:text-sm
+            focus:border-[#f5f5f5] focus:outline-none"
             placeholder="Search here..."
             value={searchQuery}
             // onChange={(e) => debouncedUserResults(e)}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
-        </div>
-      </div>
 
-      <div className="text-right pr-6">
+        </div>
+
+
+        <div className="flex sm:flex-row flex-col items-center">
+        <div className="text-right text-xs pr-6 sm:mb-0">
         <LimiPerPage
           usersLimit={ordersLimit}
           handleEntriesPerPageChange={handleEntriesPerPageChange}
           entriesPerPageOptions={entriesPerPageOptions}></LimiPerPage>
+        </div>
+        </div>
+
+        
+
       </div>
 
-      <div className="rounded-lg border border-gray-200 drop-shadow-xl m-5">
-        <table className="w-full rounded-md border-collapse bg-white text-left text-sm text-gray-500">
-          <thead className="bg-gray-500">
+      
+
+      <div className="overflow-auto rounded-lg border border-gray-200 drop-shadow-lg m-5">
+
+        <table className="bg-white text-left text-xs text-gray-600 w-full">
+
+          <thead className="bg-[#0F172A]">
             <UserColumns {...orderColProps} />
           </thead>
+
           <tbody>
+
             {orders &&
+
               orders!.map((order: any) => (
-                <tr key={order.id} className="hover:bg-gray-200">
-                  <td className="px-4 py-3">{_.capitalize(order.status)}</td>
-                  <td className="px-4 py-3">{order.amount}</td>
-                  <td className="px-4 py-3">{order.taxAmount}</td>
-                  <td className="px-4 py-3">{order.orderItems.length}</td>
-                  <td className="px-4 py-3">{order.user.name}</td>
-                  <td className="flex">
-                    <span className="px-4 py-3">
-                      <Pencil className="cursor-pointer" />
+
+                <tr key={order.id} className="hover:bg-[#F4F5F7] border-b border-[#f5f5f5]">
+                  <td className="px-2">{_.capitalize(order.status)}</td>
+                  <td className="px-2">{order.amount}</td>
+                  <td className="px-2">{order.taxAmount}</td>
+                  <td className="px-2">{order.orderItems.length}</td>
+                  <td className="px-2">{order.user.name}</td>
+
+                  <td className="py-3">
+                    
+                  <div className="flex flex-row items-center">
+
+                    <span className="px-1">
+                      <Pencil 
+                      size={15}
+                      color="black"
+                      className="cursor-pointer" />
                     </span>
                     {/* <span className="px-4 py-3">
                       <Trash
@@ -173,9 +206,12 @@ const UserList = () => {
                         onClick={() => onDelete(order.id)}
                       />
                     </span> */}
+                    </div>
                   </td>
+
                 </tr>
               ))}
+              
           </tbody>
         </table>
       </div>

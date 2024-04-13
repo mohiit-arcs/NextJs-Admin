@@ -59,80 +59,90 @@ const ChangePassword = () => {
   };
 
   return (
-    <div className="bg-gray-100 p-10 min-h-screen ">
+    <div className="bg-[#FFFFFF] p-5 min-h-screen px-5">
 
-      <div className="px-44">
-        <h1 className="text-4xl text-left text-black font-extrabold px-4">
+      <div className="">
+        <h1 className="md:text-4xl text-3xl mb-4 text-left text-black font-extrabold">
           Change Password
         </h1>
       </div>
 
-      <div className="py-8 px-44">
-        <form onSubmit={handleSubmit(onSubmit)}>
-          {/* <div className="flex gap-[6%] flex-row w-full ">
+      <div className="border rounded-xl shadow-lg bg-[#FFFFFF]">
 
-           <div className="flex flex-col w-[47%]"> */}
+        <div className="p-8">
 
-          <div className="relative">
-            <p className="px-4 py-3 text-sm">
-              <label className="text-black" htmlFor="currentPassword">
-                Current Password
-              </label>
-            </p>
+          <form onSubmit={handleSubmit(onSubmit)}>
 
-            <input
-              className="p-3 mb-5 w-1/2 text-black rounded-full text-sm"
-              type={showCurrentPassword ? "text" : "password"}
-              id="currentPassword"
-              {...register("currentPassword")}
-            />
+            <div className="flex gap-[6%] flex-col md:flex-row w-full ">
 
-            <div
-              className="-ml-7 cursor-pointer absolute top-[50%] left-[48%]"
-              onClick={() => setShowCurrentPassword(!showCurrentPassword)}
-            >
-              {showCurrentPassword ? (
-                <Eye color="black" />
-              ) : (
-                <EyeOff color="black" />
-              )}
+              <div className="flex flex-col w-full md:w-[47%]">
+                <div className="relative">
+                  <p className="mb-3 md:text-sm text-xs">
+                    <label className="text-black" htmlFor="name">
+                      Current Password:
+                    </label>
+                  </p>
+
+                  <input
+                    className="p-3 mb-5 w-full text-black rounded-[8px] border md:text-sm text-xs"
+                    type={showCurrentPassword ? "text" : "password"}
+                    id="currentPassword"
+                    {...register("currentPassword")}
+                  />
+
+                  <div
+                    className="-ml-7 cursor-pointer absolute top-[45%] left-[98%]"
+                    onClick={() => setShowCurrentPassword(!showCurrentPassword)}
+                  >
+                    {showCurrentPassword ? (
+                      <Eye color="black" />
+                    ) : (
+                      <EyeOff color="black" />
+                    )}
+                  </div>
+
+                  {errors.currentPassword && (
+                    <span className="error text-red-500 text-xs absolute bottom-0 px-4">
+                      {errors.currentPassword.message}
+                    </span>
+                  )}
+                </div>
+              </div>
+
+              <div className="flex flex-col md:w-[47%] w-full">
+                <div className="relative">
+                  <p className="mb-3 md:text-sm text-xs">
+                    <label className="text-black" htmlFor="name">
+                      New Password:
+                    </label>
+                  </p>
+
+                  <input
+                    className="p-3 mb-5 w-full text-black rounded-[8px] border md:text-sm text-xs"
+                    type="password"
+                    id="newPassword"
+                    {...register("newPassword")}
+                  />
+
+                  {errors.newPassword && (
+                    <span className="error text-red-500 text-xs absolute bottom-0 px-4">
+                      {errors.newPassword.message}
+                    </span>
+                  )}
+                </div>
+              </div>
             </div>
 
-            {errors.currentPassword && (
-              <span className="text-red-500">
-                {errors.currentPassword.message}
-              </span>
-            )}
-          </div>
-
-          <div className="relative">
-            <p className="px-4 py-3 text-sm">
-              <label className="text-black" htmlFor="newPassword">
-                New Password
-              </label>
-            </p>
-
-            <input
-              className="p-3 mb-5 w-1/2 text-black rounded-full text-sm"
-              type="password"
-              id="newPassword"
-              {...register("newPassword")}
-            />
-
-            {errors.newPassword && (
-              <span className="text-red-500">{errors.newPassword.message}</span>
-            )}
-          </div>
-
-          <button
-            type="submit"
-            className="bg-blue-500 hover:bg-blue-600 m-2 py-3 text-white rounded-full w-[150px]"
-          >
-            Submit
-          </button>
-        </form>
+            <button
+              type="submit"
+              className="bg-[#EBA232] hover:bg-[#cc861d] m-2 py-3 text-white rounded-[8px] w-[150px]"
+            >
+              Submit
+            </button>
+          </form>
+        </div>
       </div>
-      </div>
+    </div>
   );
 };
 

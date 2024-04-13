@@ -207,27 +207,30 @@ const UpdateRestaurant = () => {
   };
 
   return (
-    <div className="bg-gray-100 p-10 min-h-screen px-32">
-      <div className="border px-8 pt-8 rounded-xl shadow-lg bg-[#dfe2e7]">
-        <div className="px-4">
-          <h1 className="text-4xl text-left text-black font-extrabold px-4">
+    <div className="bg-[#FFFFFF] p-5 min-h-screen px-5">
+
+      <div className="">
+          <h1 className="text-4xl mb-4 text-left text-black font-extrabold">
             Update Restuarant
           </h1>
         </div>
 
-        <div className="py-8 px-4">
+      <div className="border rounded-xl shadow-lg bg-[#FFFFFF]">
+        
+
+        <div className="p-8">
           <form onSubmit={handleSubmit(updateRestaurant)}>
-            <div className="flex gap-[6%] flex-row w-full ">
-              <div className="flex flex-col w-[47%]">
+            <div className="flex gap-[6%] md:flex-row flex-col w-full ">
+              <div className="flex flex-col md:w-[47%] w-full">
                 <div className="relative">
-                  <p className="px-4 py-3 text-sm">
+                  <p className="mb-3 md:text-sm text-xs">
                     <label className="text-black" htmlFor="name">
                       Name*
                     </label>
                   </p>
 
                   <input
-                    className="p-3 mb-5 w-full text-black rounded-full text-sm"
+                    className="p-3 mb-5 w-full text-black rounded-[8px] border md:text-sm text-xs"
                     type="text"
                     id="name"
                     autoComplete="off"
@@ -246,14 +249,14 @@ const UpdateRestaurant = () => {
                 </div>
 
                 <div className="relative">
-                  <p className="px-4 py-3 text-sm">
+                  <p className="py-3 md:text-sm text-xs">
                     <label className="text-black" htmlFor="email">
                       Email*
                     </label>
                   </p>
 
                   <input
-                    className="p-3 mb-5 w-full text-black rounded-full text-sm"
+                    className="p-3 mb-5 w-full text-black rounded-[8px] border md:text-sm text-xs"
                     type="text"
                     id="email"
                     autoComplete="off"
@@ -279,14 +282,14 @@ const UpdateRestaurant = () => {
                 </div>
 
                 <div className="relative">
-                  <p className="px-4 py-3 text-sm">
+                  <p className=" py-3 text-sm">
                     <label className="text-black" htmlFor="phoneNumber">
                       Phone Number*
                     </label>
                   </p>
 
                   <input
-                    className="p-3 mb-5 w-full text-black rounded-full text-sm"
+                    className="p-3 mb-5 w-full text-black border rounded-[8px] md:text-sm text-xs"
                     type="text"
                     id="phoneNumber"
                     autoComplete="off"
@@ -312,14 +315,14 @@ const UpdateRestaurant = () => {
                 </div>
 
                 <div className="relative">
-                  <p className="px-4 py-3 text-sm">
+                  <p className="py-3 md:text-sm text-xs">
                     <label className="text-black" htmlFor="street">
                       Street*
                     </label>
                   </p>
 
                   <input
-                    className="p-3 mb-5 w-full text-black rounded-full text-sm"
+                    className="p-3 mb-5 w-full text-black border rounded-[8px] md:text-sm text-xs"
                     type="text"
                     id="street"
                     autoComplete="off"
@@ -338,16 +341,16 @@ const UpdateRestaurant = () => {
                 </div>
               </div>
 
-              <div className="flex flex-col w-[47%]">
+              <div className="flex flex-col md:w-[47%] w-full">
                 <div className="relative">
-                  <p className="px-4 py-3 text-sm">
+                  <p className="mb-3 text-sm">
                     <label className="text-black" htmlFor="city">
                       City*
                     </label>
                   </p>
 
                   <input
-                    className="p-3 mb-5 w-full text-black rounded-full text-sm"
+                    className="p-3 mb-5 w-full text-black border rounded-[8px] md:text-sm text-xs"
                     type="text"
                     id="city"
                     autoComplete="off"
@@ -366,14 +369,15 @@ const UpdateRestaurant = () => {
                 </div>
 
                 <div className="relative">
-                  <p className="px-4 py-3 text-sm">
+
+                  <p className="py-3 text-sm">
                     <label className="text-black" htmlFor="zipcode">
                       ZipCode*
                     </label>
                   </p>
 
                   <input
-                    className="p-3 mb-5 w-full text-black rounded-full text-sm"
+                    className="p-3 mb-5 w-full text-black border rounded-[8px] md:text-sm text-xs"
                     id="zipcode"
                     autoComplete="off"
                     placeholder="ZipCode"
@@ -398,14 +402,14 @@ const UpdateRestaurant = () => {
                 </div>
 
                 <div className="relative">
-                  <p className="px-4 py-3 text-sm">
+                  <p className="py-3 text-sm">
                     <label className="text-black" htmlFor="state">
                       State*
                     </label>
                   </p>
 
                   <input
-                    className="p-3 mb-5 w-full text-black rounded-full text-sm"
+                    className="p-3 mb-5 w-full text-black border rounded-[8px] md:text-sm text-xs"
                     type="text"
                     id="state"
                     autoComplete="off"
@@ -424,14 +428,14 @@ const UpdateRestaurant = () => {
                 </div>
 
                 <div className="relative">
-                  <p className="px-4 py-3 text-sm">
+                  <p className="py-3 md:text-sm text-xs">
                     <label className="text-black" htmlFor="country">
                       Country*
                     </label>
                   </p>
 
                   <input
-                    className="p-3 mb-5 w-full text-black rounded-full text-sm"
+                    className="p-3 mb-5 w-full text-black border rounded-[8px] md:text-sm text-xs"
                     type="text"
                     id="country"
                     autoComplete="off"
@@ -452,14 +456,14 @@ const UpdateRestaurant = () => {
             </div>
 
             <div className="relative">
-              <p className="px-4 py-3 text-sm">
+              <p className="py-3 text-sm">
                 <label className="text-black" htmlFor="image">
                   Image*
                 </label>
               </p>
 
               <input
-                className="p-3 mb-5 w-full text-black rounded-full text-sm"
+                className="p-3 mb-5 w-full text-black border rounded-[8px] md:text-sm text-xs"
                 type="file"
                 accept="image/jpeg, image/png"
                 id="image"
@@ -467,10 +471,10 @@ const UpdateRestaurant = () => {
                 hidden
               />
 
-              <div className="bg-[#FFFFFF] p-3 mb-5 w-full text-black rounded-full text-sm">
+              <div className="bg-[#FFFFFF] p-3 mb-5 w-full text-black border rounded-[8px] md:text-sm text-xs">
                 <button
                   type="button"
-                  className="bg-[#EBA232] hover:bg-[#cc861d] m-2 py-3 text-white rounded-full w-[150px]">
+                  className="bg-[#C1C1C1] hover:bg-[#A9A9A9] m-2 py-3 text-white rounded-[8px] w-[150px]">
                   Choose File
                 </button>
               </div>
@@ -494,7 +498,7 @@ const UpdateRestaurant = () => {
 
             <button
               type="submit"
-              className="bg-[#EBA232] hover:bg-[#cc861d] m-2 py-3 text-white rounded-full w-[150px]">
+              className="bg-[#EBA232] hover:bg-[#cc861d] m-2 py-3 text-white rounded-[8px] w-[150px]">
               Submit
             </button>
           </form>

@@ -131,88 +131,127 @@ const AddFoodItem = () => {
   };
 
   return (
-    <div className="bg-gray-100">
-      <h1 className="text-4xl text-center text-black">Add Food Item</h1>
-      <div className="flex flex-col items-center justify-center min-h-screen py-2">
-        <hr />
+    <div className="bg-[#FFFFFF] p-5 min-h-screen px-5">
+
+        <div className="">
+          <h1 className="md:text-4xl text-3xl mb-4 text-left text-black font-extrabold">
+            Add Restuarant
+          </h1>
+        </div>
+
+      <div className="border rounded-xl shadow-lg bg-[#FFFFFF]">
+
+      <div className="p-8">
+        
         <form onSubmit={handleSubmit(addFoodItem)}>
-          <label className="text-black" htmlFor="name">
-            Name*
-          </label>
-          <div className="flex justify-center items-center">
-            <input
-              className="w-72 p-3 text-black"
-              type="text"
-              id="name"
-              autoComplete="off"
-              placeholder="Name"
-              {...register("name", {
-                required: true,
-                validate: validateNoWhiteSpace,
-              })}
-            />
-          </div>
-          {errors.name && (
-            <div className="error text-red-500">
-              {messages.form.validation.name.required}
-            </div>
-          )}
-          <hr />
-          <label className="text-black" htmlFor="price">
-            Price*
-          </label>
-          <div className="flex justify-center items-center">
-            <input
-              className="w-72 p-3 text-black"
-              type="text"
-              id="price"
-              autoComplete="off"
-              placeholder="Price"
-              {...register("price", {
-                required: true,
-                validate: (value) => value != 0,
-              })}
-            />
-          </div>
-          {errors.price && (
-            <div className="error text-red-500">
-              {messages.form.validation.price.required}
-            </div>
-          )}
-          <hr />
-          <label className="text-black" htmlFor="restaurant">
-            Restaurant*
-          </label>
-          <hr />
-          <select
-            className="w-full cursor-pointer p-2 font-medium leading-6 text-black"
-            id="restaurant"
-            {...register("restaurantId", { required: true })}
-            value={restaurantId}
-            onChange={handleRestaurantChange}>
-            <option disabled>-- Select Restaurant --</option>
-            {restaurants.map((item: any, index) => {
-              return (
-                <option key={item.id} className="text-gray-900" value={item.id}>
-                  {item.name}
-                </option>
-              );
-            })}
-          </select>
-          {errors.restaurantId && (
-            <div className="error text-red-500">
-              {messages.form.validation.restaurant.required}
-            </div>
-          )}
-          <hr />
-          {restaurantId && (
-            <>
-              <label className="text-black" htmlFor="menu-category">
-                Menu Category*
+
+        <div className="flex gap-[6%] md:flex-row flex-col w-full ">
+
+        <div className="flex flex-col md:w-[47%] w-full">
+
+          <div className="relative">
+
+            <p className="mb-3 md:text-sm text-xs">
+              <label className="text-black" htmlFor="name">
+                Name:
               </label>
-              <hr />
+            </p>
+  
+              <input
+                className="p-3 mb-5 w-full text-black rounded-[8px] border md:text-sm text-xs"
+                type="text"
+                id="name"
+                autoComplete="off"
+                placeholder="Name"
+                {...register("name", {
+                  required: true,
+                  validate: validateNoWhiteSpace,
+                })}
+              />
+            
+            {errors.name && (
+              <div className="error text-red-500 text-xs absolute bottom-0 px-4">
+                {messages.form.validation.name.required}
+              </div>
+            )}
+
+          </div>
+
+          <div className="relative">
+
+                  <p className="mb-3 md:text-sm text-xs">
+                    <label className="text-black" htmlFor="name">
+                      Price:
+                    </label>
+                  </p>
+
+              <input
+                className="p-3 mb-5 w-full text-black rounded-[8px] border md:text-sm text-xs"
+                type="text"
+                id="price"
+                autoComplete="off"
+                placeholder="Price"
+                {...register("price", {
+                  required: true,
+                  validate: (value) => value != 0,
+                })}
+              />
+
+            {errors.price && (
+              <div className="error text-red-500 text-xs absolute bottom-0 px-4">
+                {messages.form.validation.price.required}
+              </div>
+            )}
+
+          </div>
+
+          </div>
+
+          <div className="flex flex-col md:w-[47%] w-full">
+
+          <div className="relative">
+
+                  <p className="mb-3 md:text-sm text-xs">
+                    <label className="text-black" htmlFor="name">
+                      Restaurant:
+                    </label>
+                  </p>
+            
+            <select
+              className="p-3 mb-5 w-full text-black rounded-[8px] border md:text-sm text-xs"
+              id="restaurant"
+              {...register("restaurantId", { required: true })}
+              value={restaurantId}
+              onChange={handleRestaurantChange}>
+              <option disabled>-- Select Restaurant --</option>
+              {restaurants.map((item: any, index) => {
+                return (
+                  <option key={item.id} className="text-gray-900" value={item.id}>
+                    {item.name}
+                  </option>
+                );
+              })}
+            </select>
+  
+            {errors.restaurantId && (
+              <div className="error text-red-500 text-xs absolute bottom-0 px-4">
+                {messages.form.validation.restaurant.required}
+              </div>
+            )}
+
+          </div>
+          
+          {restaurantId && (
+            <div className="relative">
+
+                  <p className="mb-3 md:text-sm text-xs">
+                    <label className="text-black" htmlFor="name">
+                      Menu Cetagory:
+                    </label>
+                  </p>
+
               <select
-                className="w-full cursor-pointer p-2 font-medium leading-6 text-black"
+                className="p-3 mb-5 w-full text-black rounded-[8px] border md:text-sm text-xs"
                 id="menu-category"
                 {...register("categoryId", { required: true })}>
                 <option disabled>-- Select Category --</option>
@@ -228,22 +267,28 @@ const AddFoodItem = () => {
                     );
                   })}
               </select>
+
               {errors.categoryId && (
-                <div className="error text-red-500">
+                <div className="error text-red-500 text-xs absolute bottom-0 px-4">
                   {messages.form.validation.menuCategory.required}
                 </div>
               )}
-            </>
+
+            </div>
           )}
 
-          <hr />
-          <hr />
+          </div>
+
+          </div>
           <button
             type="submit"
-            className="bg-blue-500 hover:bg-blue-600 m-2 p-2 text-white rounded-md w-full">
+            className="bg-[#EBA232] hover:bg-[#cc861d] m-2 py-3 text-white rounded-[8px] w-[150px]">
             Submit
           </button>
+
         </form>
+        
+        </div>
       </div>
     </div>
   );
