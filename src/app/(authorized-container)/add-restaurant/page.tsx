@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import imageCompression from "browser-image-compression";
 import { messages } from "@/messages/frontend/index.message";
-import { CreateRestaurantResponse, RestaurantsApi } from "@/swagger";
+import { RestaurantsApi } from "@/swagger";
 
 type Inputs = {
   name: string;
@@ -63,19 +63,15 @@ const AddRestaurant = () => {
       };
 
       const restaurantsApi = new RestaurantsApi();
-      restaurantsApi
-        .createRestaurant({
-          createRestaurantRequest: addRestaurantPayload,
-        })
-        .then((response: CreateRestaurantResponse) => {
-          if (response.data?.success) {
-            router.push("restaurant-list");
-            toast.success(response.message);
-          } else {
-            toast.error(response.message);
-          }
-        });
-    } catch (error) {
+      const response = await restaurantsApi.createRestaurant({
+        createRestaurantRequest: addRestaurantPayload,
+      });
+      if (response.data?.success) {
+        router.push("restaurant-list");
+        toast.success(response.message);
+      }
+    } catch (error: any) {
+      toast.error(error.message);
       console.log(error);
     }
   };
@@ -138,24 +134,18 @@ const AddRestaurant = () => {
 
   return (
     <div className="bg-[#FFFFFF] p-5 min-h-screen px-5">
-
-        <div className="">
-          <h1 className="md:text-4xl text-3xl mb-4 text-left text-black font-extrabold">
-            Add Restuarant
-          </h1>
-        </div>
+      <div className="">
+        <h1 className="md:text-4xl text-3xl mb-4 text-left text-black font-extrabold">
+          Add Restuarant
+        </h1>
+      </div>
 
       <div className="border rounded-xl shadow-lg bg-[#FFFFFF]">
-        
-
         <div className="p-8">
-          
           <form onSubmit={handleSubmit(addRestaurant)}>
             <div className="flex gap-[6%] md:flex-row flex-col w-full ">
               <div className="flex flex-col md:w-[47%] w-full">
-
                 <div className="relative">
-
                   <p className="mb-3 md:text-sm text-xs">
                     <label className="text-black" htmlFor="name">
                       Name:
@@ -179,7 +169,6 @@ const AddRestaurant = () => {
                       {messages.form.validation.name.required}
                     </div>
                   )}
-
                 </div>
 
                 <div className="relative">
@@ -430,7 +419,6 @@ const AddRestaurant = () => {
               className="bg-[#EBA232] hover:bg-[#cc861d] m-2 py-3 text-white rounded-[8px] w-[150px]">
               Submit
             </button>
-            
           </form>
         </div>
       </div>

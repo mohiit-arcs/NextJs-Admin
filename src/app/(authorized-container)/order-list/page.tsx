@@ -1,6 +1,6 @@
 "use client";
 
-import { Restaurant, User } from "@prisma/client";
+import { User } from "@prisma/client";
 import { Pencil, Search } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -8,7 +8,9 @@ import _ from "lodash";
 import Pagination from "@/components/ui/table/pagination/pagination";
 import useDebounce from "@/hooks/useDebounce";
 import UserColumns, { OrdersListColumnsProps } from "./columns";
-import { OrdersApi, OrdersListResponse } from "@/swagger";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { OrdersApi } from "@/swagger";
 import { useRestaurantContext } from "@/contexts/restaurant/RestaurantContext";
 import LimiPerPage from "@/components/ui/table/pagination/limitPerPage/limitPerPage";
 
@@ -46,23 +48,21 @@ const UserList = () => {
   const getOrders = async () => {
     try {
       const ordersApi = new OrdersApi();
-      ordersApi
-        .findOrdersByRestaurantId({
-          limit: ordersLimit,
-          page: currentPage,
-          search: debouncedSearchQuery,
-          sortBy: sortBy,
-          sortOrder: sortOrder,
-          restaurantId: defaultRestuarant?.id,
-        })
-        .then((response: OrdersListResponse) => {
-          const orders = response.data?.rows as [];
-          setOrders(orders);
-          setTotalOrders(response.data?.count);
-          const totalPages = Math.ceil(response.data?.count! / ordersLimit);
-          setTotalPages(totalPages);
-        });
-    } catch (error) {
+      const response = await ordersApi.findOrdersByRestaurantId({
+        limit: ordersLimit,
+        page: currentPage,
+        search: debouncedSearchQuery,
+        sortBy: sortBy,
+        sortOrder: sortOrder,
+        restaurantId: defaultRestuarant?.id,
+      });
+      const orders = response.data?.rows as [];
+      setOrders(orders);
+      setTotalOrders(response.data?.count);
+      const totalPages = Math.ceil(response.data?.count! / ordersLimit);
+      setTotalPages(totalPages);
+    } catch (error: any) {
+      toast.error(error.message);
       console.log(error);
     }
   };
@@ -123,7 +123,6 @@ const UserList = () => {
 
   return (
     <div className="min-h-screen">
-
       <div className="py-4 flex justify-start pl-5 border-b border-[#DDDDDD]">
         <h1 className="text-4xl font-bold text-center text-black">
           Orders List
@@ -131,9 +130,7 @@ const UserList = () => {
       </div>
 
       <div className="flex sm:flex-row flex-col sm:justify-between justify-center items-center px-5 mt-8">
-
         <div className="flex items-center relative lg:w-[400px] sm:w-[250px] w-full sm:mr-6 mr-0 sm:mb-2 mb-8">
-
           <Search
             color="#dddddd"
             size={18}
@@ -150,40 +147,30 @@ const UserList = () => {
             // onChange={(e) => debouncedUserResults(e)}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
-
         </div>
-
 
         <div className="flex sm:flex-row flex-col items-center">
-        <div className="text-right text-xs pr-6 sm:mb-0">
-        <LimiPerPage
-          usersLimit={ordersLimit}
-          handleEntriesPerPageChange={handleEntriesPerPageChange}
-          entriesPerPageOptions={entriesPerPageOptions}></LimiPerPage>
+          <div className="text-right text-xs pr-6 sm:mb-0">
+            <LimiPerPage
+              usersLimit={ordersLimit}
+              handleEntriesPerPageChange={handleEntriesPerPageChange}
+              entriesPerPageOptions={entriesPerPageOptions}></LimiPerPage>
+          </div>
         </div>
-        </div>
-
-        
-
       </div>
 
-      
-
       <div className="overflow-auto rounded-lg border border-gray-200 drop-shadow-lg m-5">
-
         <table className="bg-white text-left text-xs text-gray-600 w-full">
-
           <thead className="bg-[#0F172A]">
             <UserColumns {...orderColProps} />
           </thead>
 
           <tbody>
-
             {orders &&
-
               orders!.map((order: any) => (
-
-                <tr key={order.id} className="hover:bg-[#F4F5F7] border-b border-[#f5f5f5]">
+                <tr
+                  key={order.id}
+                  className="hover:bg-[#F4F5F7] border-b border-[#f5f5f5]">
                   <td className="px-2">{_.capitalize(order.status)}</td>
                   <td className="px-2">{order.amount}</td>
                   <td className="px-2">{order.taxAmount}</td>
@@ -191,16 +178,15 @@ const UserList = () => {
                   <td className="px-2">{order.user.name}</td>
 
                   <td className="py-3">
-                    
-                  <div className="flex flex-row items-center">
-
-                    <span className="px-1">
-                      <Pencil 
-                      size={15}
-                      color="black"
-                      className="cursor-pointer" />
-                    </span>
-                    {/* <span className="px-4 py-3">
+                    <div className="flex flex-row items-center">
+                      <span className="px-1">
+                        <Pencil
+                          size={15}
+                          color="black"
+                          className="cursor-pointer"
+                        />
+                      </span>
+                      {/* <span className="px-4 py-3">
                       <Trash
                         className="cursor-pointer"
                         onClick={() => onDelete(order.id)}
@@ -208,10 +194,8 @@ const UserList = () => {
                     </span> */}
                     </div>
                   </td>
-
                 </tr>
               ))}
-              
           </tbody>
         </table>
       </div>

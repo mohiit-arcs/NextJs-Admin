@@ -7,11 +7,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import imageCompression from "browser-image-compression";
 import { messages } from "@/messages/frontend/index.message";
-import {
-  RestaurantRequestApi,
-  RestaurantsApi,
-  UpdateRestaurantResponse,
-} from "@/swagger";
+import { RestaurantRequestApi, RestaurantsApi } from "@/swagger";
 
 type Inputs = {
   name: string;
@@ -133,19 +129,15 @@ const UpdateRestaurant = () => {
       };
 
       const restaurantsApi = new RestaurantsApi();
-      restaurantsApi
-        .updateRestaurant({
-          updateRestaurantRequest: updateRestaurantPayload,
-        })
-        .then((response: UpdateRestaurantResponse) => {
-          if (response.data?.success) {
-            router.back();
-            toast.success(response.message);
-          } else {
-            toast.error(response.message);
-          }
-        });
-    } catch (error) {
+      const response = await restaurantsApi.updateRestaurant({
+        updateRestaurantRequest: updateRestaurantPayload,
+      });
+      if (response.data?.success) {
+        router.back();
+        toast.success(response.message);
+      }
+    } catch (error: any) {
+      toast.error(error.message);
       console.log(error);
     }
   };
@@ -208,16 +200,13 @@ const UpdateRestaurant = () => {
 
   return (
     <div className="bg-[#FFFFFF] p-5 min-h-screen px-5">
-
       <div className="">
-          <h1 className="text-4xl mb-4 text-left text-black font-extrabold">
-            Update Restuarant
-          </h1>
-        </div>
+        <h1 className="text-4xl mb-4 text-left text-black font-extrabold">
+          Update Restuarant
+        </h1>
+      </div>
 
       <div className="border rounded-xl shadow-lg bg-[#FFFFFF]">
-        
-
         <div className="p-8">
           <form onSubmit={handleSubmit(updateRestaurant)}>
             <div className="flex gap-[6%] md:flex-row flex-col w-full ">
@@ -369,7 +358,6 @@ const UpdateRestaurant = () => {
                 </div>
 
                 <div className="relative">
-
                   <p className="py-3 text-sm">
                     <label className="text-black" htmlFor="zipcode">
                       ZipCode*

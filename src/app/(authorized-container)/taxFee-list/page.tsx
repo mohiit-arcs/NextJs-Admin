@@ -9,12 +9,7 @@ import { useEffect, useMemo, useState } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import TaxFeeColumnsListColumns, { FoodItemListColumnsProps } from "./column";
-import {
-  TaxFeeApi,
-  TaxFeeDeleteResponse,
-  TaxFeeListResponse,
-  TaxFeeRequestApi,
-} from "@/swagger";
+import { TaxFeeApi, TaxFeeRequestApi } from "@/swagger";
 import { TaxFee } from "@prisma/client";
 import { useRestaurantContext } from "@/contexts/restaurant/RestaurantContext";
 import LimiPerPage from "@/components/ui/table/pagination/limitPerPage/limitPerPage";
@@ -52,23 +47,21 @@ const TaxFeeList = () => {
   const getTaxFee = async () => {
     try {
       const taxFeeApi = new TaxFeeApi();
-      taxFeeApi
-        .findTaxFee({
-          limit: taxFeeLimit,
-          page: currentPage,
-          search: debouncedSearchQuery,
-          sortBy: sortBy,
-          sortOrder: sortOrder,
-          restaurantId: defaultRestuarant?.id,
-        })
-        .then((response: TaxFeeListResponse) => {
-          const taxFee = response.data?.rows as TaxFee[];
-          setTaxFee(taxFee);
-          setTotalTaxFee(response.data?.count);
-          const totalPages = Math.ceil(response.data?.count! / taxFeeLimit);
-          setTotalPages(totalPages);
-        });
-    } catch (error) {
+      const response = await taxFeeApi.findTaxFee({
+        limit: taxFeeLimit,
+        page: currentPage,
+        search: debouncedSearchQuery,
+        sortBy: sortBy,
+        sortOrder: sortOrder,
+        restaurantId: defaultRestuarant?.id,
+      });
+      const taxFee = response.data?.rows as TaxFee[];
+      setTaxFee(taxFee);
+      setTotalTaxFee(response.data?.count);
+      const totalPages = Math.ceil(response.data?.count! / taxFeeLimit);
+      setTotalPages(totalPages);
+    } catch (error: any) {
+      toast.error(error.message);
       console.log(error);
     }
   };
@@ -84,21 +77,20 @@ const TaxFeeList = () => {
       );
       if (toDelete) {
         const taxFeeRequestApi = new TaxFeeRequestApi();
-        taxFeeRequestApi
-          .deleteTaxFeeById({ id: restaurantId })
-          .then((response: TaxFeeDeleteResponse) => {
-            if (response.data?.success) {
-              const updatedTaxFee = taxFee?.filter(
-                (restaurant) => restaurant.id != restaurantId
-              );
-              setTaxFee(updatedTaxFee);
-              setTotalTaxFee(response.data?.count);
-              toast.success(response.data?.message);
-            }
-          });
+        const response = await taxFeeRequestApi.deleteTaxFeeById({
+          id: restaurantId,
+        });
+        if (response.data?.success) {
+          const updatedTaxFee = taxFee?.filter(
+            (restaurant) => restaurant.id != restaurantId
+          );
+          setTaxFee(updatedTaxFee);
+          setTotalTaxFee(response.data?.count);
+          toast.success(response.data?.message);
+        }
       }
-      return;
-    } catch (error) {
+    } catch (error: any) {
+      toast.error(error.message);
       console.log(error);
     }
   };
@@ -153,9 +145,7 @@ const TaxFeeList = () => {
     sortOrder,
   };
   return (
-
     <div className="min-h-screen">
-
       <div className="py-4 flex justify-start pl-5 border-b border-[#DDDDDD]">
         <h1 className="text-4xl font-bold text-center text-black">
           Tax and Fee List
@@ -163,7 +153,6 @@ const TaxFeeList = () => {
       </div>
 
       <div className="flex sm:flex-row flex-col sm:justify-between justify-center items-center px-5 mt-8">
-
         <div className="flex items-center relative lg:w-[400px] sm:w-[250px] w-full sm:mr-6 mr-0 sm:mb-2 mb-8">
           <Search
             color="#dddddd"
@@ -182,28 +171,20 @@ const TaxFeeList = () => {
         </div>
 
         <div className="flex sm:flex-row flex-col items-center">
+          <div className="text-right text-xs pr-6 sm:mb-0 mb-8">
+            <LimiPerPage
+              usersLimit={taxFeeLimit}
+              handleEntriesPerPageChange={handleEntriesPerPageChange}
+              entriesPerPageOptions={entriesPerPageOptions}></LimiPerPage>
+          </div>
 
-        <div className="text-right text-xs pr-6 sm:mb-0 mb-8">
-        <LimiPerPage
-          usersLimit={taxFeeLimit}
-          handleEntriesPerPageChange={handleEntriesPerPageChange}
-          entriesPerPageOptions={entriesPerPageOptions}
-        ></LimiPerPage>
+          <button
+            onClick={() => router.push("add-taxfee")}
+            className="bg-[#EBA232] hover:bg-[#EBA232] rounded-[8px] lg:w-40 w-28 py-4">
+            <a className=" text-white lg:text-sm text-xs">Add new tax fee</a>
+          </button>
         </div>
-
-        <button
-          onClick={() => router.push("add-taxfee")}
-          className="bg-[#EBA232] hover:bg-[#EBA232] rounded-[8px] lg:w-40 w-28 py-4"
-        >
-          <a className=" text-white lg:text-sm text-xs">Add new tax fee</a>
-        </button>
-
-        </div>
-
-        
       </div>
-
-      
 
       <div className="overflow-auto rounded-lg border border-gray-200 drop-shadow-lg m-5">
         <table className="bg-white text-left text-xs text-gray-600 w-full">
@@ -214,15 +195,12 @@ const TaxFeeList = () => {
             {taxFee?.map((item: any) => (
               <tr
                 key={item.id}
-                className="hover:bg-[#F4F5F7] border-b border-[#D8D9DB]"
-              >
+                className="hover:bg-[#F4F5F7] border-b border-[#D8D9DB]">
                 <td className="px-2">{item.taxName}</td>
                 <td className="px-2">{_.capitalize(item.taxType)}</td>
                 <td className="px-2">{item.value}</td>
                 <td className="py-3">
-
                   <div className="flex flex-row items-center">
-
                     <span className="px-1">
                       <Pencil
                         size={15}
@@ -231,7 +209,7 @@ const TaxFeeList = () => {
                         onClick={() => onUpdate(item.id)}
                       />
                     </span>
-  
+
                     <span className="px-1">
                       <Trash
                         size={15}
@@ -240,9 +218,7 @@ const TaxFeeList = () => {
                         onClick={() => onDelete(item.id)}
                       />
                     </span>
-
                   </div>
-
                 </td>
               </tr>
             ))}

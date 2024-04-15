@@ -4,6 +4,8 @@ import {
   RestaurantDetailsResponseDataDetails,
   RestaurantRequestApi,
 } from "@/swagger";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { Mail, MapPin, Phone } from "lucide-react";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -26,7 +28,8 @@ const RestaurantInfo = () => {
         id: restaurantId,
       });
       setRestaurantData(response.data?.details);
-    } catch (error) {
+    } catch (error: any) {
+      toast.error(error.message);
       console.log(error);
     }
   };
@@ -51,15 +54,12 @@ const RestaurantInfo = () => {
         </div>
 
         <div className="text-left p-10">
-
           <div className="text-3xl font-bold text-[#0F172A] mb-4">
             <p>{restaurantData?.name}</p>
           </div>
 
           <div className="flex flex-col md:flex-row justify-start md:justify-between items-start md:items-end text-sm text-[#696969]">
-          
             <div>
-
               <div className="flex mb-[12px]">
                 <p>
                   <Mail height={18} />
@@ -75,25 +75,22 @@ const RestaurantInfo = () => {
               </div>
 
               <div className="flex">
-              <div>
-                <p>
-                  <MapPin height={18} />
-                </p>
-              </div>
-              <div className="pl-[5px]">
-                <p className="mb-[5px]">{restaurantData?.street}</p>
-                <p className="mb-[5px]">
-                  {restaurantData?.city}, {restaurantData?.zipcode}
-                </p>
-                <p>
-                  {restaurantData?.state}, {restaurantData?.country}
-                </p>
+                <div>
+                  <p>
+                    <MapPin height={18} />
+                  </p>
+                </div>
+                <div className="pl-[5px]">
+                  <p className="mb-[5px]">{restaurantData?.street}</p>
+                  <p className="mb-[5px]">
+                    {restaurantData?.city}, {restaurantData?.zipcode}
+                  </p>
+                  <p>
+                    {restaurantData?.state}, {restaurantData?.country}
+                  </p>
+                </div>
               </div>
             </div>
-
-            </div>
-
-            
           </div>
 
           {/* <div className="px-4 py-5">

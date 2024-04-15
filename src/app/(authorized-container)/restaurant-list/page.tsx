@@ -9,18 +9,12 @@ import _ from "lodash";
 import Pagination from "@/components/ui/table/pagination/pagination";
 import useDebounce from "@/hooks/useDebounce";
 import RestaurantColumns, { RestaurantColumnsProps } from "./columns";
-import {
-  RestaurantDeleteResponse,
-  RestaurantListResponse,
-  RestaurantRequestApi,
-  RestaurantsApi,
-} from "@/swagger";
+import { RestaurantRequestApi, RestaurantsApi } from "@/swagger";
 import { Restaurant } from "@prisma/client";
 import ToolTip from "@/components/ui/tooltip/tooltip";
 import LimiPerPage from "@/components/ui/table/pagination/limitPerPage/limitPerPage";
 
 const entriesPerPageOptions = [5, 10, 15];
-const baseUrl = "http://localhost:3000";
 
 const RestaurantList = () => {
   const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
@@ -46,24 +40,20 @@ const RestaurantList = () => {
   const getRestaurants = async () => {
     try {
       const restaurantListApi = new RestaurantsApi();
-      restaurantListApi
-        .findRestaurants({
-          limit: restaurantsLimit,
-          page: currentPage,
-          search: debouncedSearchQuery,
-          sortBy: sortBy,
-          sortOrder: sortOrder,
-        })
-        .then((response: RestaurantListResponse) => {
-          const restaurants = response.data?.rows as Restaurant[];
-          setRestaurants(restaurants);
-          setTotalRestaurants(response.data?.count);
-          const totalPages = Math.ceil(
-            response.data?.count! / restaurantsLimit
-          );
-          setTotalPages(totalPages);
-        });
-    } catch (error) {
+      const response = await restaurantListApi.findRestaurants({
+        limit: restaurantsLimit,
+        page: currentPage,
+        search: debouncedSearchQuery,
+        sortBy: sortBy,
+        sortOrder: sortOrder,
+      });
+      const restaurants = response.data?.rows as Restaurant[];
+      setRestaurants(restaurants);
+      setTotalRestaurants(response.data?.count);
+      const totalPages = Math.ceil(response.data?.count! / restaurantsLimit);
+      setTotalPages(totalPages);
+    } catch (error: any) {
+      toast.error(error.message);
       console.log(error);
     }
   };
@@ -75,21 +65,21 @@ const RestaurantList = () => {
       );
       if (toDelete) {
         const resturantRequestApi = new RestaurantRequestApi();
-        resturantRequestApi
-          .deleteRestaurantById({ id: restaurantId })
-          .then((response: RestaurantDeleteResponse) => {
-            if (response.data?.success) {
-              const updatedRestaurants = restaurants.filter(
-                (restaurant) => restaurant.id != restaurantId
-              );
-              setRestaurants(updatedRestaurants);
-              setTotalRestaurants(response.data?.count);
-              toast.success(response.data?.message);
-            }
-          });
+        const response = await resturantRequestApi.deleteRestaurantById({
+          id: restaurantId,
+        });
+        if (response.data?.success) {
+          const updatedRestaurants = restaurants.filter(
+            (restaurant) => restaurant.id != restaurantId
+          );
+          setRestaurants(updatedRestaurants);
+          setTotalRestaurants(response.data?.count);
+          toast.success(response.data?.message);
+        }
       }
       return;
-    } catch (error) {
+    } catch (error: any) {
+      toast.error(error.message);
       console.log(error);
     }
   };
@@ -149,9 +139,7 @@ const RestaurantList = () => {
   };
 
   return (
-    
     <div className="min-h-screen">
-
       <div className="py-4 flex justify-start pl-5 border-b border-[#DDDDDD]">
         <h1 className="text-4xl font-bold text-center text-[#0F172A]">
           Restaurant List
@@ -159,7 +147,6 @@ const RestaurantList = () => {
       </div>
 
       <div className="flex sm:flex-row flex-col sm:justify-between justify-center items-center px-5 mt-8">
-
         <div className="flex items-center relative lg:w-[400px] sm:w-[250px] w-full sm:mr-6 mr-0 sm:mb-2 mb-8">
           <Search
             color="#dddddd"
@@ -179,36 +166,27 @@ const RestaurantList = () => {
         </div>
 
         <div className="flex sm:flex-row flex-col items-center">
-        
           <div className="text-right text-xs pr-6 sm:mb-0 mb-8">
-          <LimiPerPage
-            usersLimit={restaurantsLimit}
-            handleEntriesPerPageChange={handleEntriesPerPageChange}
-            entriesPerPageOptions={entriesPerPageOptions}
-          ></LimiPerPage>
+            <LimiPerPage
+              usersLimit={restaurantsLimit}
+              handleEntriesPerPageChange={handleEntriesPerPageChange}
+              entriesPerPageOptions={entriesPerPageOptions}></LimiPerPage>
           </div>
-  
+
           <button
             onClick={() => router.push("add-restaurant")}
-            className="bg-[#EBA232] hover:bg-[#EBA232] rounded-[8px] lg:w-40 w-28 py-4 "
-          >
+            className="bg-[#EBA232] hover:bg-[#EBA232] rounded-[8px] lg:w-40 w-28 py-4 ">
             <a className=" text-white lg:text-sm text-xs">Add Restaurant</a>
           </button>
-
         </div>
-
       </div>
 
-      
-
       <div className="overflow-auto rounded-lg border border-gray-200 drop-shadow-lg m-5">
-
         <table className=" bg-white text-left text-xs text-gray-600 w-full">
-
           <thead className="bg-[#0F172A]">
             <RestaurantColumns {...restaurantsColProps} />
           </thead>
-          
+
           <tbody>
             {restaurants!.map((restaurant: any) => (
               <tr
@@ -218,8 +196,7 @@ const RestaurantList = () => {
                   })
                 }
                 key={restaurant.id}
-                className="hover:bg-[#F4F5F7] border-b border-[#f5f5f5]"
-              >
+                className="hover:bg-[#F4F5F7] border-b border-[#f5f5f5]">
                 <td className="px-3">
                   {/* <span className="cursor-pointer hover:text-[#0F172A]"> */}
                   {restaurant.name}
@@ -240,9 +217,7 @@ const RestaurantList = () => {
                   />
                 </td> */}
                 <td className="py-3">
-
                   <div className="flex flex-row items-center">
-
                     <span className="px-1">
                       <ToolTip tooltip={"Edit Restaurant Details"}>
                         {" "}
@@ -272,9 +247,7 @@ const RestaurantList = () => {
                         />
                       </ToolTip>
                     </span>
-
                   </div>
-                  
                 </td>
               </tr>
             ))}

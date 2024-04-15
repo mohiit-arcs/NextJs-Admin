@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
-import { ChangePasswordResponse, MeApi } from "@/swagger";
+import { MeApi } from "@/swagger";
 import { useRouter } from "next/navigation";
 
 const ChangePassword = () => {
@@ -38,29 +38,24 @@ const ChangePassword = () => {
   const onSubmit = async (data: any) => {
     try {
       const changePasswordApi = new MeApi();
-      changePasswordApi
-        .changePassword({
-          changePasswordRequest: {
-            currentPassword: data.currentPassword,
-            newPassword: data.newPassword,
-          },
-        })
-        .then((response: ChangePasswordResponse) => {
-          if (response.data?.success) {
-            toast.success(response?.message);
-            router.push("/dashboard");
-          } else {
-            toast.error(response.message);
-          }
-        });
-    } catch (error) {
+      const response = await changePasswordApi.changePassword({
+        changePasswordRequest: {
+          currentPassword: data.currentPassword,
+          newPassword: data.newPassword,
+        },
+      });
+      if (response.data?.success) {
+        toast.success(response?.message);
+        router.push("/dashboard");
+      }
+    } catch (error: any) {
+      toast.error(error.message);
       console.log(error);
     }
   };
 
   return (
     <div className="bg-[#FFFFFF] p-5 min-h-screen px-5">
-
       <div className="">
         <h1 className="md:text-4xl text-3xl mb-4 text-left text-black font-extrabold">
           Change Password
@@ -68,13 +63,9 @@ const ChangePassword = () => {
       </div>
 
       <div className="border rounded-xl shadow-lg bg-[#FFFFFF]">
-
         <div className="p-8">
-
           <form onSubmit={handleSubmit(onSubmit)}>
-
             <div className="flex gap-[6%] flex-col md:flex-row w-full ">
-
               <div className="flex flex-col w-full md:w-[47%]">
                 <div className="relative">
                   <p className="mb-3 md:text-sm text-xs">
@@ -92,8 +83,9 @@ const ChangePassword = () => {
 
                   <div
                     className="-ml-7 cursor-pointer absolute top-[45%] left-[98%]"
-                    onClick={() => setShowCurrentPassword(!showCurrentPassword)}
-                  >
+                    onClick={() =>
+                      setShowCurrentPassword(!showCurrentPassword)
+                    }>
                     {showCurrentPassword ? (
                       <Eye color="black" />
                     ) : (
@@ -135,8 +127,7 @@ const ChangePassword = () => {
 
             <button
               type="submit"
-              className="bg-[#EBA232] hover:bg-[#cc861d] m-2 py-3 text-white rounded-[8px] w-[150px]"
-            >
+              className="bg-[#EBA232] hover:bg-[#cc861d] m-2 py-3 text-white rounded-[8px] w-[150px]">
               Submit
             </button>
           </form>
