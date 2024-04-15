@@ -9,6 +9,7 @@ import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { ChangePasswordResponse, MeApi } from "@/swagger";
 import { useRouter } from "next/navigation";
+import HeaderTitle from "@/components/ui/HeaderTitle/HeaderTitle";
 
 const ChangePassword = () => {
   const router = useRouter();
@@ -61,13 +62,9 @@ const ChangePassword = () => {
   return (
     <div className="bg-[#FFFFFF] p-5 min-h-screen px-5">
 
-      <div className="">
-        <h1 className="md:text-4xl text-3xl mb-4 text-left text-black font-extrabold">
-          Change Password
-        </h1>
-      </div>
+     <HeaderTitle title="Change Password"></HeaderTitle> 
 
-      <div className="border rounded-xl shadow-lg bg-[#FFFFFF]">
+      <div className="mt-4 border rounded-xl shadow-lg bg-[#FFFFFF]">
 
         <div className="p-8">
 

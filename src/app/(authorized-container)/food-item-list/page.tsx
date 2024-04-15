@@ -16,6 +16,7 @@ import {
   FoodItemsListResponse,
 } from "@/swagger";
 import LimiPerPage from "@/components/ui/table/pagination/limitPerPage/limitPerPage";
+import HeaderTitle from "@/components/ui/HeaderTitle/HeaderTitle";
 
 const entriesPerPageOptions = [5, 10, 15];
 const baseUrl = "http://localhost:3000";
@@ -148,15 +149,9 @@ const FoodItemList = () => {
   };
   return (
     <div className="min-h-screen">
-
-      <div className="py-4 flex justify-start pl-5 border-b border-[#DDDDDD]">
-        <h1 className="text-4xl font-bold text-center text-[#0F172A]">
-          Food Item List
-        </h1>
-      </div>
+      <HeaderTitle title="Food Item List"></HeaderTitle>
 
       <div className="flex sm:flex-row flex-col sm:justify-between justify-center items-center px-5 mt-8">
-
         <div className="flex items-center relative lg:w-[400px] sm:w-[250px] w-full sm:mr-6 mr-0 sm:mb-2 mb-8">
           <Search
             color="#dddddd"
@@ -175,30 +170,23 @@ const FoodItemList = () => {
           />
         </div>
 
-        
         <div className="flex sm:flex-row flex-col items-center">
+          <div className="text-right text-xs pr-6 sm:mb-0 mb-8">
+            <LimiPerPage
+              usersLimit={itemsLimit}
+              handleEntriesPerPageChange={handleEntriesPerPageChange}
+              entriesPerPageOptions={entriesPerPageOptions}
+            ></LimiPerPage>
+          </div>
 
-        <div className="text-right text-xs pr-6 sm:mb-0 mb-8">
-        <LimiPerPage
-          usersLimit={itemsLimit}
-          handleEntriesPerPageChange={handleEntriesPerPageChange}
-          entriesPerPageOptions={entriesPerPageOptions}
-        ></LimiPerPage>
+          <button
+            onClick={() => router.push("add-foodItem")}
+            className="bg-[#EBA232] hover:bg-[#EBA232] rounded-[8px] lg:w-40 w-28 py-4"
+          >
+            <a className=" text-white lg:text-sm text-xs">Add Food Item</a>
+          </button>
         </div>
-
-
-        <button
-          onClick={() => router.push("add-foodItem")}
-          className="bg-[#EBA232] hover:bg-[#EBA232] rounded-[8px] lg:w-40 w-28 py-4"
-        >
-          <a className=" text-white lg:text-sm text-xs">Add Food Item</a>
-        </button>
-
-        </div>
-        
       </div>
-
-      
 
       <div className="overflow-auto rounded-lg border border-gray-200 drop-shadow-lg m-5">
         <table className="bg-white text-left text-xs text-gray-600 w-full">

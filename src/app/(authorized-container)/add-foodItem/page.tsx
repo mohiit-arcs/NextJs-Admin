@@ -1,5 +1,6 @@
 "use client";
 
+import HeaderTitle from "@/components/ui/HeaderTitle/HeaderTitle";
 import { messages } from "@/messages/frontend/index.message";
 import {
   CreateFoodItemResponse,
@@ -133,13 +134,9 @@ const AddFoodItem = () => {
   return (
     <div className="bg-[#FFFFFF] p-5 min-h-screen px-5">
 
-        <div className="">
-          <h1 className="md:text-4xl text-3xl mb-4 text-left text-black font-extrabold">
-            Add Restuarant
-          </h1>
-        </div>
+        <HeaderTitle title="Add Food Item"></HeaderTitle>
 
-      <div className="border rounded-xl shadow-lg bg-[#FFFFFF]">
+      <div className="mt-4 border rounded-xl shadow-lg bg-[#FFFFFF]">
 
       <div className="p-8">
         
