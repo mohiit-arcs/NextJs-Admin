@@ -18,6 +18,7 @@ import {
 import { TaxFee } from "@prisma/client";
 import { useRestaurantContext } from "@/contexts/restaurant/RestaurantContext";
 import LimiPerPage from "@/components/ui/table/pagination/limitPerPage/limitPerPage";
+import ListingHeader from "@/components/ui/HeaderTitle/HeaderTitle";
 
 const entriesPerPageOptions = [5, 10, 15];
 
@@ -153,17 +154,10 @@ const TaxFeeList = () => {
     sortOrder,
   };
   return (
-
     <div className="min-h-screen">
-
-      <div className="py-4 flex justify-start pl-5 border-b border-[#DDDDDD]">
-        <h1 className="text-4xl font-bold text-center text-black">
-          Tax and Fee List
-        </h1>
-      </div>
+      <ListingHeader title="Tax & Fee List"></ListingHeader>
 
       <div className="flex sm:flex-row flex-col sm:justify-between justify-center items-center px-5 mt-8">
-
         <div className="flex items-center relative lg:w-[400px] sm:w-[250px] w-full sm:mr-6 mr-0 sm:mb-2 mb-8">
           <Search
             color="#dddddd"
@@ -182,28 +176,22 @@ const TaxFeeList = () => {
         </div>
 
         <div className="flex sm:flex-row flex-col items-center">
+          <div className="text-right text-xs pr-6 sm:mb-0 mb-8">
+            <LimiPerPage
+              usersLimit={taxFeeLimit}
+              handleEntriesPerPageChange={handleEntriesPerPageChange}
+              entriesPerPageOptions={entriesPerPageOptions}
+            ></LimiPerPage>
+          </div>
 
-        <div className="text-right text-xs pr-6 sm:mb-0 mb-8">
-        <LimiPerPage
-          usersLimit={taxFeeLimit}
-          handleEntriesPerPageChange={handleEntriesPerPageChange}
-          entriesPerPageOptions={entriesPerPageOptions}
-        ></LimiPerPage>
+          <button
+            onClick={() => router.push("add-taxfee")}
+            className="bg-[#EBA232] hover:bg-[#EBA232] rounded-[8px] lg:w-40 w-28 py-4"
+          >
+            <a className=" text-white lg:text-sm text-xs">Add new tax fee</a>
+          </button>
         </div>
-
-        <button
-          onClick={() => router.push("add-taxfee")}
-          className="bg-[#EBA232] hover:bg-[#EBA232] rounded-[8px] lg:w-40 w-28 py-4"
-        >
-          <a className=" text-white lg:text-sm text-xs">Add new tax fee</a>
-        </button>
-
-        </div>
-
-        
       </div>
-
-      
 
       <div className="overflow-auto rounded-lg border border-gray-200 drop-shadow-lg m-5">
         <table className="bg-white text-left text-xs text-gray-600 w-full">
@@ -220,9 +208,7 @@ const TaxFeeList = () => {
                 <td className="px-2">{_.capitalize(item.taxType)}</td>
                 <td className="px-2">{item.value}</td>
                 <td className="py-3">
-
                   <div className="flex flex-row items-center">
-
                     <span className="px-1">
                       <Pencil
                         size={15}
@@ -231,7 +217,7 @@ const TaxFeeList = () => {
                         onClick={() => onUpdate(item.id)}
                       />
                     </span>
-  
+
                     <span className="px-1">
                       <Trash
                         size={15}
@@ -240,9 +226,7 @@ const TaxFeeList = () => {
                         onClick={() => onDelete(item.id)}
                       />
                     </span>
-
                   </div>
-
                 </td>
               </tr>
             ))}

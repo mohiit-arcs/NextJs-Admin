@@ -12,6 +12,7 @@ import {
   RestaurantsApi,
   UpdateRestaurantResponse,
 } from "@/swagger";
+import HeaderTitle from "@/components/ui/HeaderTitle/HeaderTitle";
 
 type Inputs = {
   name: string;
@@ -209,13 +210,9 @@ const UpdateRestaurant = () => {
   return (
     <div className="bg-[#FFFFFF] p-5 min-h-screen px-5">
 
-      <div className="">
-          <h1 className="text-4xl mb-4 text-left text-black font-extrabold">
-            Update Restuarant
-          </h1>
-        </div>
+      <HeaderTitle title="Update Restaurant"></HeaderTitle>
 
-      <div className="border rounded-xl shadow-lg bg-[#FFFFFF]">
+      <div className="mt-4 border rounded-xl shadow-lg bg-[#FFFFFF]">
         
 
         <div className="p-8">
