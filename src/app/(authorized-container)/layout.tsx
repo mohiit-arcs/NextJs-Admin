@@ -3,7 +3,6 @@
 import Sidebar from "@/components/sidebar";
 import { useUserProfile } from "@/components/user-profile/page";
 import { useRestaurantContext } from "@/contexts/restaurant/RestaurantContext";
-import useInterceptor from "@/hooks/useInterceptor";
 import { getAuthToken } from "@/services/frontend/storage.service";
 import {
   MeApi,
@@ -27,8 +26,6 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
     }
     setProfile();
   }, []);
-
-  useInterceptor();
 
   const setProfile = () => {
     try {

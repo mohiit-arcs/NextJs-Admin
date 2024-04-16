@@ -5,6 +5,7 @@ import { ToastContainer } from "react-toastify";
 import { UserProfileProvider } from "@/components/user-profile/page";
 import { config } from "@/config/index.config";
 import { RestaurantProvider } from "@/contexts/restaurant/RestaurantContext";
+import Interceptor from "@/contexts/interceptor/Interceptor";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -18,34 +19,38 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <UserProfileProvider>
-      <RestaurantProvider>
-        <head>
-          <meta charSet="UTF-8" />
-          <meta
-            name="viewport"
-            content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-          />
-          <title>{config.applicationName}</title>
-        </head>
-        <html lang="en">
-          <body
-            className={poppins.className + ` scrollbar-thin scrollbar-webkit`}>
-            {children}
-            <ToastContainer
-              position="top-right"
-              autoClose={2500}
-              hideProgressBar={false}
-              newestOnTop={true}
-              closeOnClick
-              rtl={false}
-              pauseOnFocusLoss
-              draggable
-              pauseOnHover
+    <Interceptor>
+      <UserProfileProvider>
+        <RestaurantProvider>
+          <head>
+            <meta charSet="UTF-8" />
+            <meta
+              name="viewport"
+              content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
             />
-          </body>
-        </html>
-      </RestaurantProvider>
-    </UserProfileProvider>
+            <title>{config.applicationName}</title>
+          </head>
+          <html lang="en">
+            <body
+              className={
+                poppins.className + ` scrollbar-thin scrollbar-webkit`
+              }>
+              {children}
+              <ToastContainer
+                position="top-right"
+                autoClose={2500}
+                hideProgressBar={false}
+                newestOnTop={true}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+              />
+            </body>
+          </html>
+        </RestaurantProvider>
+      </UserProfileProvider>
+    </Interceptor>
   );
 }

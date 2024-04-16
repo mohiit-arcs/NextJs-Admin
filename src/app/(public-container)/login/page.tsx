@@ -2,7 +2,7 @@
 import { useUserProfile } from "@/components/user-profile/page";
 import { messages } from "@/messages/frontend/index.message";
 import { setAuthToken } from "@/services/frontend/storage.service";
-import { AuthenticationApi, LoginResponse } from "@/swagger";
+import { AuthenticationApi } from "@/swagger";
 import { RoleSlug } from "@prisma/client";
 import { Eye, EyeOff } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -29,36 +29,31 @@ export default function LoginPage() {
   const onLogin: SubmitHandler<Inputs> = async (login) => {
     try {
       const authApi = new AuthenticationApi();
-      authApi
-        .login({
-          loginRequest: {
-            email: login.email,
-            password: login.password,
-          },
-        })
-        .then((response: LoginResponse) => {
-          console.log(response);
-          if (response.data?.profile) {
-            const token = response.data.token;
-            setUserProfile(response.data.profile);
-            setAuthToken(token);
-            if (response.data.profile.role?.slug === RoleSlug.superAdmin) {
-              router.push("/user-list");
-              toast.success(response.message);
-            } else if (
-              response.data.profile.role?.slug === RoleSlug.restaurantAdmin
-            ) {
-              router.push("/restaurant-list");
-              toast.success(response.message);
-            } else {
-              router.push("/dashboard");
-              toast.success(response.message);
-            }
-          } else {
-            toast.error(response.message);
-          }
-        });
-    } catch (error) {
+      const response = await authApi.login({
+        loginRequest: {
+          email: login.email,
+          password: login.password,
+        },
+      });
+      if (response.data?.profile) {
+        const token = response.data.token;
+        setUserProfile(response.data.profile);
+        setAuthToken(token);
+        if (response.data.profile.role?.slug === RoleSlug.superAdmin) {
+          router.push("/user-list");
+          toast.success(response.message);
+        } else if (
+          response.data.profile.role?.slug === RoleSlug.restaurantAdmin
+        ) {
+          router.push("/restaurant-list");
+          toast.success(response.message);
+        } else {
+          router.push("/dashboard");
+          toast.success(response.message);
+        }
+      }
+    } catch (error: any) {
+      toast.error(error.message);
       console.log(error);
     }
   };
