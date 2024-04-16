@@ -8,7 +8,7 @@ interface LimiPerPageProps {
   ) => void;
 }
 
-const LimiPerPage = ({
+const LimitPerPage = ({
   usersLimit,
   entriesPerPageOptions,
   handleEntriesPerPageChange,
@@ -30,4 +30,4 @@ const LimiPerPage = ({
   );
 };
 
-export default LimiPerPage;
+export default LimitPerPage;

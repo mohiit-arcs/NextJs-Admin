@@ -10,7 +10,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import FoodItemListColumns, { FoodItemListColumnsProps } from "./columns";
 import { FoodItemRequestApi, FoodItemsApi } from "@/swagger";
-import LimiPerPage from "@/components/ui/table/pagination/limitPerPage/limitPerPage";
+import LimitPerPage from "@/components/ui/table/pagination/limitPerPage/limitPerPage";
 import HeaderTitle from "@/components/ui/HeaderTitle/HeaderTitle";
 
 const entriesPerPageOptions = [5, 10, 15];
@@ -161,10 +161,10 @@ const FoodItemList = () => {
 
         <div className="flex sm:flex-row flex-col items-center">
           <div className="text-right text-xs pr-6 sm:mb-0 mb-8">
-            <LimiPerPage
+            <LimitPerPage
               usersLimit={itemsLimit}
               handleEntriesPerPageChange={handleEntriesPerPageChange}
-              entriesPerPageOptions={entriesPerPageOptions}></LimiPerPage>
+              entriesPerPageOptions={entriesPerPageOptions}></LimitPerPage>
           </div>
 
           <button

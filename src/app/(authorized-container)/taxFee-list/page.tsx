@@ -12,7 +12,7 @@ import TaxFeeColumnsListColumns, { FoodItemListColumnsProps } from "./column";
 import { TaxFeeApi, TaxFeeRequestApi } from "@/swagger";
 import { TaxFee } from "@prisma/client";
 import { useRestaurantContext } from "@/contexts/restaurant/RestaurantContext";
-import LimiPerPage from "@/components/ui/table/pagination/limitPerPage/limitPerPage";
+import LimitPerPage from "@/components/ui/table/pagination/limitPerPage/limitPerPage";
 import ListingHeader from "@/components/ui/HeaderTitle/HeaderTitle";
 
 const entriesPerPageOptions = [5, 10, 15];
@@ -170,10 +170,10 @@ const TaxFeeList = () => {
 
         <div className="flex sm:flex-row flex-col items-center">
           <div className="text-right text-xs pr-6 sm:mb-0 mb-8">
-            <LimiPerPage
+            <LimitPerPage
               usersLimit={taxFeeLimit}
               handleEntriesPerPageChange={handleEntriesPerPageChange}
-              entriesPerPageOptions={entriesPerPageOptions}></LimiPerPage>
+              entriesPerPageOptions={entriesPerPageOptions}></LimitPerPage>
           </div>
 
           <button

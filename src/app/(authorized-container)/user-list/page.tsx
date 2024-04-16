@@ -10,13 +10,8 @@ import _ from "lodash";
 import Pagination from "@/components/ui/table/pagination/pagination";
 import useDebounce from "@/hooks/useDebounce";
 import UserColumns, { UserColumnsProps } from "./columns";
-import {
-  UserDeleteResponse,
-  UserListResponse,
-  UserRequestApi,
-  UsersApi,
-} from "@/swagger";
-import LimiPerPage from "@/components/ui/table/pagination/limitPerPage/limitPerPage";
+import { UserRequestApi, UsersApi } from "@/swagger";
+import LimitPerPage from "@/components/ui/table/pagination/limitPerPage/limitPerPage";
 import ListingHeader from "@/components/ui/HeaderTitle/HeaderTitle";
 
 const entriesPerPageOptions = [5, 10, 15];
@@ -75,6 +70,7 @@ const UserList = () => {
           const updatedUsers = users.filter((user) => user.id != userId);
           setUsers(updatedUsers);
           setTotalUsers(response.data.count);
+          setCurrentPage(1);
           toast.success(response.data.message);
         }
       }
@@ -165,10 +161,10 @@ const UserList = () => {
 
         <div className="flex sm:flex-row flex-col items-center">
           <div className="text-right text-xs pr-6 sm:mb-0 mb-8">
-            <LimiPerPage
+            <LimitPerPage
               usersLimit={usersLimit}
               handleEntriesPerPageChange={handleEntriesPerPageChange}
-              entriesPerPageOptions={entriesPerPageOptions}></LimiPerPage>
+              entriesPerPageOptions={entriesPerPageOptions}></LimitPerPage>
           </div>
 
           <button

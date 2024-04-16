@@ -11,7 +11,7 @@ import "react-toastify/dist/ReactToastify.css";
 import MenuCategoryListColumns, { FoodItemListColumnsProps } from "./column";
 import { MenuCategoryApi } from "@/swagger";
 import { useRestaurantContext } from "@/contexts/restaurant/RestaurantContext";
-import LimiPerPage from "@/components/ui/table/pagination/limitPerPage/limitPerPage";
+import LimitPerPage from "@/components/ui/table/pagination/limitPerPage/limitPerPage";
 import ListingHeader from "@/components/ui/HeaderTitle/HeaderTitle";
 
 const entriesPerPageOptions = [5, 10, 15];
@@ -143,10 +143,10 @@ const MenuCategoryList = () => {
 
         <div className="flex sm:flex-row flex-col items-center">
           <div className="text-right text-xs pr-6 sm:mb-0 mb-8">
-            <LimiPerPage
+            <LimitPerPage
               usersLimit={menuCategoriesLimit}
               handleEntriesPerPageChange={handleEntriesPerPageChange}
-              entriesPerPageOptions={entriesPerPageOptions}></LimiPerPage>
+              entriesPerPageOptions={entriesPerPageOptions}></LimitPerPage>
           </div>
 
           <button

@@ -12,7 +12,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { OrdersApi } from "@/swagger";
 import { useRestaurantContext } from "@/contexts/restaurant/RestaurantContext";
-import LimiPerPage from "@/components/ui/table/pagination/limitPerPage/limitPerPage";
+import LimitPerPage from "@/components/ui/table/pagination/limitPerPage/limitPerPage";
 import ListingHeader from "@/components/ui/HeaderTitle/HeaderTitle";
 
 const entriesPerPageOptions = [5, 10, 15];
@@ -148,10 +148,10 @@ const UserList = () => {
 
         <div className="flex sm:flex-row flex-col items-center">
           <div className="text-right text-xs pr-6 sm:mb-0">
-            <LimiPerPage
+            <LimitPerPage
               usersLimit={ordersLimit}
               handleEntriesPerPageChange={handleEntriesPerPageChange}
-              entriesPerPageOptions={entriesPerPageOptions}></LimiPerPage>
+              entriesPerPageOptions={entriesPerPageOptions}></LimitPerPage>
           </div>
         </div>
       </div>

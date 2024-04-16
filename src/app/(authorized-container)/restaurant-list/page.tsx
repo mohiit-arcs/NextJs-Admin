@@ -12,7 +12,7 @@ import RestaurantColumns, { RestaurantColumnsProps } from "./columns";
 import { RestaurantRequestApi, RestaurantsApi } from "@/swagger";
 import { Restaurant } from "@prisma/client";
 import ToolTip from "@/components/ui/tooltip/tooltip";
-import LimiPerPage from "@/components/ui/table/pagination/limitPerPage/limitPerPage";
+import LimitPerPage from "@/components/ui/table/pagination/limitPerPage/limitPerPage";
 import ListingHeader from "@/components/ui/HeaderTitle/HeaderTitle";
 
 const entriesPerPageOptions = [5, 10, 15];
@@ -165,10 +165,10 @@ const RestaurantList = () => {
 
         <div className="flex sm:flex-row flex-col items-center">
           <div className="text-right text-xs pr-6 sm:mb-0 mb-8">
-            <LimiPerPage
+            <LimitPerPage
               usersLimit={restaurantsLimit}
               handleEntriesPerPageChange={handleEntriesPerPageChange}
-              entriesPerPageOptions={entriesPerPageOptions}></LimiPerPage>
+              entriesPerPageOptions={entriesPerPageOptions}></LimitPerPage>
           </div>
 
           <button
