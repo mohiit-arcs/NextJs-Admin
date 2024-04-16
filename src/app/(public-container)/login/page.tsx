@@ -65,11 +65,8 @@ export default function LoginPage() {
 
   return (
     <div className="bg-gradient-to-b from-orange-50 to-orange-100 md:h-screen h-full flex md:flex-row flex-col md:p-0 sm:p-16 p-8">
-
       <div className="flex-1 p-4 flex flex-row justify-center items-center lg:w-1/2 md:w-2/3 w-full">
-
         <div className="lg:w-1/2 md:w-2/3 w-full">
-
           <div className="w-full mb-16 flex flex-row items-center">
             <img
               className="w-16"
@@ -150,7 +147,7 @@ export default function LoginPage() {
                     className="xl:w-2/12 w-3/12 flex justify-center items-center bg-[#FFFFFF] border-t border-r border-b border-[#E2E8F0] rounded-r-lg p-4 ml-px mt-2"
                     onClick={() => setShowPassword(!showPassword)}>
                     {showPassword ? (
-                      <Eye color="black"  />
+                      <Eye color="black" />
                     ) : (
                       <EyeOff color="black" />
                     )}

@@ -57,11 +57,9 @@ const ChangePassword = () => {
 
   return (
     <div className="bg-[#FFFFFF] p-5 min-h-screen px-5">
-
-     <HeaderTitle title="Change Password"></HeaderTitle> 
+      <HeaderTitle title="Change Password"></HeaderTitle>
 
       <div className="mt-4 border rounded-xl shadow-lg bg-[#FFFFFF]">
-
         <div className="p-8">
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="flex gap-[6%] flex-col md:flex-row w-full ">

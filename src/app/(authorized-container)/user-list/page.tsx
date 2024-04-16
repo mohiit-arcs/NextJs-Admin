@@ -168,14 +168,12 @@ const UserList = () => {
             <LimiPerPage
               usersLimit={usersLimit}
               handleEntriesPerPageChange={handleEntriesPerPageChange}
-              entriesPerPageOptions={entriesPerPageOptions}
-            ></LimiPerPage>
+              entriesPerPageOptions={entriesPerPageOptions}></LimiPerPage>
           </div>
 
           <button
             onClick={() => router.push("add-user")}
-            className="bg-[#EBA232] hover:bg-[#EBA232] rounded-[8px] lg:w-28 w-20 py-4"
-          >
+            className="bg-[#EBA232] hover:bg-[#EBA232] rounded-[8px] lg:w-28 w-20 py-4">
             <a className=" text-white lg:text-sm text-xs">Add User</a>
           </button>
         </div>
@@ -192,8 +190,7 @@ const UserList = () => {
               users!.map((user: any) => (
                 <tr
                   key={user.id}
-                  className="hover:bg-[#F4F5F7] border-b border-[#f5f5f5]"
-                >
+                  className="hover:bg-[#F4F5F7] border-b border-[#f5f5f5]">
                   <td className="px-2">{user.name}</td>
                   <td className="px-2">{user.email}</td>
                   <td className="px-2">{user.role.name}</td>

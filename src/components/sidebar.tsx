@@ -93,8 +93,7 @@ const Sidebar = ({
             setIsShowDialog(!isShowDialog);
             toast.success(messages.defaultResataurantUpdate);
           }}
-          id="restaurant"
-        >
+          id="restaurant">
           <option disabled>-- Select Restaurant --</option>
           {restaurants.map((item: any) => {
             return (
@@ -113,8 +112,7 @@ const Sidebar = ({
       <div
         className={
           sidebarOpen == false ? sidebarCloseClass : "w-full transition-all"
-        }
-      >
+        }>
         <div className="bg-[#0F172A] h-full relative pl-4 py-2">
           <div className="text-center">
             <h1 className="text-2xl text-[#FFFFFF] font-bold mr-4 my-3">
@@ -122,7 +120,6 @@ const Sidebar = ({
             </h1>
           </div>
           {defaultRestuarant != null ? (
-
             <div className="flex justify-start ml-4 items-center gap-2 mt-8">
               <p className="text-right text-white">{defaultRestuarant?.name}</p>
               {restaurants.length > 0 ? (
@@ -139,8 +136,7 @@ const Sidebar = ({
                   handleCloseDialog={handleCloseDialog}
                   actionsPannel={DialogActions()}
                   size={"w-2/7"}
-                  color={"bg-green"}
-                ></Dialog>
+                  color={"bg-green"}></Dialog>
               )}
             </div>
           ) : null}
@@ -151,8 +147,7 @@ const Sidebar = ({
                   `flex items-center  p-2 ` +
                   (pathname === "/dashboard" ? activeClass : "")
                 }
-                href={"/dashboard"}
-              >
+                href={"/dashboard"}>
                 <div className="p-1 flex justify-center items-center group-hover:text-[#EBA232] rounded-full w-8 h-8 bg-[#0F172A] text-[#FFFFFF]">
                   <LayoutDashboardIcon width={16} height={16} />
                 </div>
@@ -166,8 +161,7 @@ const Sidebar = ({
                     `flex items-center  p-2 ` +
                     (pathname === "/user-list" ? activeClass : "")
                   }
-                  href={"/user-list"}
-                >
+                  href={"/user-list"}>
                   <div className="p-1 flex justify-center items-center group-hover:text-[#EBA232] rounded-full w-8 h-8 bg-[#0F172A] text-[#FFFFFF]">
                     <Users width={16} height={16} />
                   </div>
@@ -182,8 +176,7 @@ const Sidebar = ({
                     `flex items-center  p-2 ` +
                     (pathname === "/restaurant-list" ? activeClass : "")
                   }
-                  href={"/restaurant-list"}
-                >
+                  href={"/restaurant-list"}>
                   <div className="p-1 flex justify-center items-center group-hover:text-[#EBA232] rounded-full w-8 h-8 bg-[#0F172A] text-[#FFFFFF]">
                     <Hotel width={16} height={16} />
                   </div>
@@ -198,8 +191,7 @@ const Sidebar = ({
                     `flex items-center  p-2 ` +
                     (pathname === "/taxFee-list" ? activeClass : "")
                   }
-                  href={"/taxFee-list"}
-                >
+                  href={"/taxFee-list"}>
                   <div className="p-1 flex justify-center items-center group-hover:text-[#EBA232] rounded-full w-8 h-8 bg-[#0F172A] text-[#FFFFFF]">
                     <Percent width={16} height={16} />
                   </div>
@@ -214,8 +206,7 @@ const Sidebar = ({
                     `flex items-center  p-2 ` +
                     (pathname === "/menu-category-list" ? activeClass : "")
                   }
-                  href={"/menu-category-list"}
-                >
+                  href={"/menu-category-list"}>
                   <div className="p-1 flex justify-center items-center group-hover:text-[#EBA232] rounded-full w-8 h-8 bg-[#0F172A] text-[#FFFFFF]">
                     <Menu width={16} height={16} />
                   </div>
@@ -230,8 +221,7 @@ const Sidebar = ({
                     `flex items-center  p-2 ` +
                     (pathname === "/food-item-list" ? activeClass : "")
                   }
-                  href={"/food-item-list"}
-                >
+                  href={"/food-item-list"}>
                   <div className="p-1 flex justify-center group-hover:text-[#EBA232] items-center rounded-full w-8 h-8 bg-[#0F172A] text-[#FFFFFF]">
                     <Utensils width={16} height={16} />
                   </div>
@@ -246,8 +236,7 @@ const Sidebar = ({
                     `flex items-center  p-2 ` +
                     (pathname === "/order-list" ? activeClass : "")
                   }
-                  href={"/order-list"}
-                >
+                  href={"/order-list"}>
                   <div className="p-1 flex justify-center group-hover:text-[#EBA232] items-center rounded-full w-8 h-8 bg-[#0F172A] text-[#FFFFFF]">
                     <ShoppingCart width={16} height={16} />
                   </div>
@@ -263,8 +252,7 @@ const Sidebar = ({
                   `flex items-center  p-2 ` +
                   (pathname === "/profile" ? activeClass : "")
                 }
-                href={"/profile"}
-              >
+                href={"/profile"}>
                 <div className="p-1 flex justify-center items-center group-hover:text-[#EBA232] rounded-full w-8 h-8 bg-[#0F172A] text-[#FFFFFF]">
                   <User width={16} height={16} />
                 </div>
@@ -277,8 +265,7 @@ const Sidebar = ({
                   `flex items-center  p-2 ` +
                   (pathname === "/change-password" ? activeClass : "")
                 }
-                href={"/change-password"}
-              >
+                href={"/change-password"}>
                 <div className="p-1 flex justify-center items-center group-hover:text-[#EBA232] rounded-full w-8 h-8 bg-[#0F172A] text-[#FFFFFF]">
                   <Key width={16} height={16} />
                 </div>
@@ -287,8 +274,7 @@ const Sidebar = ({
             </li>
             <li
               className="flex cursor-pointer group items-center hover:text-[#EBA232]  p-2"
-              onClick={() => logout()}
-            >
+              onClick={() => logout()}>
               <div className="p-1 flex justify-center items-center rounded-full w-8 h-8 bg-[#0F172A] text-[#FFFFFF] group-hover:text-[#EBA232]">
                 <LogOut width={16} height={16} />
               </div>
@@ -299,8 +285,7 @@ const Sidebar = ({
       </div>
       <div
         onClick={() => handleSideBarToggle()}
-        className="bg-[#ffffff] w-0 flex items-center justify-center"
-      >
+        className="bg-[#ffffff] w-0 flex items-center justify-center">
         <span className="mr-7 z-10 absolute right-[-32px]">
           {sidebarOpen ? (
             <div>
@@ -311,19 +296,16 @@ const Sidebar = ({
                 viewBox="0 0 16 96"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
-                stroke="#FFFFFF"
-              >
+                stroke="#FFFFFF">
                 <path
                   d="M2.5 0H3C3 20 15 12 15 32V64C15 84 3 76 3 96H2.5V0Z"
                   fill="#FFFFFF"
                   fillOpacity="0.12"
                   stroke="transparent"
-                  strokeWidth="0px"
-                ></path>
+                  strokeWidth="0px"></path>
                 <path
                   d="M0 0H2.5C2.5 20 14.5 12 14.5 32V64C14.5 84 2.5 76 2.5 96H0V0Z"
-                  fill="#FFFFFF"
-                ></path>
+                  fill="#FFFFFF"></path>
               </svg>
               <ChevronLeft
                 color="black"
@@ -343,19 +325,16 @@ const Sidebar = ({
                 viewBox="0 0 16 96"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
-                stroke="black"
-              >
+                stroke="black">
                 <path
                   d="M2.5 0H3C3 20 15 12 15 32V64C15 84 3 76 3 96H2.5V0Z"
                   fill="black"
                   fillOpacity="0.12"
                   stroke="transparent"
-                  strokeWidth="0px"
-                ></path>
+                  strokeWidth="0px"></path>
                 <path
                   d="M0 0H2.5C2.5 20 14.5 12 14.5 32V64C14.5 84 2.5 76 2.5 96H0V0Z"
-                  fill="black"
-                ></path>
+                  fill="black"></path>
               </svg>
               <ChevronRight
                 color="white"

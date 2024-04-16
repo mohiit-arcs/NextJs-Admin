@@ -151,8 +151,7 @@ const UserList = () => {
             <LimiPerPage
               usersLimit={ordersLimit}
               handleEntriesPerPageChange={handleEntriesPerPageChange}
-              entriesPerPageOptions={entriesPerPageOptions}
-            ></LimiPerPage>
+              entriesPerPageOptions={entriesPerPageOptions}></LimiPerPage>
           </div>
         </div>
       </div>
@@ -168,8 +167,7 @@ const UserList = () => {
               orders!.map((order: any) => (
                 <tr
                   key={order.id}
-                  className="hover:bg-[#F4F5F7] border-b border-[#f5f5f5]"
-                >
+                  className="hover:bg-[#F4F5F7] border-b border-[#f5f5f5]">
                   <td className="px-2">{_.capitalize(order.status)}</td>
                   <td className="px-2">{order.amount}</td>
                   <td className="px-2">{order.taxAmount}</td>

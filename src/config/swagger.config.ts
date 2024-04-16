@@ -102,10 +102,7 @@ import {
   TaxFeeDeleteResponse,
   TaxFeeDetailsResponse,
 } from "@/app/api/v1/tax-fee/[id]/swagger";
-import {
-  OrdersAPI,
-  OrdersListResponse,
-} from "@/app/api/v1/orders/swagger";
+import { OrdersAPI, OrdersListResponse } from "@/app/api/v1/orders/swagger";
 
 export const getApiDocs = () => {
   const spec = createSwaggerSpec({

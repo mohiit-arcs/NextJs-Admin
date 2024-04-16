@@ -87,6 +87,7 @@ const TaxFeeList = () => {
           );
           setTaxFee(updatedTaxFee);
           setTotalTaxFee(response.data?.count);
+          setCurrentPage(1);
           toast.success(response.data?.message);
         }
       }
@@ -172,14 +173,12 @@ const TaxFeeList = () => {
             <LimiPerPage
               usersLimit={taxFeeLimit}
               handleEntriesPerPageChange={handleEntriesPerPageChange}
-              entriesPerPageOptions={entriesPerPageOptions}
-            ></LimiPerPage>
+              entriesPerPageOptions={entriesPerPageOptions}></LimiPerPage>
           </div>
 
           <button
             onClick={() => router.push("add-taxfee")}
-            className="bg-[#EBA232] hover:bg-[#EBA232] rounded-[8px] lg:w-40 w-28 py-4"
-          >
+            className="bg-[#EBA232] hover:bg-[#EBA232] rounded-[8px] lg:w-40 w-28 py-4">
             <a className=" text-white lg:text-sm text-xs">Add new tax fee</a>
           </button>
         </div>

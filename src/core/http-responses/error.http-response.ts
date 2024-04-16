@@ -6,11 +6,15 @@ import {} from "prisma/prisma-client/index";
 export const errorResponse = (exception: any) => {
   const statusCode = getExceptionStatus(exception);
   const message = getExceptionMessage(exception);
-  return NextResponse.json({
-    success: false,
-    message: message,
-    statusCode: statusCode,
-  });
+  const headers = getHeaders();
+  return new NextResponse(
+    JSON.stringify({
+      success: false,
+      message: message,
+      statusCode: statusCode,
+    }),
+    { status: statusCode, headers }
+  );
 };
 
 export const getExceptionStatus = (exception: any) => {
@@ -24,3 +28,7 @@ export const getExceptionMessage = (exception: any) => {
     ? exception.message
     : "Internal Server Error";
 };
+
+export function getHeaders() {
+  return { "content-type": "application/json" };
+}

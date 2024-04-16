@@ -130,46 +130,38 @@ const AddFoodItem = () => {
 
   return (
     <div className="bg-[#FFFFFF] p-5 min-h-screen px-5">
-
-        <HeaderTitle title="Add Food Item"></HeaderTitle>
+      <HeaderTitle title="Add Food Item"></HeaderTitle>
 
       <div className="mt-4 border rounded-xl shadow-lg bg-[#FFFFFF]">
+        <div className="p-8">
+          <form onSubmit={handleSubmit(addFoodItem)}>
+            <div className="flex gap-[6%] md:flex-row flex-col w-full ">
+              <div className="flex flex-col md:w-[47%] w-full">
+                <div className="relative">
+                  <p className="mb-3 md:text-sm text-xs">
+                    <label className="text-black" htmlFor="name">
+                      Name:
+                    </label>
+                  </p>
 
-      <div className="p-8">
-        
-        <form onSubmit={handleSubmit(addFoodItem)}>
+                  <input
+                    className="p-3 mb-5 w-full text-black rounded-[8px] border md:text-sm text-xs"
+                    type="text"
+                    id="name"
+                    autoComplete="off"
+                    placeholder="Name"
+                    {...register("name", {
+                      required: true,
+                      validate: validateNoWhiteSpace,
+                    })}
+                  />
 
-        <div className="flex gap-[6%] md:flex-row flex-col w-full ">
-
-        <div className="flex flex-col md:w-[47%] w-full">
-
-          <div className="relative">
-
-            <p className="mb-3 md:text-sm text-xs">
-              <label className="text-black" htmlFor="name">
-                Name:
-              </label>
-            </p>
-  
-              <input
-                className="p-3 mb-5 w-full text-black rounded-[8px] border md:text-sm text-xs"
-                type="text"
-                id="name"
-                autoComplete="off"
-                placeholder="Name"
-                {...register("name", {
-                  required: true,
-                  validate: validateNoWhiteSpace,
-                })}
-              />
-            
-            {errors.name && (
-              <div className="error text-red-500 text-xs absolute bottom-0 px-4">
-                {messages.form.validation.name.required}
-              </div>
-            )}
-
-          </div>
+                  {errors.name && (
+                    <div className="error text-red-500 text-xs absolute bottom-0 px-4">
+                      {messages.form.validation.name.required}
+                    </div>
+                  )}
+                </div>
 
                 <div className="relative">
                   <p className="mb-3 md:text-sm text-xs">

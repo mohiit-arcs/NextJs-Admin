@@ -73,6 +73,7 @@ const FoodItemList = () => {
           );
           setFoodItems(updatedFoodItems);
           setTotalFoodItems(response.data.count);
+          setCurrentPage(1);
           toast.success(response.data.message);
         }
       }
@@ -163,14 +164,12 @@ const FoodItemList = () => {
             <LimiPerPage
               usersLimit={itemsLimit}
               handleEntriesPerPageChange={handleEntriesPerPageChange}
-              entriesPerPageOptions={entriesPerPageOptions}
-            ></LimiPerPage>
+              entriesPerPageOptions={entriesPerPageOptions}></LimiPerPage>
           </div>
 
           <button
             onClick={() => router.push("add-foodItem")}
-            className="bg-[#EBA232] hover:bg-[#EBA232] rounded-[8px] lg:w-40 w-28 py-4"
-          >
+            className="bg-[#EBA232] hover:bg-[#EBA232] rounded-[8px] lg:w-40 w-28 py-4">
             <a className=" text-white lg:text-sm text-xs">Add Food Item</a>
           </button>
         </div>

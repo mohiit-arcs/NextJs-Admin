@@ -13,7 +13,6 @@ import { RestaurantRequestApi, RestaurantsApi } from "@/swagger";
 import { Restaurant } from "@prisma/client";
 import ToolTip from "@/components/ui/tooltip/tooltip";
 import LimiPerPage from "@/components/ui/table/pagination/limitPerPage/limitPerPage";
-import { title } from "process";
 import ListingHeader from "@/components/ui/HeaderTitle/HeaderTitle";
 
 const entriesPerPageOptions = [5, 10, 15];
@@ -76,6 +75,7 @@ const RestaurantList = () => {
           );
           setRestaurants(updatedRestaurants);
           setTotalRestaurants(response.data?.count);
+          setCurrentPage(1);
           toast.success(response.data?.message);
         }
       }
@@ -168,8 +168,7 @@ const RestaurantList = () => {
             <LimiPerPage
               usersLimit={restaurantsLimit}
               handleEntriesPerPageChange={handleEntriesPerPageChange}
-              entriesPerPageOptions={entriesPerPageOptions}
-            ></LimiPerPage>
+              entriesPerPageOptions={entriesPerPageOptions}></LimiPerPage>
           </div>
 
           <button
