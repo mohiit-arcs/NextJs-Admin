@@ -1,5 +1,6 @@
 "use client";
 
+import HeaderTitle from "@/components/ui/HeaderTitle/HeaderTitle";
 import { messages } from "@/messages/frontend/index.message";
 import { FoodItemRequestApi, FoodItemsApi } from "@/swagger";
 import { useParams, useRouter } from "next/navigation";
@@ -81,13 +82,9 @@ const UpdateFoodItem = () => {
 
   return (
     <div className="bg-[#FFFFFF] p-5 min-h-screen px-5">
-      <div className="">
-        <h1 className="md:text-4xl text-3xl mb-4 text-left text-black font-extrabold">
-          Update Food Item
-        </h1>
-      </div>
+      <HeaderTitle title="Update Food Item"></HeaderTitle>
 
-      <div className="border rounded-xl shadow-lg bg-[#FFFFFF]">
+      <div className="mt-4 border rounded-xl shadow-lg bg-[#FFFFFF]">
         <div className="p-8">
           <form onSubmit={handleSubmit(updateFoodItem)}>
             <div className="flex gap-[6%] md:flex-row flex-col w-full ">
@@ -150,7 +147,8 @@ const UpdateFoodItem = () => {
 
             <button
               type="submit"
-              className="bg-[#EBA232] hover:bg-[#cc861d] m-2 py-3 text-white rounded-[8px] w-[150px]">
+              className="bg-[#EBA232] hover:bg-[#cc861d] m-2 py-3 text-white rounded-[8px] w-[150px]"
+            >
               Submit
             </button>
           </form>

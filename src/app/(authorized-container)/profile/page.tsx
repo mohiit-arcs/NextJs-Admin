@@ -1,5 +1,6 @@
 "use client";
 
+import HeaderTitle from "@/components/ui/HeaderTitle/HeaderTitle";
 import { LoginResponseDataProfile, MeApi } from "@/swagger";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -27,13 +28,9 @@ const Profile = () => {
 
   return (
     <div className="bg-white min-h-screen p-5">
-      <div className="px-4 py-5 rounded-tl-lg rounded-tr-lg">
-        <h3 className="text-4xl leading-6 font-bold text-[#0F172A]">
-          User Details
-        </h3>
-      </div>
+      <HeaderTitle title="User Details"></HeaderTitle>
 
-      <div className="bg-white border w-full text-center shadow-lg rounded-lg">
+      <div className="mt-4 bg-white border w-full text-center shadow-lg rounded-lg">
         <div className="">
           <dl className="px-5 py-4 rounded-lg ">
             <div className=" px-4 py-5 flex justify-start ">

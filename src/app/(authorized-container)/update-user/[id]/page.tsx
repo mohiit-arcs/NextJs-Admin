@@ -13,6 +13,7 @@ import {
   UserRolesResponse,
   UsersApi,
 } from "@/swagger";
+import HeaderTitle from "@/components/ui/HeaderTitle/HeaderTitle";
 
 type Inputs = {
   name: string;
@@ -109,13 +110,9 @@ const UpdateUser = () => {
 
   return (
     <div className="bg-[#FFFFFF] p-5 min-h-screen px-5">
-      <div className="">
-        <h1 className="md:text-4xl text-3xl mb-4 text-left text-black font-extrabold">
-          Update User
-        </h1>
-      </div>
+      <HeaderTitle title="Update User"></HeaderTitle>
 
-      <div className="border rounded-xl shadow-lg bg-[#FFFFFF]">
+      <div className="mt-4 border rounded-xl shadow-lg bg-[#FFFFFF]">
         <div className="p-8">
           <form onSubmit={handleSubmit(updateUser)}>
             <div className="flex gap-[6%] md:flex-row flex-col w-full ">
@@ -187,14 +184,16 @@ const UpdateUser = () => {
                   <select
                     className="p-3 mb-5 w-full text-black rounded-[8px] border md:text-sm text-xs"
                     id="role"
-                    {...register("role", { required: true })}>
+                    {...register("role", { required: true })}
+                  >
                     <option disabled>-- Select User Role --</option>
                     {roles.map((item) => {
                       return (
                         <option
                           key={item.id}
                           className="text-gray-900"
-                          value={item.id}>
+                          value={item.id}
+                        >
                           {item.name}
                         </option>
                       );
@@ -210,7 +209,8 @@ const UpdateUser = () => {
             </div>
             <button
               type="submit"
-              className="bg-[#EBA232] hover:bg-[#cc861d] m-2 py-3 text-white rounded-[8px] w-[150px]">
+              className="bg-[#EBA232] hover:bg-[#cc861d] m-2 py-3 text-white rounded-[8px] w-[150px]"
+            >
               Submit
             </button>
           </form>

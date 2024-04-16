@@ -8,6 +8,7 @@ import "react-toastify/dist/ReactToastify.css";
 import imageCompression from "browser-image-compression";
 import { messages } from "@/messages/frontend/index.message";
 import { RestaurantsApi } from "@/swagger";
+import HeaderTitle from "@/components/ui/HeaderTitle/HeaderTitle";
 
 type Inputs = {
   name: string;
@@ -134,13 +135,9 @@ const AddRestaurant = () => {
 
   return (
     <div className="bg-[#FFFFFF] p-5 min-h-screen px-5">
-      <div className="">
-        <h1 className="md:text-4xl text-3xl mb-4 text-left text-black font-extrabold">
-          Add Restuarant
-        </h1>
-      </div>
+      <HeaderTitle title="Add Restaurant"></HeaderTitle>
 
-      <div className="border rounded-xl shadow-lg bg-[#FFFFFF]">
+      <div className="mt-4 border rounded-xl shadow-lg bg-[#FFFFFF]">
         <div className="p-8">
           <form onSubmit={handleSubmit(addRestaurant)}>
             <div className="flex gap-[6%] md:flex-row flex-col w-full ">
@@ -416,7 +413,8 @@ const AddRestaurant = () => {
 
             <button
               type="submit"
-              className="bg-[#EBA232] hover:bg-[#cc861d] m-2 py-3 text-white rounded-[8px] w-[150px]">
+              className="bg-[#EBA232] hover:bg-[#cc861d] m-2 py-3 text-white rounded-[8px] w-[150px]"
+            >
               Submit
             </button>
           </form>

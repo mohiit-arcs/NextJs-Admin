@@ -12,6 +12,7 @@ import MenuCategoryListColumns, { FoodItemListColumnsProps } from "./column";
 import { MenuCategoryApi } from "@/swagger";
 import { useRestaurantContext } from "@/contexts/restaurant/RestaurantContext";
 import LimiPerPage from "@/components/ui/table/pagination/limitPerPage/limitPerPage";
+import ListingHeader from "@/components/ui/HeaderTitle/HeaderTitle";
 
 const entriesPerPageOptions = [5, 10, 15];
 
@@ -120,12 +121,8 @@ const MenuCategoryList = () => {
   };
   return (
     <div className="min-h-screen">
-      <div className="py-4 flex justify-start pl-5 border-b border-[#DDDDDD]">
-        <h1 className="text-4xl font-bold text-center text-[#0F172A]">
-          Menu Category List
-        </h1>
-      </div>{" "}
-      abc d
+      <ListingHeader title="Menu Category List"></ListingHeader>
+
       <div className="flex sm:flex-row flex-col sm:justify-between justify-center items-center px-5 mt-8">
         <div className="flex items-center relative lg:w-[400px] sm:w-[250px] w-full sm:mr-6 mr-0 sm:mb-2 mb-8">
           <Search
@@ -149,16 +146,19 @@ const MenuCategoryList = () => {
             <LimiPerPage
               usersLimit={menuCategoriesLimit}
               handleEntriesPerPageChange={handleEntriesPerPageChange}
-              entriesPerPageOptions={entriesPerPageOptions}></LimiPerPage>
+              entriesPerPageOptions={entriesPerPageOptions}
+            ></LimiPerPage>
           </div>
 
           <button
             onClick={() => router.push("add-menu-category")}
-            className="bg-[#EBA232] hover:bg-[#EBA232] rounded-[8px] lg:w-40 w-28 py-4">
+            className="bg-[#EBA232] hover:bg-[#EBA232] rounded-[8px] lg:w-40 w-28 py-4"
+          >
             <a className=" text-white lg:text-sm text-xs">Add Menu Cetagory</a>
           </button>
         </div>
       </div>
+
       <div className="overflow-auto rounded-lg border border-gray-200 drop-shadow-lg m-5">
         <table className="bg-white text-left text-xs text-gray-600 w-full">
           <thead className="bg-[#0F172A]">
@@ -168,7 +168,8 @@ const MenuCategoryList = () => {
             {menuCategories!.map((menuCategory: any) => (
               <tr
                 key={menuCategory.id}
-                className="hover:bg-[#F4F5F7] border-b border-[#f5f5f5]">
+                className="hover:bg-[#F4F5F7] border-b border-[#f5f5f5]"
+              >
                 <td className="px-3 w-[150px]">{menuCategory.name}</td>
 
                 <td className="">

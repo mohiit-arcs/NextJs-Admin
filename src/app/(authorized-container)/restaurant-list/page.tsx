@@ -13,6 +13,8 @@ import { RestaurantRequestApi, RestaurantsApi } from "@/swagger";
 import { Restaurant } from "@prisma/client";
 import ToolTip from "@/components/ui/tooltip/tooltip";
 import LimiPerPage from "@/components/ui/table/pagination/limitPerPage/limitPerPage";
+import { title } from "process";
+import ListingHeader from "@/components/ui/HeaderTitle/HeaderTitle";
 
 const entriesPerPageOptions = [5, 10, 15];
 
@@ -140,11 +142,7 @@ const RestaurantList = () => {
 
   return (
     <div className="min-h-screen">
-      <div className="py-4 flex justify-start pl-5 border-b border-[#DDDDDD]">
-        <h1 className="text-4xl font-bold text-center text-[#0F172A]">
-          Restaurant List
-        </h1>
-      </div>
+      <ListingHeader title="Restaurant List"></ListingHeader>
 
       <div className="flex sm:flex-row flex-col sm:justify-between justify-center items-center px-5 mt-8">
         <div className="flex items-center relative lg:w-[400px] sm:w-[250px] w-full sm:mr-6 mr-0 sm:mb-2 mb-8">
@@ -170,7 +168,8 @@ const RestaurantList = () => {
             <LimiPerPage
               usersLimit={restaurantsLimit}
               handleEntriesPerPageChange={handleEntriesPerPageChange}
-              entriesPerPageOptions={entriesPerPageOptions}></LimiPerPage>
+              entriesPerPageOptions={entriesPerPageOptions}
+            ></LimiPerPage>
           </div>
 
           <button

@@ -1,5 +1,6 @@
 "use client";
 
+import HeaderTitle from "@/components/ui/HeaderTitle/HeaderTitle";
 import { messages } from "@/messages/frontend/index.message";
 import { AuthenticationApi, UserRolesApi, UserRolesResponse } from "@/swagger";
 import { Eye, EyeOff } from "lucide-react";
@@ -77,11 +78,7 @@ const AddUser = () => {
 
   return (
     <div className="bg-[#FFFFFF] p-5 min-h-screen px-5">
-      <div className="">
-        <h1 className="md:text-4xl text-3xl mb-4 text-left text-black font-extrabold">
-          Add User
-        </h1>
-      </div>
+      <HeaderTitle title="Add User"></HeaderTitle>
 
       <div className="border rounded-xl shadow-lg bg-[#FFFFFF]">
         <div className="p-8">
@@ -173,7 +170,8 @@ const AddUser = () => {
                     />
                     <div
                       className="-ml-9 mb-4 cursor-pointer"
-                      onClick={() => setShowPassword(!showPassword)}>
+                      onClick={() => setShowPassword(!showPassword)}
+                    >
                       {showPassword ? (
                         <Eye color="black" />
                       ) : (
@@ -201,14 +199,16 @@ const AddUser = () => {
                   <select
                     className="p-3 mb-5 w-full text-black rounded-[8px] border md:text-sm text-xs"
                     id="role"
-                    {...register("role", { required: true })}>
+                    {...register("role", { required: true })}
+                  >
                     <option disabled>-- Select User Role --</option>
                     {roles.map((item, index) => {
                       return (
                         <option
                           key={item.slug}
                           className="text-gray-900"
-                          value={item.id}>
+                          value={item.id}
+                        >
                           {item.name}
                         </option>
                       );
@@ -225,7 +225,8 @@ const AddUser = () => {
 
             <button
               type="submit"
-              className="bg-[#EBA232] hover:bg-[#cc861d] m-2 py-3 text-white rounded-[8px] w-[150px]">
+              className="bg-[#EBA232] hover:bg-[#cc861d] m-2 py-3 text-white rounded-[8px] w-[150px]"
+            >
               Submit
             </button>
           </form>

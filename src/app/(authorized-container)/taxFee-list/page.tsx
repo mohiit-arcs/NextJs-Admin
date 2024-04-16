@@ -13,6 +13,7 @@ import { TaxFeeApi, TaxFeeRequestApi } from "@/swagger";
 import { TaxFee } from "@prisma/client";
 import { useRestaurantContext } from "@/contexts/restaurant/RestaurantContext";
 import LimiPerPage from "@/components/ui/table/pagination/limitPerPage/limitPerPage";
+import ListingHeader from "@/components/ui/HeaderTitle/HeaderTitle";
 
 const entriesPerPageOptions = [5, 10, 15];
 
@@ -146,11 +147,7 @@ const TaxFeeList = () => {
   };
   return (
     <div className="min-h-screen">
-      <div className="py-4 flex justify-start pl-5 border-b border-[#DDDDDD]">
-        <h1 className="text-4xl font-bold text-center text-black">
-          Tax and Fee List
-        </h1>
-      </div>
+      <ListingHeader title="Tax & Fee List"></ListingHeader>
 
       <div className="flex sm:flex-row flex-col sm:justify-between justify-center items-center px-5 mt-8">
         <div className="flex items-center relative lg:w-[400px] sm:w-[250px] w-full sm:mr-6 mr-0 sm:mb-2 mb-8">
@@ -175,12 +172,14 @@ const TaxFeeList = () => {
             <LimiPerPage
               usersLimit={taxFeeLimit}
               handleEntriesPerPageChange={handleEntriesPerPageChange}
-              entriesPerPageOptions={entriesPerPageOptions}></LimiPerPage>
+              entriesPerPageOptions={entriesPerPageOptions}
+            ></LimiPerPage>
           </div>
 
           <button
             onClick={() => router.push("add-taxfee")}
-            className="bg-[#EBA232] hover:bg-[#EBA232] rounded-[8px] lg:w-40 w-28 py-4">
+            className="bg-[#EBA232] hover:bg-[#EBA232] rounded-[8px] lg:w-40 w-28 py-4"
+          >
             <a className=" text-white lg:text-sm text-xs">Add new tax fee</a>
           </button>
         </div>

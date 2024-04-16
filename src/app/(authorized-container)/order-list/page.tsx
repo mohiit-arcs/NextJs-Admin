@@ -13,6 +13,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { OrdersApi } from "@/swagger";
 import { useRestaurantContext } from "@/contexts/restaurant/RestaurantContext";
 import LimiPerPage from "@/components/ui/table/pagination/limitPerPage/limitPerPage";
+import ListingHeader from "@/components/ui/HeaderTitle/HeaderTitle";
 
 const entriesPerPageOptions = [5, 10, 15];
 
@@ -123,11 +124,7 @@ const UserList = () => {
 
   return (
     <div className="min-h-screen">
-      <div className="py-4 flex justify-start pl-5 border-b border-[#DDDDDD]">
-        <h1 className="text-4xl font-bold text-center text-black">
-          Orders List
-        </h1>
-      </div>
+      <ListingHeader title="Order List"></ListingHeader>
 
       <div className="flex sm:flex-row flex-col sm:justify-between justify-center items-center px-5 mt-8">
         <div className="flex items-center relative lg:w-[400px] sm:w-[250px] w-full sm:mr-6 mr-0 sm:mb-2 mb-8">
@@ -154,7 +151,8 @@ const UserList = () => {
             <LimiPerPage
               usersLimit={ordersLimit}
               handleEntriesPerPageChange={handleEntriesPerPageChange}
-              entriesPerPageOptions={entriesPerPageOptions}></LimiPerPage>
+              entriesPerPageOptions={entriesPerPageOptions}
+            ></LimiPerPage>
           </div>
         </div>
       </div>
@@ -170,7 +168,8 @@ const UserList = () => {
               orders!.map((order: any) => (
                 <tr
                   key={order.id}
-                  className="hover:bg-[#F4F5F7] border-b border-[#f5f5f5]">
+                  className="hover:bg-[#F4F5F7] border-b border-[#f5f5f5]"
+                >
                   <td className="px-2">{_.capitalize(order.status)}</td>
                   <td className="px-2">{order.amount}</td>
                   <td className="px-2">{order.taxAmount}</td>
