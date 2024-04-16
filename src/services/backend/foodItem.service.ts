@@ -59,7 +59,7 @@ export const updateFoodItem = async (
     throw badRequest(messages.error.foodItemNotFound);
   }
 
-  const foodItemWithExistingName = await prisma.user.findFirst({
+  const foodItemWithExistingName = await prisma.foodItem.findFirst({
     where: { name: updateFoodItem.name, id: { not: id } },
     select: { id: true },
   });

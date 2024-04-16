@@ -45,22 +45,20 @@ const UserList = () => {
   const getUsers = async () => {
     try {
       const usersAPi = new UsersApi();
-      usersAPi
-        .findUsers({
-          limit: usersLimit,
-          page: currentPage,
-          search: debouncedSearchQuery,
-          sortBy: sortBy,
-          sortOrder: sortOrder,
-        })
-        .then((response: UserListResponse) => {
-          const users = response.data?.rows as User[];
-          setUsers(users);
-          setTotalUsers(response.data?.count);
-          const totalPages = Math.ceil(response.data?.count! / usersLimit);
-          setTotalPages(totalPages);
-        });
-    } catch (error) {
+      const response = await usersAPi.findUsers({
+        limit: usersLimit,
+        page: currentPage,
+        search: debouncedSearchQuery,
+        sortBy: sortBy,
+        sortOrder: sortOrder,
+      });
+      const users = response.data?.rows as User[];
+      setUsers(users);
+      setTotalUsers(response.data?.count);
+      const totalPages = Math.ceil(response.data?.count! / usersLimit);
+      setTotalPages(totalPages);
+    } catch (error: any) {
+      toast.error(error.message);
       console.log(error);
     }
   };
@@ -70,21 +68,19 @@ const UserList = () => {
       const toDelete = confirm("Are you sure, you want to delete the user?");
       if (toDelete) {
         const userRequestApi = new UserRequestApi();
-        userRequestApi
-          .deleteUserById({
-            id: userId,
-          })
-          .then((response: UserDeleteResponse) => {
-            if (response.data?.success) {
-              const updatedUsers = users.filter((user) => user.id != userId);
-              setUsers(updatedUsers);
-              setTotalUsers(response.data.count);
-              toast.success(response.data.message);
-            }
-          });
+        const response = await userRequestApi.deleteUserById({
+          id: userId,
+        });
+        if (response.data?.success) {
+          const updatedUsers = users.filter((user) => user.id != userId);
+          setUsers(updatedUsers);
+          setTotalUsers(response.data.count);
+          toast.success(response.data.message);
+        }
       }
       return;
-    } catch (error) {
+    } catch (error: any) {
+      toast.error(error.message);
       console.log(error);
     }
   };
@@ -172,14 +168,12 @@ const UserList = () => {
             <LimiPerPage
               usersLimit={usersLimit}
               handleEntriesPerPageChange={handleEntriesPerPageChange}
-              entriesPerPageOptions={entriesPerPageOptions}
-            ></LimiPerPage>
+              entriesPerPageOptions={entriesPerPageOptions}></LimiPerPage>
           </div>
 
           <button
             onClick={() => router.push("add-user")}
-            className="bg-[#EBA232] hover:bg-[#EBA232] rounded-[8px] lg:w-28 w-20 py-4"
-          >
+            className="bg-[#EBA232] hover:bg-[#EBA232] rounded-[8px] lg:w-28 w-20 py-4">
             <a className=" text-white lg:text-sm text-xs">Add User</a>
           </button>
         </div>
@@ -196,8 +190,7 @@ const UserList = () => {
               users!.map((user: any) => (
                 <tr
                   key={user.id}
-                  className="hover:bg-[#F4F5F7] border-b border-[#f5f5f5]"
-                >
+                  className="hover:bg-[#F4F5F7] border-b border-[#f5f5f5]">
                   <td className="px-2">{user.name}</td>
                   <td className="px-2">{user.email}</td>
                   <td className="px-2">{user.role.name}</td>

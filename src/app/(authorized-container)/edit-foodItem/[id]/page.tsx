@@ -2,11 +2,7 @@
 
 import HeaderTitle from "@/components/ui/HeaderTitle/HeaderTitle";
 import { messages } from "@/messages/frontend/index.message";
-import {
-  FoodItemRequestApi,
-  FoodItemsApi,
-  UpdateFoodItemResponse,
-} from "@/swagger";
+import { FoodItemRequestApi, FoodItemsApi } from "@/swagger";
 import { useParams, useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -62,24 +58,20 @@ const UpdateFoodItem = () => {
   const updateFoodItem: SubmitHandler<Inputs> = async (updateFoodItem) => {
     try {
       const foodItemsApi = new FoodItemsApi();
-      foodItemsApi
-        .updateFoodItem({
-          updateFoodItemRequest: {
-            id: Number(id),
-            name: updateFoodItem.name,
-            price: updateFoodItem.price,
-          },
-        })
-        .then((response: UpdateFoodItemResponse) => {
-          if (response.data?.success) {
-            router.push("food-item-list");
-            toast.success(response.message);
-            router.back();
-          } else {
-            toast.error(response.message);
-          }
-        });
-    } catch (error) {
+      const response = await foodItemsApi.updateFoodItem({
+        updateFoodItemRequest: {
+          id: Number(id),
+          name: updateFoodItem.name,
+          price: updateFoodItem.price,
+        },
+      });
+      if (response.data?.success) {
+        router.push("food-item-list");
+        toast.success(response.message);
+        router.back();
+      }
+    } catch (error: any) {
+      toast.error(error.message);
       console.log(error);
     }
   };

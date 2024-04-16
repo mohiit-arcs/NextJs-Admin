@@ -7,7 +7,6 @@ import {
   RestaurantsApi,
   TaxFeeApi,
   TaxFeeRequestApi,
-  UpdateMenuCategoryResponse,
 } from "@/swagger";
 import { Restaurant } from "@prisma/client";
 import { useParams, useRouter } from "next/navigation";
@@ -96,26 +95,22 @@ const UpdateTaxFee = () => {
   const updateTaxFee: SubmitHandler<Inputs> = async (updateTaxFee) => {
     try {
       const taxFeeApi = new TaxFeeApi();
-      taxFeeApi
-        .updateTaxFee({
-          updateTaxFeeRequest: {
-            id: Number(id),
-            taxName: updateTaxFee.tax_name,
-            taxType: updateTaxFee.tax_type,
-            value: updateTaxFee.value,
-          },
-        })
-        .then((response: UpdateMenuCategoryResponse) => {
-          console.log(response);
-          if (response.data?.success) {
-            router.push("food-item-list");
-            toast.success(response.message);
-            router.back();
-          } else {
-            toast.error(response.message);
-          }
-        });
-    } catch (error) {
+
+      const response = await taxFeeApi.updateTaxFee({
+        updateTaxFeeRequest: {
+          id: Number(id),
+          taxName: updateTaxFee.tax_name,
+          taxType: updateTaxFee.tax_type,
+          value: updateTaxFee.value,
+        },
+      });
+      if (response.data?.success) {
+        router.push("food-item-list");
+        toast.success(response.message);
+        router.back();
+      }
+    } catch (error: any) {
+      toast.error(error.message);
       console.log(error);
     }
   };

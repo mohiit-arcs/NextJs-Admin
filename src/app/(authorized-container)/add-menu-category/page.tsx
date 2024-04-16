@@ -3,7 +3,6 @@
 import HeaderTitle from "@/components/ui/HeaderTitle/HeaderTitle";
 import { messages } from "@/messages/frontend/index.message";
 import {
-  CreateMenuCategoryResponse,
   MenuCategoryApi,
   RestaurantListResponse,
   RestaurantsApi,
@@ -58,22 +57,18 @@ const AddMenuCategory = () => {
   const addMenuCategory: SubmitHandler<Inputs> = async (addMenuCategory) => {
     try {
       const foodItemApi = new MenuCategoryApi();
-      foodItemApi
-        .createMenuCategory({
-          createMenuCategoryRequest: {
-            name: addMenuCategory.name,
-            restaurantId: addMenuCategory.restaurantId,
-          },
-        })
-        .then((response: CreateMenuCategoryResponse) => {
-          if (response.data?.success) {
-            router.push("menu-category-list");
-            toast.success(response.message);
-          } else {
-            toast.error(response.message);
-          }
-        });
-    } catch (error) {
+      const response = await foodItemApi.createMenuCategory({
+        createMenuCategoryRequest: {
+          name: addMenuCategory.name,
+          restaurantId: addMenuCategory.restaurantId,
+        },
+      });
+      if (response.data?.success) {
+        router.push("menu-category-list");
+        toast.success(response.message);
+      }
+    } catch (error: any) {
+      toast.error(error.message);
       console.log(error);
     }
   };

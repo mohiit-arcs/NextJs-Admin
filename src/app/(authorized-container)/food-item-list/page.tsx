@@ -9,17 +9,11 @@ import { useEffect, useMemo, useState } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import FoodItemListColumns, { FoodItemListColumnsProps } from "./columns";
-import {
-  FoodItemDeleteResponse,
-  FoodItemRequestApi,
-  FoodItemsApi,
-  FoodItemsListResponse,
-} from "@/swagger";
+import { FoodItemRequestApi, FoodItemsApi } from "@/swagger";
 import LimiPerPage from "@/components/ui/table/pagination/limitPerPage/limitPerPage";
 import HeaderTitle from "@/components/ui/HeaderTitle/HeaderTitle";
 
 const entriesPerPageOptions = [5, 10, 15];
-const baseUrl = "http://localhost:3000";
 
 const FoodItemList = () => {
   const [foodItems, setFoodItems] = useState([]);
@@ -45,22 +39,20 @@ const FoodItemList = () => {
   const getFoodItems = async () => {
     try {
       const foodItemsApi = new FoodItemsApi();
-      foodItemsApi
-        .findFoodItems({
-          limit: itemsLimit,
-          page: currentPage,
-          search: debouncedSearchQuery,
-          sortBy: sortBy,
-          sortOrder: sortOrder,
-        })
-        .then((response: FoodItemsListResponse) => {
-          const foodItems: [] = response.data?.rows as [];
-          setFoodItems(foodItems);
-          setTotalFoodItems(response.data?.count);
-          const totalPages = Math.ceil(response.data?.count! / itemsLimit);
-          setTotalPages(totalPages);
-        });
-    } catch (error) {
+      const response = await foodItemsApi.findFoodItems({
+        limit: itemsLimit,
+        page: currentPage,
+        search: debouncedSearchQuery,
+        sortBy: sortBy,
+        sortOrder: sortOrder,
+      });
+      const foodItems: [] = response.data?.rows as [];
+      setFoodItems(foodItems);
+      setTotalFoodItems(response.data?.count);
+      const totalPages = Math.ceil(response.data?.count! / itemsLimit);
+      setTotalPages(totalPages);
+    } catch (error: any) {
+      toast.error(error.message);
       console.log(error);
     }
   };
@@ -72,31 +64,28 @@ const FoodItemList = () => {
       );
       if (toDelete) {
         const foodItemsRequestApi = new FoodItemRequestApi();
-        foodItemsRequestApi
-          .deleteFoodItemById({ id: foodItemId })
-          .then((response: FoodItemDeleteResponse) => {
-            if (response.data?.success) {
-              const updatedFoodItems = foodItems.filter(
-                (foodItem: any) => foodItem.id != foodItemId
-              );
-              setFoodItems(updatedFoodItems);
-              setTotalFoodItems(response.data.count);
-              toast.success(response.data.message);
-            }
-          });
+        const response = await foodItemsRequestApi.deleteFoodItemById({
+          id: foodItemId,
+        });
+        if (response.data?.success) {
+          const updatedFoodItems = foodItems.filter(
+            (foodItem: any) => foodItem.id != foodItemId
+          );
+          setFoodItems(updatedFoodItems);
+          setTotalFoodItems(response.data.count);
+          setCurrentPage(1);
+          toast.success(response.data.message);
+        }
       }
       return;
-    } catch (error) {
+    } catch (error: any) {
+      toast.error(error.message);
       console.log(error);
     }
   };
 
   const onUpdate = async (foodItemId: number) => {
     router.push(`edit-foodItem/${foodItemId}`, { scroll: true });
-  };
-
-  const onAddToMenu = async (foodItemId: number) => {
-    router.push(`add-to-menu/${foodItemId}`);
   };
 
   const handleEntriesPerPageChange = (
@@ -175,14 +164,12 @@ const FoodItemList = () => {
             <LimiPerPage
               usersLimit={itemsLimit}
               handleEntriesPerPageChange={handleEntriesPerPageChange}
-              entriesPerPageOptions={entriesPerPageOptions}
-            ></LimiPerPage>
+              entriesPerPageOptions={entriesPerPageOptions}></LimiPerPage>
           </div>
 
           <button
             onClick={() => router.push("add-foodItem")}
-            className="bg-[#EBA232] hover:bg-[#EBA232] rounded-[8px] lg:w-40 w-28 py-4"
-          >
+            className="bg-[#EBA232] hover:bg-[#EBA232] rounded-[8px] lg:w-40 w-28 py-4">
             <a className=" text-white lg:text-sm text-xs">Add Food Item</a>
           </button>
         </div>
@@ -198,8 +185,7 @@ const FoodItemList = () => {
               foodItems?.map((foodItem: any) => (
                 <tr
                   key={foodItem.id}
-                  className="hover:bg-[#F4F5F7] border-b border-[#f5f5f5]"
-                >
+                  className="hover:bg-[#F4F5F7] border-b border-[#f5f5f5]">
                   <td className="px-3">{foodItem.name}</td>
                   <td className="px-2">{foodItem.price}</td>
                   <td className="px-2">
@@ -231,14 +217,6 @@ const FoodItemList = () => {
                           onClick={() => onDelete(foodItem.id)}
                         />
                       </span>
-                      {/* <span>
-                        <button
-                          onClick={() => onAddToMenu(foodItem.id)}
-                          className="bg-black text-white rounded-md p-2 m-1"
-                        >
-                          Add To Menu
-                        </button>
-                      </span> */}
                     </div>
                   </td>
                 </tr>

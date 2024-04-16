@@ -3,7 +3,6 @@
 import HeaderTitle from "@/components/ui/HeaderTitle/HeaderTitle";
 import { messages } from "@/messages/frontend/index.message";
 import {
-  CreateFoodItemResponse,
   FoodItemsApi,
   MenuCategoryApi,
   MenuCategoryListResponse,
@@ -54,17 +53,15 @@ const AddFoodItem = () => {
   const addFoodItem: SubmitHandler<Inputs> = async (addFoodItem) => {
     try {
       const foodItemApi = new FoodItemsApi();
-      foodItemApi
-        .createFoodItem({ createFoodItemRequest: addFoodItem })
-        .then((response: CreateFoodItemResponse) => {
-          if (response.data?.success) {
-            router.push("food-item-list");
-            toast.success(response.message);
-          } else {
-            toast.error(response.message);
-          }
-        });
-    } catch (error) {
+      const response = await foodItemApi.createFoodItem({
+        createFoodItemRequest: addFoodItem,
+      });
+      if (response.data?.success) {
+        router.push("food-item-list");
+        toast.success(response.message);
+      }
+    } catch (error: any) {
+      toast.error(error.message);
       console.log(error);
     }
   };
@@ -133,158 +130,141 @@ const AddFoodItem = () => {
 
   return (
     <div className="bg-[#FFFFFF] p-5 min-h-screen px-5">
-
-        <HeaderTitle title="Add Food Item"></HeaderTitle>
+      <HeaderTitle title="Add Food Item"></HeaderTitle>
 
       <div className="mt-4 border rounded-xl shadow-lg bg-[#FFFFFF]">
+        <div className="p-8">
+          <form onSubmit={handleSubmit(addFoodItem)}>
+            <div className="flex gap-[6%] md:flex-row flex-col w-full ">
+              <div className="flex flex-col md:w-[47%] w-full">
+                <div className="relative">
+                  <p className="mb-3 md:text-sm text-xs">
+                    <label className="text-black" htmlFor="name">
+                      Name:
+                    </label>
+                  </p>
 
-      <div className="p-8">
-        
-        <form onSubmit={handleSubmit(addFoodItem)}>
+                  <input
+                    className="p-3 mb-5 w-full text-black rounded-[8px] border md:text-sm text-xs"
+                    type="text"
+                    id="name"
+                    autoComplete="off"
+                    placeholder="Name"
+                    {...register("name", {
+                      required: true,
+                      validate: validateNoWhiteSpace,
+                    })}
+                  />
 
-        <div className="flex gap-[6%] md:flex-row flex-col w-full ">
+                  {errors.name && (
+                    <div className="error text-red-500 text-xs absolute bottom-0 px-4">
+                      {messages.form.validation.name.required}
+                    </div>
+                  )}
+                </div>
 
-        <div className="flex flex-col md:w-[47%] w-full">
-
-          <div className="relative">
-
-            <p className="mb-3 md:text-sm text-xs">
-              <label className="text-black" htmlFor="name">
-                Name:
-              </label>
-            </p>
-  
-              <input
-                className="p-3 mb-5 w-full text-black rounded-[8px] border md:text-sm text-xs"
-                type="text"
-                id="name"
-                autoComplete="off"
-                placeholder="Name"
-                {...register("name", {
-                  required: true,
-                  validate: validateNoWhiteSpace,
-                })}
-              />
-            
-            {errors.name && (
-              <div className="error text-red-500 text-xs absolute bottom-0 px-4">
-                {messages.form.validation.name.required}
-              </div>
-            )}
-
-          </div>
-
-          <div className="relative">
-
+                <div className="relative">
                   <p className="mb-3 md:text-sm text-xs">
                     <label className="text-black" htmlFor="name">
                       Price:
                     </label>
                   </p>
 
-              <input
-                className="p-3 mb-5 w-full text-black rounded-[8px] border md:text-sm text-xs"
-                type="text"
-                id="price"
-                autoComplete="off"
-                placeholder="Price"
-                {...register("price", {
-                  required: true,
-                  validate: (value) => value != 0,
-                })}
-              />
+                  <input
+                    className="p-3 mb-5 w-full text-black rounded-[8px] border md:text-sm text-xs"
+                    type="text"
+                    id="price"
+                    autoComplete="off"
+                    placeholder="Price"
+                    {...register("price", {
+                      required: true,
+                      validate: (value) => value != 0,
+                    })}
+                  />
 
-            {errors.price && (
-              <div className="error text-red-500 text-xs absolute bottom-0 px-4">
-                {messages.form.validation.price.required}
+                  {errors.price && (
+                    <div className="error text-red-500 text-xs absolute bottom-0 px-4">
+                      {messages.form.validation.price.required}
+                    </div>
+                  )}
+                </div>
               </div>
-            )}
 
-          </div>
-
-          </div>
-
-          <div className="flex flex-col md:w-[47%] w-full">
-
-          <div className="relative">
-
+              <div className="flex flex-col md:w-[47%] w-full">
+                <div className="relative">
                   <p className="mb-3 md:text-sm text-xs">
                     <label className="text-black" htmlFor="name">
                       Restaurant:
                     </label>
                   </p>
-            
-            <select
-              className="p-3 mb-5 w-full text-black rounded-[8px] border md:text-sm text-xs"
-              id="restaurant"
-              {...register("restaurantId", { required: true })}
-              value={restaurantId}
-              onChange={handleRestaurantChange}>
-              <option disabled>-- Select Restaurant --</option>
-              {restaurants.map((item: any, index) => {
-                return (
-                  <option key={item.id} className="text-gray-900" value={item.id}>
-                    {item.name}
-                  </option>
-                );
-              })}
-            </select>
-  
-            {errors.restaurantId && (
-              <div className="error text-red-500 text-xs absolute bottom-0 px-4">
-                {messages.form.validation.restaurant.required}
-              </div>
-            )}
 
-          </div>
-          
-          {restaurantId && (
-            <div className="relative">
+                  <select
+                    className="p-3 mb-5 w-full text-black rounded-[8px] border md:text-sm text-xs"
+                    id="restaurant"
+                    {...register("restaurantId", { required: true })}
+                    value={restaurantId}
+                    onChange={handleRestaurantChange}>
+                    <option disabled>-- Select Restaurant --</option>
+                    {restaurants.map((item: any, index) => {
+                      return (
+                        <option
+                          key={item.id}
+                          className="text-gray-900"
+                          value={item.id}>
+                          {item.name}
+                        </option>
+                      );
+                    })}
+                  </select>
 
-                  <p className="mb-3 md:text-sm text-xs">
-                    <label className="text-black" htmlFor="name">
-                      Menu Cetagory:
-                    </label>
-                  </p>
-
-              <select
-                className="p-3 mb-5 w-full text-black rounded-[8px] border md:text-sm text-xs"
-                id="menu-category"
-                {...register("categoryId", { required: true })}>
-                <option disabled>-- Select Category --</option>
-                {menuCategories.length &&
-                  menuCategories.map((item, index) => {
-                    return (
-                      <option
-                        key={item.slug}
-                        className="text-gray-900"
-                        value={item.id}>
-                        {item.name}
-                      </option>
-                    );
-                  })}
-              </select>
-
-              {errors.categoryId && (
-                <div className="error text-red-500 text-xs absolute bottom-0 px-4">
-                  {messages.form.validation.menuCategory.required}
+                  {errors.restaurantId && (
+                    <div className="error text-red-500 text-xs absolute bottom-0 px-4">
+                      {messages.form.validation.restaurant.required}
+                    </div>
+                  )}
                 </div>
-              )}
 
+                {restaurantId && (
+                  <div className="relative">
+                    <p className="mb-3 md:text-sm text-xs">
+                      <label className="text-black" htmlFor="name">
+                        Menu Cetagory:
+                      </label>
+                    </p>
+
+                    <select
+                      className="p-3 mb-5 w-full text-black rounded-[8px] border md:text-sm text-xs"
+                      id="menu-category"
+                      {...register("categoryId", { required: true })}>
+                      <option disabled>-- Select Category --</option>
+                      {menuCategories.length &&
+                        menuCategories.map((item, index) => {
+                          return (
+                            <option
+                              key={item.slug}
+                              className="text-gray-900"
+                              value={item.id}>
+                              {item.name}
+                            </option>
+                          );
+                        })}
+                    </select>
+
+                    {errors.categoryId && (
+                      <div className="error text-red-500 text-xs absolute bottom-0 px-4">
+                        {messages.form.validation.menuCategory.required}
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
             </div>
-          )}
-
-          </div>
-
-          </div>
-          <button
-            type="submit"
-            className="bg-[#EBA232] hover:bg-[#cc861d] m-2 py-3 text-white rounded-[8px] w-[150px]">
-            Submit
-          </button>
-
-        </form>
-        
+            <button
+              type="submit"
+              className="bg-[#EBA232] hover:bg-[#cc861d] m-2 py-3 text-white rounded-[8px] w-[150px]">
+              Submit
+            </button>
+          </form>
         </div>
       </div>
     </div>

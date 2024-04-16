@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import imageCompression from "browser-image-compression";
 import { messages } from "@/messages/frontend/index.message";
-import { CreateRestaurantResponse, RestaurantsApi } from "@/swagger";
+import { RestaurantsApi } from "@/swagger";
 import HeaderTitle from "@/components/ui/HeaderTitle/HeaderTitle";
 
 type Inputs = {
@@ -64,19 +64,15 @@ const AddRestaurant = () => {
       };
 
       const restaurantsApi = new RestaurantsApi();
-      restaurantsApi
-        .createRestaurant({
-          createRestaurantRequest: addRestaurantPayload,
-        })
-        .then((response: CreateRestaurantResponse) => {
-          if (response.data?.success) {
-            router.push("restaurant-list");
-            toast.success(response.message);
-          } else {
-            toast.error(response.message);
-          }
-        });
-    } catch (error) {
+      const response = await restaurantsApi.createRestaurant({
+        createRestaurantRequest: addRestaurantPayload,
+      });
+      if (response.data?.success) {
+        router.push("restaurant-list");
+        toast.success(response.message);
+      }
+    } catch (error: any) {
+      toast.error(error.message);
       console.log(error);
     }
   };

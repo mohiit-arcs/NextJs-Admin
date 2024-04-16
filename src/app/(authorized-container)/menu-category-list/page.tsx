@@ -9,7 +9,7 @@ import { useEffect, useMemo, useState } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import MenuCategoryListColumns, { FoodItemListColumnsProps } from "./column";
-import { MenuCategoryApi, MenuCategoryListResponse } from "@/swagger";
+import { MenuCategoryApi } from "@/swagger";
 import { useRestaurantContext } from "@/contexts/restaurant/RestaurantContext";
 import LimiPerPage from "@/components/ui/table/pagination/limitPerPage/limitPerPage";
 import ListingHeader from "@/components/ui/HeaderTitle/HeaderTitle";
@@ -48,25 +48,21 @@ const MenuCategoryList = () => {
   const getMenuCategories = async () => {
     try {
       const menuCategoriesApi = new MenuCategoryApi();
-      menuCategoriesApi
-        .findMenuCategories({
-          limit: menuCategoriesLimit,
-          page: currentPage,
-          search: debouncedSearchQuery,
-          sortBy: sortBy,
-          sortOrder: sortOrder,
-          restaurantId: defaultRestuarant?.id,
-        })
-        .then((response: MenuCategoryListResponse) => {
-          const menuCategories: [] = response.data?.rows as [];
-          setMenuCategories(menuCategories);
-          setTotalMenuCategories(response.data?.count);
-          const totalPages = Math.ceil(
-            response.data?.count! / menuCategoriesLimit
-          );
-          setTotalPages(totalPages);
-        });
-    } catch (error) {
+      const response = await menuCategoriesApi.findMenuCategories({
+        limit: menuCategoriesLimit,
+        page: currentPage,
+        search: debouncedSearchQuery,
+        sortBy: sortBy,
+        sortOrder: sortOrder,
+        restaurantId: defaultRestuarant?.id,
+      });
+      const menuCategories: [] = response.data?.rows as [];
+      setMenuCategories(menuCategories);
+      setTotalMenuCategories(response.data?.count);
+      const totalPages = Math.ceil(response.data?.count! / menuCategoriesLimit);
+      setTotalPages(totalPages);
+    } catch (error: any) {
+      toast.error(error.message);
       console.log(error);
     }
   };
@@ -150,14 +146,12 @@ const MenuCategoryList = () => {
             <LimiPerPage
               usersLimit={menuCategoriesLimit}
               handleEntriesPerPageChange={handleEntriesPerPageChange}
-              entriesPerPageOptions={entriesPerPageOptions}
-            ></LimiPerPage>
+              entriesPerPageOptions={entriesPerPageOptions}></LimiPerPage>
           </div>
 
           <button
             onClick={() => router.push("add-menu-category")}
-            className="bg-[#EBA232] hover:bg-[#EBA232] rounded-[8px] lg:w-40 w-28 py-4"
-          >
+            className="bg-[#EBA232] hover:bg-[#EBA232] rounded-[8px] lg:w-40 w-28 py-4">
             <a className=" text-white lg:text-sm text-xs">Add Menu Cetagory</a>
           </button>
         </div>
@@ -172,8 +166,7 @@ const MenuCategoryList = () => {
             {menuCategories!.map((menuCategory: any) => (
               <tr
                 key={menuCategory.id}
-                className="hover:bg-[#F4F5F7] border-b border-[#f5f5f5]"
-              >
+                className="hover:bg-[#F4F5F7] border-b border-[#f5f5f5]">
                 <td className="px-3 w-[150px]">{menuCategory.name}</td>
 
                 <td className="">
@@ -191,7 +184,6 @@ const MenuCategoryList = () => {
           </tbody>
         </table>
       </div>
-
       <Pagination
         totalUsers={totalMenuCategories}
         currentPage={currentPage}

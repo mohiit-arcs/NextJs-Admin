@@ -1,5 +1,4 @@
 export const UserProfileRequest = {
-    type: "object",
-    properties: {},
-  };
-  
+  type: "object",
+  properties: {},
+};

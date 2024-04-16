@@ -9,12 +9,7 @@ import { useEffect, useMemo, useState } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import TaxFeeColumnsListColumns, { FoodItemListColumnsProps } from "./column";
-import {
-  TaxFeeApi,
-  TaxFeeDeleteResponse,
-  TaxFeeListResponse,
-  TaxFeeRequestApi,
-} from "@/swagger";
+import { TaxFeeApi, TaxFeeRequestApi } from "@/swagger";
 import { TaxFee } from "@prisma/client";
 import { useRestaurantContext } from "@/contexts/restaurant/RestaurantContext";
 import LimiPerPage from "@/components/ui/table/pagination/limitPerPage/limitPerPage";
@@ -53,23 +48,21 @@ const TaxFeeList = () => {
   const getTaxFee = async () => {
     try {
       const taxFeeApi = new TaxFeeApi();
-      taxFeeApi
-        .findTaxFee({
-          limit: taxFeeLimit,
-          page: currentPage,
-          search: debouncedSearchQuery,
-          sortBy: sortBy,
-          sortOrder: sortOrder,
-          restaurantId: defaultRestuarant?.id,
-        })
-        .then((response: TaxFeeListResponse) => {
-          const taxFee = response.data?.rows as TaxFee[];
-          setTaxFee(taxFee);
-          setTotalTaxFee(response.data?.count);
-          const totalPages = Math.ceil(response.data?.count! / taxFeeLimit);
-          setTotalPages(totalPages);
-        });
-    } catch (error) {
+      const response = await taxFeeApi.findTaxFee({
+        limit: taxFeeLimit,
+        page: currentPage,
+        search: debouncedSearchQuery,
+        sortBy: sortBy,
+        sortOrder: sortOrder,
+        restaurantId: defaultRestuarant?.id,
+      });
+      const taxFee = response.data?.rows as TaxFee[];
+      setTaxFee(taxFee);
+      setTotalTaxFee(response.data?.count);
+      const totalPages = Math.ceil(response.data?.count! / taxFeeLimit);
+      setTotalPages(totalPages);
+    } catch (error: any) {
+      toast.error(error.message);
       console.log(error);
     }
   };
@@ -85,21 +78,21 @@ const TaxFeeList = () => {
       );
       if (toDelete) {
         const taxFeeRequestApi = new TaxFeeRequestApi();
-        taxFeeRequestApi
-          .deleteTaxFeeById({ id: restaurantId })
-          .then((response: TaxFeeDeleteResponse) => {
-            if (response.data?.success) {
-              const updatedTaxFee = taxFee?.filter(
-                (restaurant) => restaurant.id != restaurantId
-              );
-              setTaxFee(updatedTaxFee);
-              setTotalTaxFee(response.data?.count);
-              toast.success(response.data?.message);
-            }
-          });
+        const response = await taxFeeRequestApi.deleteTaxFeeById({
+          id: restaurantId,
+        });
+        if (response.data?.success) {
+          const updatedTaxFee = taxFee?.filter(
+            (restaurant) => restaurant.id != restaurantId
+          );
+          setTaxFee(updatedTaxFee);
+          setTotalTaxFee(response.data?.count);
+          setCurrentPage(1);
+          toast.success(response.data?.message);
+        }
       }
-      return;
-    } catch (error) {
+    } catch (error: any) {
+      toast.error(error.message);
       console.log(error);
     }
   };
@@ -180,14 +173,12 @@ const TaxFeeList = () => {
             <LimiPerPage
               usersLimit={taxFeeLimit}
               handleEntriesPerPageChange={handleEntriesPerPageChange}
-              entriesPerPageOptions={entriesPerPageOptions}
-            ></LimiPerPage>
+              entriesPerPageOptions={entriesPerPageOptions}></LimiPerPage>
           </div>
 
           <button
             onClick={() => router.push("add-taxfee")}
-            className="bg-[#EBA232] hover:bg-[#EBA232] rounded-[8px] lg:w-40 w-28 py-4"
-          >
+            className="bg-[#EBA232] hover:bg-[#EBA232] rounded-[8px] lg:w-40 w-28 py-4">
             <a className=" text-white lg:text-sm text-xs">Add new tax fee</a>
           </button>
         </div>
@@ -202,8 +193,7 @@ const TaxFeeList = () => {
             {taxFee?.map((item: any) => (
               <tr
                 key={item.id}
-                className="hover:bg-[#F4F5F7] border-b border-[#D8D9DB]"
-              >
+                className="hover:bg-[#F4F5F7] border-b border-[#D8D9DB]">
                 <td className="px-2">{item.taxName}</td>
                 <td className="px-2">{_.capitalize(item.taxType)}</td>
                 <td className="px-2">{item.value}</td>

@@ -8,7 +8,6 @@ import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/navigation";
 import { messages } from "@/messages/frontend/index.message";
 import {
-  UpdateUserResponse,
   UserRequestApi,
   UserRolesApi,
   UserRolesResponse,
@@ -96,19 +95,15 @@ const UpdateUser = () => {
       };
 
       const usersApi = new UsersApi();
-      usersApi
-        .updateUser({
-          updateUserRequest: updatedUserData,
-        })
-        .then((response: UpdateUserResponse) => {
-          if (response.data?.success) {
-            toast.success(response.message);
-            router.back();
-          } else {
-            toast.error(response.message);
-          }
-        });
-    } catch (error) {
+      const response = await usersApi.updateUser({
+        updateUserRequest: updatedUserData,
+      });
+      if (response.data?.success) {
+        toast.success(response.message);
+        router.back();
+      }
+    } catch (error: any) {
+      toast.error(error.message);
       console.log(error);
     }
   };

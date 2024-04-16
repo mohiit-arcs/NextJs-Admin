@@ -1,6 +1,6 @@
 "use client";
 
-import { Restaurant, User } from "@prisma/client";
+import { User } from "@prisma/client";
 import { Pencil, Search } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -8,7 +8,9 @@ import _ from "lodash";
 import Pagination from "@/components/ui/table/pagination/pagination";
 import useDebounce from "@/hooks/useDebounce";
 import UserColumns, { OrdersListColumnsProps } from "./columns";
-import { OrdersApi, OrdersListResponse } from "@/swagger";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { OrdersApi } from "@/swagger";
 import { useRestaurantContext } from "@/contexts/restaurant/RestaurantContext";
 import LimiPerPage from "@/components/ui/table/pagination/limitPerPage/limitPerPage";
 import ListingHeader from "@/components/ui/HeaderTitle/HeaderTitle";
@@ -47,23 +49,21 @@ const UserList = () => {
   const getOrders = async () => {
     try {
       const ordersApi = new OrdersApi();
-      ordersApi
-        .findOrdersByRestaurantId({
-          limit: ordersLimit,
-          page: currentPage,
-          search: debouncedSearchQuery,
-          sortBy: sortBy,
-          sortOrder: sortOrder,
-          restaurantId: defaultRestuarant?.id,
-        })
-        .then((response: OrdersListResponse) => {
-          const orders = response.data?.rows as [];
-          setOrders(orders);
-          setTotalOrders(response.data?.count);
-          const totalPages = Math.ceil(response.data?.count! / ordersLimit);
-          setTotalPages(totalPages);
-        });
-    } catch (error) {
+      const response = await ordersApi.findOrdersByRestaurantId({
+        limit: ordersLimit,
+        page: currentPage,
+        search: debouncedSearchQuery,
+        sortBy: sortBy,
+        sortOrder: sortOrder,
+        restaurantId: defaultRestuarant?.id,
+      });
+      const orders = response.data?.rows as [];
+      setOrders(orders);
+      setTotalOrders(response.data?.count);
+      const totalPages = Math.ceil(response.data?.count! / ordersLimit);
+      setTotalPages(totalPages);
+    } catch (error: any) {
+      toast.error(error.message);
       console.log(error);
     }
   };
@@ -151,8 +151,7 @@ const UserList = () => {
             <LimiPerPage
               usersLimit={ordersLimit}
               handleEntriesPerPageChange={handleEntriesPerPageChange}
-              entriesPerPageOptions={entriesPerPageOptions}
-            ></LimiPerPage>
+              entriesPerPageOptions={entriesPerPageOptions}></LimiPerPage>
           </div>
         </div>
       </div>
@@ -168,8 +167,7 @@ const UserList = () => {
               orders!.map((order: any) => (
                 <tr
                   key={order.id}
-                  className="hover:bg-[#F4F5F7] border-b border-[#f5f5f5]"
-                >
+                  className="hover:bg-[#F4F5F7] border-b border-[#f5f5f5]">
                   <td className="px-2">{_.capitalize(order.status)}</td>
                   <td className="px-2">{order.amount}</td>
                   <td className="px-2">{order.taxAmount}</td>

@@ -1,4 +1,5 @@
 import { notFound } from "@/core/errors/http.error";
+import { errorResponse } from "@/core/http-responses/error.http-response";
 import { successResponse } from "@/core/http-responses/success.http-response";
 import { ApiRequest } from "@/interfaces/backend/request.interface";
 import { acl } from "@/services/backend/acl.service";
@@ -35,22 +36,17 @@ export const DELETE = acl(
           },
         });
 
-        const response = NextResponse.json({
-          success: true,
-          message: "Food Item Deleted Successfully",
-          statusCode: HttpStatusCode.Created,
-          count: totalFoodItems,
+        return successResponse({
+          data: {
+            success: true,
+            count: totalFoodItems,
+            message: "Food Item Deleted Successfully",
+          },
         });
-
-        return response;
       }
       throw notFound("Food Item not found");
     } catch (error: any) {
-      return NextResponse.json({
-        success: false,
-        message: error.message,
-        statusCode: error.statusCode,
-      });
+      return errorResponse(error);
     }
   }
 );
@@ -65,11 +61,7 @@ export const GET = acl(
         data: await getFoodItemById(id, request.user?.id!),
       });
     } catch (error: any) {
-      return NextResponse.json({
-        success: false,
-        message: error.message,
-        statusCode: error.statusCode,
-      });
+      return errorResponse(error);
     }
   }
 );

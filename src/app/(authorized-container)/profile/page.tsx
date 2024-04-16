@@ -1,11 +1,9 @@
 "use client";
 
 import HeaderTitle from "@/components/ui/HeaderTitle/HeaderTitle";
-import {
-  LoginResponseDataProfile,
-  MeApi,
-  UserProfileResponse,
-} from "@/swagger";
+import { LoginResponseDataProfile, MeApi } from "@/swagger";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { useEffect, useState } from "react";
 
 const Profile = () => {
@@ -16,14 +14,14 @@ const Profile = () => {
     getUserProfile();
   }, []);
 
-  const getUserProfile = () => {
+  const getUserProfile = async () => {
     try {
-      meApi.profile().then((response: UserProfileResponse) => {
-        if (response.data?.profile?.details?.id) {
-          setProfileData(response.data?.profile.details);
-        }
-      });
+      const response = await meApi.profile();
+      if (response.data?.profile?.details?.id) {
+        setProfileData(response.data?.profile.details);
+      }
     } catch (error: any) {
+      toast.error(error.message);
       console.log(error);
     }
   };

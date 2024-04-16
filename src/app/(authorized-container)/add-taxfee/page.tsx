@@ -2,13 +2,7 @@
 
 import HeaderTitle from "@/components/ui/HeaderTitle/HeaderTitle";
 import { messages } from "@/messages/frontend/index.message";
-import {
-  TaxFeeApi,
-  RestaurantListResponse,
-  RestaurantsApi,
-  CreateTaxFeeResponse,
-  TaxFeeRequestApi,
-} from "@/swagger";
+import { TaxFeeApi, RestaurantListResponse, RestaurantsApi } from "@/swagger";
 import { Restaurant } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import React from "react";
@@ -46,24 +40,20 @@ const AddTaxFee = () => {
   const addTaxFee: SubmitHandler<Inputs> = async (addTaxFee) => {
     try {
       const taxFeeApi = new TaxFeeApi();
-      taxFeeApi
-        .createTaxFee({
-          createTaxFeeRequest: {
-            taxName: addTaxFee.tax_name,
-            taxType: addTaxFee.tax_type,
-            value: addTaxFee.value,
-            restaurantId: addTaxFee.restaurantId,
-          },
-        })
-        .then((response: CreateTaxFeeResponse) => {
-          if (response.data?.success) {
-            router.push("taxFee-list");
-            toast.success(response.message);
-          } else {
-            toast.error(response.message);
-          }
-        });
-    } catch (error) {
+      const response = await taxFeeApi.createTaxFee({
+        createTaxFeeRequest: {
+          taxName: addTaxFee.tax_name,
+          taxType: addTaxFee.tax_type,
+          value: addTaxFee.value,
+          restaurantId: addTaxFee.restaurantId,
+        },
+      });
+      if (response.data?.success) {
+        router.push("taxFee-list");
+        toast.success(response.message);
+      }
+    } catch (error: any) {
+      toast.error(error.message);
       console.log(error);
     }
   };

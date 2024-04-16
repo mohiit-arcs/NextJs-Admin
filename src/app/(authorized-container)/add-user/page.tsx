@@ -2,12 +2,7 @@
 
 import HeaderTitle from "@/components/ui/HeaderTitle/HeaderTitle";
 import { messages } from "@/messages/frontend/index.message";
-import {
-  AuthenticationApi,
-  SignupResponse,
-  UserRolesApi,
-  UserRolesResponse,
-} from "@/swagger";
+import { AuthenticationApi, UserRolesApi, UserRolesResponse } from "@/swagger";
 import { Eye, EyeOff } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -46,24 +41,20 @@ const AddUser = () => {
   const addUser: SubmitHandler<Inputs> = async (addUser) => {
     try {
       const authApi = new AuthenticationApi();
-      authApi
-        .signup({
-          signupRequest: {
-            name: addUser.name,
-            email: addUser.email,
-            password: addUser.password,
-            role: roles.find((role) => role.id == addUser.role),
-          },
-        })
-        .then((response: SignupResponse) => {
-          if (response.data?.success) {
-            router.push("user-list");
-            toast.success(response.message);
-          } else {
-            toast.error(response.message);
-          }
-        });
-    } catch (error) {
+      const response = await authApi.signup({
+        signupRequest: {
+          name: addUser.name,
+          email: addUser.email,
+          password: addUser.password,
+          role: roles.find((role) => role.id == addUser.role),
+        },
+      });
+      if (response.data?.success) {
+        router.push("user-list");
+        toast.success(response.message);
+      }
+    } catch (error: any) {
+      toast.error(error.message);
       console.log(error);
     }
   };

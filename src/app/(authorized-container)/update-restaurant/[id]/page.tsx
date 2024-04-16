@@ -7,11 +7,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import imageCompression from "browser-image-compression";
 import { messages } from "@/messages/frontend/index.message";
-import {
-  RestaurantRequestApi,
-  RestaurantsApi,
-  UpdateRestaurantResponse,
-} from "@/swagger";
+import { RestaurantRequestApi, RestaurantsApi } from "@/swagger";
 import HeaderTitle from "@/components/ui/HeaderTitle/HeaderTitle";
 
 type Inputs = {
@@ -134,19 +130,15 @@ const UpdateRestaurant = () => {
       };
 
       const restaurantsApi = new RestaurantsApi();
-      restaurantsApi
-        .updateRestaurant({
-          updateRestaurantRequest: updateRestaurantPayload,
-        })
-        .then((response: UpdateRestaurantResponse) => {
-          if (response.data?.success) {
-            router.back();
-            toast.success(response.message);
-          } else {
-            toast.error(response.message);
-          }
-        });
-    } catch (error) {
+      const response = await restaurantsApi.updateRestaurant({
+        updateRestaurantRequest: updateRestaurantPayload,
+      });
+      if (response.data?.success) {
+        router.back();
+        toast.success(response.message);
+      }
+    } catch (error: any) {
+      toast.error(error.message);
       console.log(error);
     }
   };
@@ -209,12 +201,9 @@ const UpdateRestaurant = () => {
 
   return (
     <div className="bg-[#FFFFFF] p-5 min-h-screen px-5">
-
       <HeaderTitle title="Update Restaurant"></HeaderTitle>
 
       <div className="mt-4 border rounded-xl shadow-lg bg-[#FFFFFF]">
-        
-
         <div className="p-8">
           <form onSubmit={handleSubmit(updateRestaurant)}>
             <div className="flex gap-[6%] md:flex-row flex-col w-full ">
@@ -366,7 +355,6 @@ const UpdateRestaurant = () => {
                 </div>
 
                 <div className="relative">
-
                   <p className="py-3 text-sm">
                     <label className="text-black" htmlFor="zipcode">
                       ZipCode*

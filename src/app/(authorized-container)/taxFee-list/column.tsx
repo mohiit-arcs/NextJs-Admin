@@ -21,12 +21,16 @@ const TaxFeeColumnsListColumns: React.FC<FoodItemListColumnsProps> = ({
 }) => {
   const getArrowIcon = (field: string) => {
     if (sortBy === field) {
-      return sortOrder === "asc" ? <ChevronUp className="h-[12px]"/> : <ChevronDown className="h-[12px]"/>;
+      return sortOrder === "asc" ? (
+        <ChevronUp className="h-[12px]" />
+      ) : (
+        <ChevronDown className="h-[12px]" />
+      );
     }
     return (
       <>
-        <ChevronUp className="h-[12px]"/>
-        <ChevronDown className="h-[12px] -mt-1"/>
+        <ChevronUp className="h-[12px]" />
+        <ChevronDown className="h-[12px] -mt-1" />
       </>
     );
   };
@@ -40,11 +44,11 @@ const TaxFeeColumnsListColumns: React.FC<FoodItemListColumnsProps> = ({
             }
             key={column.field}
             className="py-4 px-3  cursor-pointer text-sm text-white font-bold">
-              <div className="flex flex-row items-center">
-            {column.label}{" "}
-            {column.sortable ? (
-              <span className="text-sm">{getArrowIcon(column.field)}</span>
-            ) : null}
+            <div className="flex flex-row items-center">
+              {column.label}{" "}
+              {column.sortable ? (
+                <span className="text-sm">{getArrowIcon(column.field)}</span>
+              ) : null}
             </div>
           </th>
         );

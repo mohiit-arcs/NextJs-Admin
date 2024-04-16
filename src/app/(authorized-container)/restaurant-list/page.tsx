@@ -9,20 +9,13 @@ import _ from "lodash";
 import Pagination from "@/components/ui/table/pagination/pagination";
 import useDebounce from "@/hooks/useDebounce";
 import RestaurantColumns, { RestaurantColumnsProps } from "./columns";
-import {
-  RestaurantDeleteResponse,
-  RestaurantListResponse,
-  RestaurantRequestApi,
-  RestaurantsApi,
-} from "@/swagger";
+import { RestaurantRequestApi, RestaurantsApi } from "@/swagger";
 import { Restaurant } from "@prisma/client";
 import ToolTip from "@/components/ui/tooltip/tooltip";
 import LimiPerPage from "@/components/ui/table/pagination/limitPerPage/limitPerPage";
-import { title } from "process";
 import ListingHeader from "@/components/ui/HeaderTitle/HeaderTitle";
 
 const entriesPerPageOptions = [5, 10, 15];
-const baseUrl = "http://localhost:3000";
 
 const RestaurantList = () => {
   const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
@@ -48,24 +41,20 @@ const RestaurantList = () => {
   const getRestaurants = async () => {
     try {
       const restaurantListApi = new RestaurantsApi();
-      restaurantListApi
-        .findRestaurants({
-          limit: restaurantsLimit,
-          page: currentPage,
-          search: debouncedSearchQuery,
-          sortBy: sortBy,
-          sortOrder: sortOrder,
-        })
-        .then((response: RestaurantListResponse) => {
-          const restaurants = response.data?.rows as Restaurant[];
-          setRestaurants(restaurants);
-          setTotalRestaurants(response.data?.count);
-          const totalPages = Math.ceil(
-            response.data?.count! / restaurantsLimit
-          );
-          setTotalPages(totalPages);
-        });
-    } catch (error) {
+      const response = await restaurantListApi.findRestaurants({
+        limit: restaurantsLimit,
+        page: currentPage,
+        search: debouncedSearchQuery,
+        sortBy: sortBy,
+        sortOrder: sortOrder,
+      });
+      const restaurants = response.data?.rows as Restaurant[];
+      setRestaurants(restaurants);
+      setTotalRestaurants(response.data?.count);
+      const totalPages = Math.ceil(response.data?.count! / restaurantsLimit);
+      setTotalPages(totalPages);
+    } catch (error: any) {
+      toast.error(error.message);
       console.log(error);
     }
   };
@@ -77,21 +66,22 @@ const RestaurantList = () => {
       );
       if (toDelete) {
         const resturantRequestApi = new RestaurantRequestApi();
-        resturantRequestApi
-          .deleteRestaurantById({ id: restaurantId })
-          .then((response: RestaurantDeleteResponse) => {
-            if (response.data?.success) {
-              const updatedRestaurants = restaurants.filter(
-                (restaurant) => restaurant.id != restaurantId
-              );
-              setRestaurants(updatedRestaurants);
-              setTotalRestaurants(response.data?.count);
-              toast.success(response.data?.message);
-            }
-          });
+        const response = await resturantRequestApi.deleteRestaurantById({
+          id: restaurantId,
+        });
+        if (response.data?.success) {
+          const updatedRestaurants = restaurants.filter(
+            (restaurant) => restaurant.id != restaurantId
+          );
+          setRestaurants(updatedRestaurants);
+          setTotalRestaurants(response.data?.count);
+          setCurrentPage(1);
+          toast.success(response.data?.message);
+        }
       }
       return;
-    } catch (error) {
+    } catch (error: any) {
+      toast.error(error.message);
       console.log(error);
     }
   };
@@ -178,14 +168,12 @@ const RestaurantList = () => {
             <LimiPerPage
               usersLimit={restaurantsLimit}
               handleEntriesPerPageChange={handleEntriesPerPageChange}
-              entriesPerPageOptions={entriesPerPageOptions}
-            ></LimiPerPage>
+              entriesPerPageOptions={entriesPerPageOptions}></LimiPerPage>
           </div>
 
           <button
             onClick={() => router.push("add-restaurant")}
-            className="bg-[#EBA232] hover:bg-[#EBA232] rounded-[8px] lg:w-40 w-28 py-4 "
-          >
+            className="bg-[#EBA232] hover:bg-[#EBA232] rounded-[8px] lg:w-40 w-28 py-4 ">
             <a className=" text-white lg:text-sm text-xs">Add Restaurant</a>
           </button>
         </div>
@@ -206,8 +194,7 @@ const RestaurantList = () => {
                   })
                 }
                 key={restaurant.id}
-                className="hover:bg-[#F4F5F7] border-b border-[#f5f5f5]"
-              >
+                className="hover:bg-[#F4F5F7] border-b border-[#f5f5f5]">
                 <td className="px-3">
                   {/* <span className="cursor-pointer hover:text-[#0F172A]"> */}
                   {restaurant.name}
